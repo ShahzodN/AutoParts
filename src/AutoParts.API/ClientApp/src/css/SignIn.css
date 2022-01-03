@@ -1,0 +1,12 @@
+.background {
+    background: linear-gradient(to right, #83a4d4, #b6fbff);
+    width: 100vw;
+    height: 100vh;
+}
+
+.form-holder {
+    width: 500px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0px 0px 10px 1px gray;
+}

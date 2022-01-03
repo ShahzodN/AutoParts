@@ -4,14 +4,80 @@
     "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj": {}
   },
   "projects": {
-    "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj": {
+    "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj",
-        "projectName": "AutoParts.Infrastructure",
-        "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj",
+        "projectUniqueName": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj",
+        "projectName": "AutoParts.Application",
+        "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj",
         "packagesPath": "/home/shakhzod/.nuget/packages/",
-        "outputPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/obj/",
+        "outputPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/shakhzod/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj": {
+                "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj",
+        "projectName": "AutoParts.Domain",
+        "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj",
+        "packagesPath": "/home/shakhzod/.nuget/packages/",
+        "outputPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/shakhzod/.nuget/NuGet/NuGet.Config"
@@ -37,6 +103,79 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj",
+        "projectName": "AutoParts.Infrastructure",
+        "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj",
+        "packagesPath": "/home/shakhzod/.nuget/packages/",
+        "outputPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/shakhzod/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj": {
+                "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj"
+              },
+              "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj": {
+                "projectPath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/AutoParts.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

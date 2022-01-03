@@ -1,0 +1,12 @@
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/bin/Debug/net6.0/AutoParts.Domain.deps.json
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/bin/Debug/net6.0/AutoParts.Domain.dll
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/bin/Debug/net6.0/ref/AutoParts.Domain.dll
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/bin/Debug/net6.0/AutoParts.Domain.pdb
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.csproj.AssemblyReference.cache
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.AssemblyInfoInputs.cache
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.AssemblyInfo.cs
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.csproj.CoreCompileInputs.cache
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.dll
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/ref/AutoParts.Domain.dll
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Domain/obj/Debug/net6.0/AutoParts.Domain.pdb
