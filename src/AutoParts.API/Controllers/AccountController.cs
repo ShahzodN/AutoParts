@@ -34,14 +34,6 @@ namespace AutoParts.API.Controllers
             return NotFound();
         }
 
-        [HttpGet("secret")]
-        [Authorize(Roles = "Admin,Customer")]
-        public IActionResult Secret()
-        {
-            var a = new { Name = "Hello" };
-            return Json(a);
-        }
-
         [HttpPost("signout")]
         public IActionResult _SignOut()
         {

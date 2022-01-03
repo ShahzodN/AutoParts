@@ -31,7 +31,7 @@ namespace AutoParts.Infrastructure.Services
                 Subject = new ClaimsIdentity(roles),
                 Issuer = "localhost",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature),
-                Expires = DateTime.UtcNow.AddMinutes(1)
+                Expires = DateTime.UtcNow.AddDays(14)
             };
 
             SecurityToken token = handler.CreateToken(descriptor);
