@@ -13,10 +13,10 @@ namespace AutoParts.Infrastructure.Repositories
             context = _context;
             Set = context.Set<T>();
         }
-        
+
         protected readonly TContext context;
         protected readonly DbSet<T> Set;
-        
+
         public async Task<T> Create(T model)
         {
             await Set.AddAsync(model);
@@ -27,7 +27,8 @@ namespace AutoParts.Infrastructure.Repositories
         public async Task Delete(int id)
         {
             var entity = await GetById(id);
-            Set.Remove(entity);
+            if (entity != null)
+                Set.Remove(entity);
             await context.SaveChangesAsync();
         }
 
@@ -36,7 +37,7 @@ namespace AutoParts.Infrastructure.Repositories
             return await Set.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<T> Update(T model)
+        public async Task<T?> Update(T model)
         {
             Set.Update(model);
             await context.SaveChangesAsync();
