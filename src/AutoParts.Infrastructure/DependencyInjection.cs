@@ -17,7 +17,7 @@ namespace AutoParts.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static void AddInfrastructure(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -50,10 +50,13 @@ namespace AutoParts.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddScoped<IRoleManager, RoleManager>();
             services.AddScoped<IAccountManager, AccountManager>();
+
+            return services;
         }
     }
 }
