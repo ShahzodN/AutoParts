@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,21 @@ namespace AutoParts.Infrastructure.Repositories
             Set.Update(model);
             await context.SaveChangesAsync();
             return await GetById(model.Id);
+        }
+
+        public async Task<List<T>> GetAll(Expression<Func<T, bool>> expression = null!)
+        {
+            IQueryable<T> query = null!;
+            List<T> models = new();
+
+            if (expression != null)
+            {
+                query = Set.Where(expression);
+                models = await query.ToListAsync();
+            }
+
+            models = await Set.ToListAsync();
+            return models;
         }
     }
 }
