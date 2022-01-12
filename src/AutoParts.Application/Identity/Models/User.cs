@@ -7,8 +7,7 @@ namespace AutoParts.Application.Identity.Models
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public Car? Car { get; set; }
-        public int? CarId { get; set; }
+        public string? PhoneNumber { get; set; }
         public Account Account { get; set; } = null!;
         public int AccountId { get; set; }
     }
