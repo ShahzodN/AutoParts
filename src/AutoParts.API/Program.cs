@@ -1,13 +1,11 @@
+using AutoParts.Application;
 using AutoParts.Infrastructure;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
@@ -22,7 +20,9 @@ app.UseCookiePolicy(new CookiePolicyOptions()
     HttpOnly = HttpOnlyPolicy.Always,
     MinimumSameSitePolicy = SameSiteMode.Strict
 });
+
 app.UseRouting();
+
 app.Use(async (context, next) =>
 {
     string? token = context.Request.Cookies["asp.net_auth"];

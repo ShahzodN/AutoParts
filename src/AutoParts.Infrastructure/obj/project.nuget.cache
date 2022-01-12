@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "bZyaWIzFlnp8irXQJqiA3SUYx+iWLCy4dsjiKsnnVVLFN6VqmY7AjnptsZ2HzGnhVYA7R9wpQ+GLTIPKnFXOcA==",
+  "dgSpecHash": "pES3VUwZfySKxtpD3McVWxNu5OeKwbH6FnMosocsb+qCKZt7cB6loPaLOyEBVRsbbNf6c3dqfa6Rt8x/wetnjw==",
   "success": true,
   "projectFilePath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Infrastructure/AutoParts.Infrastructure.csproj",
   "expectedPackageFiles": [
     "/home/shakhzod/.nuget/packages/automapper/10.1.1/automapper.10.1.1.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.1/automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "/home/shakhzod/.nuget/packages/fluentvalidation/10.3.6/fluentvalidation.10.3.6.nupkg.sha512",
+    "/home/shakhzod/.nuget/packages/fluentvalidation.dependencyinjectionextensions/10.3.6/fluentvalidation.dependencyinjectionextensions.10.3.6.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/9.0.0/mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.1/microsoft.aspnetcore.authentication.jwtbearer.6.0.1.nupkg.sha512",

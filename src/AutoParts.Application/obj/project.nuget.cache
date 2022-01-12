@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "LRP6i2Be+AiY2Ip7qnSgA28AEHOd8eJwUCE3UKLVf5FdPlmz6HzY/REEXkqUkgaztV946biv1TQubQ6v/6tjcA==",
+  "dgSpecHash": "TmJKe04fed9uVKxbi02Oxs+CKcKP9LV8BrJuj4my0M4t0V3yBC4oOmmlmvugU349eqpcT3iQMP5DO9ZPDSLg9A==",
   "success": true,
   "projectFilePath": "/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/AutoParts.Application.csproj",
   "expectedPackageFiles": [
     "/home/shakhzod/.nuget/packages/automapper/10.1.1/automapper.10.1.1.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.1/automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "/home/shakhzod/.nuget/packages/fluentvalidation/10.3.6/fluentvalidation.10.3.6.nupkg.sha512",
+    "/home/shakhzod/.nuget/packages/fluentvalidation.dependencyinjectionextensions/10.3.6/fluentvalidation.dependencyinjectionextensions.10.3.6.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/9.0.0/mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
     "/home/shakhzod/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
