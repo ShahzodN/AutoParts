@@ -1,3 +1,4 @@
+using AutoParts.API.Middleware;
 using AutoParts.Application;
 using AutoParts.Infrastructure;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -10,10 +11,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-}
-
+app.UseMiddleware<ExceptionHandler>();
 app.UseStaticFiles();
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
@@ -23,21 +21,12 @@ app.UseCookiePolicy(new CookiePolicyOptions()
 
 app.UseRouting();
 
-app.Use(async (context, next) =>
-{
-    string? token = context.Request.Cookies["asp.net_auth"];
-    if (token != null)
-        context.Request.Headers.Append("Authorization", "Bearer " + token);
-    await next();
-});
+app.UseMiddleware<TokenWriter>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.MapFallbackToFile("index.html");
 

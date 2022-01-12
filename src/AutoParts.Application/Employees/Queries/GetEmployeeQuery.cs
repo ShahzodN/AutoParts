@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoParts.Application.Exceptions;
 using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Repositories;
 using MediatR;
@@ -26,12 +27,7 @@ namespace AutoParts.Application.Employees.Queries
         {
             Employee? employee = await employeeRepo.GetById(request.Id);
 
-            if (employee != null)
-            {
-                return mapper.Map<EmployeeDto>(employee);
-            }
-
-            return null!;
+            return employee == null ? throw new NotFoundException("Employee was not found") : mapper.Map<EmployeeDto>(employee);
         }
     }
 }
