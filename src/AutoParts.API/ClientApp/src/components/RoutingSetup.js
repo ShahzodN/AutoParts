@@ -1,31 +1,23 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { About } from "./About";
 import { Home } from "./Home";
 import { SignIn } from "./SignIn";
 import { Person } from "./Person";
-import { NavMenu } from "./NavMenu";
+import { Admin } from "./Admin";
 
 export class RoutingSetup extends Component {
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    <Route path="/signin" component={SignIn} />
-                    <div>
-                        <NavMenu />
-                        <Route exact path="/">
-                            <Home />
-                        </Route>
-                        <Route path="/about">
-                            <About />
-                        </Route>
-                        <Route path="/person">
-                            <Person />
-                        </Route>
-                    </div>
-                </Switch>
-            </Router>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/person" element={<Person />} />
+          <Route path="/admin/*" element={<Admin />} />
+          <Route path="/signin" element={<SignIn />} />
+        </Routes>
+      </div>
+    );
+  }
 }

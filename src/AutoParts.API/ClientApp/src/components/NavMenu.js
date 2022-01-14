@@ -18,9 +18,12 @@ export class NavMenu extends Component {
               <li className="nav-item">
                 <Link className="nav-link" to="/person">Person</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin">Admin</Link>
+              </li>
             </ul>
             <div className="container-fluid d-flex flex-row-reverse">
-              <Link className="nav-link" to="/signin">
+              <a className="nav-link" href="/signin">
                 <div className="d-flex">
                   <span className="text-dark">Sign in</span>
                   <div className="icon-holder ms-1">
@@ -30,7 +33,7 @@ export class NavMenu extends Component {
                     </svg>
                   </div>
                 </div>
-              </Link>
+              </a>
             </div>
           </div>
         </nav>

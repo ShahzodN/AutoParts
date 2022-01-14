@@ -1,26 +1,13 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import { About } from './About';
-import { Link } from 'react-router-dom';
-import { SignIn } from './SignIn';
+import { Component } from "react";
+import { NavMenu } from "./NavMenu";
 
 export class Home extends Component {
-  constructor(props) {
-    super(props);
-
-    this.getSecret = this.getSecret.bind(this);
-  }
-
-  async getSecret() {
-    const response = await fetch('api/account/secret');
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>Home</h1>
-        <button onClick={this.getSecret}>Get secret</button>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <NavMenu />
+                <h1>Home</h1>
+            </div>
+        )
+    }
 }

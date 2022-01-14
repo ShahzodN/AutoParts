@@ -1,20 +1,22 @@
 using AutoMapper;
+using AutoParts.Application.Employees.Queries;
 using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Repositories;
 using MediatR;
 
 namespace AutoParts.Application.Employees.Commands.Create
 {
-    public class CreateEmployeeCommand : IRequest<int>
+    public class CreateEmployeeCommand : IRequest<EmployeeDto>
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
+        public string? Picture { get; set; }
         public int Salary { get; set; }
     }
 
-    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, int>
+    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, EmployeeDto>
     {
         private readonly IEmployeeRepository employeeRepo;
         private readonly IMapper mapper;
@@ -25,17 +27,12 @@ namespace AutoParts.Application.Employees.Commands.Create
             this.mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<EmployeeDto> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
             Employee employee = mapper.Map<Employee>(request);
 
-            if (employee != null)
-            {
-                employee = await employeeRepo.Create(employee);
-                return employee.Id;
-            }
-
-            return 0;
+            employee = await employeeRepo.Create(employee);
+            return mapper.Map<EmployeeDto>(employee);
         }
     }
 }
