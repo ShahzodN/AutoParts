@@ -47,6 +47,16 @@ class EmployeeService {
 
     return response;
   }
+
+  async createAccount(data) {
+    const response = await fetch("/api/employee/create-account", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    return response;
+  }
 }
 
 export default new EmployeeService();

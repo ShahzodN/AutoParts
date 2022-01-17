@@ -13,10 +13,12 @@ namespace AutoParts.API.Controllers
     public class EmployeeController : Controller
     {
         private readonly IMediator mediator;
+        private readonly IAccountManager accountManager;
 
-        public EmployeeController(IMediator mediator)
+        public EmployeeController(IMediator mediator, IAccountManager accountManager)
         {
             this.mediator = mediator;
+            this.accountManager = accountManager;
         }
 
         #region GET
@@ -44,6 +46,13 @@ namespace AutoParts.API.Controllers
             return Created($"/api/employee/{createdEmployee.Id}", createdEmployee);
         }
 
+        [HttpPost("create-account")]
+        public async Task<IActionResult> CreateAccount(CreateAccountForEmployeeCommand command)
+        {
+            await mediator.Send(command);
+            return NoContent();
+        }
+
         #endregion
 
         #region PUT
@@ -58,7 +67,7 @@ namespace AutoParts.API.Controllers
 
         #endregion
 
-        #region Delete
+        #region DELETE
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)

@@ -25,8 +25,10 @@ export class Employee extends Component {
   }
 
   componentDidMount() {
-    EmployeeService.getAll().then(emps => this.setState({ employees: emps, employeesDownloaded: true }))
-
+    EmployeeService.getAll().then(emps => {
+      this.setState({ employees: emps, employeesDownloaded: true });
+      console.log(this.state.employees);
+    });
   }
 
   render() {

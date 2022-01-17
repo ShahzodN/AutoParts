@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
+using AutoParts.Application.Attributes;
 using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Repositories;
+using AutoParts.Domain.Enums;
 using MediatR;
 
 namespace AutoParts.Application.Employees.Commands.Update
@@ -10,6 +13,9 @@ namespace AutoParts.Application.Employees.Commands.Update
         public int Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+
+        [JsonConverter(typeof(EmployeePositionConverter))]
+        public EmployeePosition Position { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int Salary { get; set; }

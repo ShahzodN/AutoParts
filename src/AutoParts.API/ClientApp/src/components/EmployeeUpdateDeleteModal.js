@@ -3,10 +3,12 @@ import { useForm } from "react-hook-form";
 import EmployeeService from "../services/employee.service";
 import user from "../assets/user.png"
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import $ from "jquery";
 
 export function EmployeeUpdateDeleteModal(props) {
 
   const { register, handleSubmit } = useForm();
+
   let base64Image = "";
 
   function validate(data) {
@@ -20,8 +22,9 @@ export function EmployeeUpdateDeleteModal(props) {
     return finalResult;
   }
 
-  const onSubmit = (data) => {
+  const onEmployeeSubmit = (data) => {
     data.id = props.id;
+
     if (validate(data) === 1) {
       data.picture = base64Image;
 
@@ -29,6 +32,20 @@ export function EmployeeUpdateDeleteModal(props) {
         .then(res => {
           console.log(res.status);
           props.handleShowHide();
+        });
+    }
+  }
+
+  const onAccountSubmit = data => {
+    data.employeeId = props.id;
+
+    if (validate(data) === 1) {
+      data.picture = base64Image;
+
+      EmployeeService.createAccount(data)
+        .then(res => {
+          if (res.ok)
+            props.handleShowHide();
         });
     }
   }
@@ -46,7 +63,7 @@ export function EmployeeUpdateDeleteModal(props) {
   }
 
   const onIconClick = (e) => {
-    document.getElementsByName("fileUploadBtn")[0]?.click();
+    $("input[name='fileUploadBtn']").trigger('click');
   }
 
   const deleteEmployee = () => {
@@ -54,6 +71,13 @@ export function EmployeeUpdateDeleteModal(props) {
       .then(res => console.log(res.status));
 
     props.handleShowHide();
+  }
+
+  const toggleForms = (e) => {
+    $('.eud-wrapper').toggle();
+    $('.cae-wrapper').toggle();
+    $('.empUpdate-btns').toggle();
+    $('.empCreateAccount-btns').toggle();
   }
 
   return (
@@ -67,28 +91,58 @@ export function EmployeeUpdateDeleteModal(props) {
       </ModalHeader>
 
       <Modal.Body>
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column align-items-center" id="empUpdate">
-            <div className="d-flex flex-column align-items-center m-2"
-              style={{ width: "200px" }}
-              onClick={onIconClick}>
-              <img src={user} alt="" id="prev" style={{ width: "100%" }} />
-              <input hidden={true} type="file" {...register("picture")} onChange={onFileUpload} name="fileUploadBtn" />
+        <div>
+          <div className="eud-wrapper hide">
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <form onSubmit={handleSubmit(onEmployeeSubmit)} className="d-flex flex-column align-items-center" id="empUpdate">
+                <div className="d-flex flex-column align-items-center m-2"
+                  style={{ width: "200px" }}
+                  onClick={onIconClick}>
+                  <img src={user} alt="" id="prev" style={{ width: "100%" }} />
+                  <input hidden={true} type="file" {...register("picture")} onChange={onFileUpload} name="fileUploadBtn" />
+                </div>
+                <input className="m-1" placeholder="Имя" defaultValue={props.firstName} {...register("firstName")} />
+                <input className="m-1" placeholder="Фамилия" defaultValue={props.lastName}{...register("lastName")} />
+                <input className="m-1" placeholder="Адрес" defaultValue={props.address} {...register("address")} />
+                <input className="m-1" placeholder="Номер телефона" defaultValue={props.phoneNumber} {...register("phoneNumber")} />
+                <input className="m-1" placeholder="Зарплата" defaultValue={props.salary} {...register("salary")} />
+                <select className="m-1" {...register("position")}>
+                  <option value="Администратор">Администратор</option>
+                  <option value="Сотрудник">Сотрудник</option>
+                  <option value="Охрана">Охрана</option>
+                  <option value="Уборщица">Уборщица</option>
+                </select>
+              </form>
             </div>
-            <input className="m-1" placeholder="Имя" defaultValue={props.firstName} {...register("firstName")} />
-            <input className="m-1" placeholder="Фамилия" defaultValue={props.lastName}{...register("lastName")} />
-            <input className="m-1" placeholder="Адрес" defaultValue={props.address} {...register("address")} />
-            <input className="m-1" placeholder="Номер телефона" defaultValue={props.phoneNumber} {...register("phoneNumber")} />
-            <input className="m-1" placeholder="Зарплата" defaultValue={props.salary} {...register("salary")} />
-          </form>
+          </div>
+          <div className="cae-wrapper" style={{ display: "none" }}>
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <form onSubmit={handleSubmit(onAccountSubmit)} className="d-flex flex-column align-items-center" id="empCreateAccount">
+                <input className="m-1" placeholder="Email" {...register("email")} />
+                <input className="m-1" placeholder="Пароль" {...register("password")} />
+                <input className="m-1" placeholder="Подтвердить пароль" {...register("passwordConfirm")} />
+              </form>
+            </div>
+          </div>
         </div>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button onClick={() => deleteEmployee()}>Удалить</Button>
-        <Button type="submit" form="empUpdate">Сохранить</Button>
-      </Modal.Footer>
+        <Button className="empUpdate-btns" onClick={() => deleteEmployee()}>Удалить</Button>
+        <Button className="empUpdate-btns" type="submit" form="empUpdate">Сохранить</Button>
+        <Button className="empUpdate-btns" onClick={() => toggleForms()}>Создать аккаунт</Button>
 
+        <Button className="empCreateAccount-btns"
+          style={{ display: "none" }}
+          onClick={toggleForms}
+        >
+          Отменить
+        </Button>
+        <Button className="empCreateAccount-btns" type="submit" form="empCreateAccount" style={{ display: "none" }}>
+          Создать
+        </Button>
+
+      </Modal.Footer>
     </Modal>
   );
 }

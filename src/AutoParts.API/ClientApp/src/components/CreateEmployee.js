@@ -61,6 +61,12 @@ export function CreateEmployee(props) {
         <input className="m-1" placeholder="Адрес" {...register("address")} />
         <input className="m-1" placeholder="Номер телефона" {...register("phoneNumber")} />
         <input className="m-1" placeholder="Зарплата" {...register("salary")} />
+        <select className="m-1" {...register("position")}>
+          <option value="Администратор">Администратор</option>
+          <option value="Сотрудник">Сотрудник</option>
+          <option value="Охрана">Охрана</option>
+          <option value="Уборщица">Уборщица</option>
+        </select>
         <button type="submit" className="btn btn-primary">Создать</button>
       </form>
     </div>
