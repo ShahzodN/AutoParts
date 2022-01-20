@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using AutoParts.Application.Exceptions;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ namespace AutoParts.Infrastructure.Repositories
             var entity = await GetById(id);
             if (entity != null)
                 Set.Remove(entity);
+            else
+                throw new NotFoundException("Car with provided id was not found.");
             await context.SaveChangesAsync();
         }
 
