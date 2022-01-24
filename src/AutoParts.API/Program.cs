@@ -1,6 +1,7 @@
 using AutoParts.API.Middleware;
 using AutoParts.Application;
 using AutoParts.Infrastructure;
+using AutoParts.Infrastructure.Persistence;
 using Microsoft.AspNetCore.CookiePolicy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandler>();
+DbInitializer.Init(app.Services);
+if (!app.Environment.IsDevelopment())
+    app.UseMiddleware<ExceptionHandler>();
 app.UseStaticFiles();
 app.UseCookiePolicy(new CookiePolicyOptions()
 {

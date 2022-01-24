@@ -36,7 +36,7 @@ namespace AutoParts.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<T?> GetById(int id)
+        public virtual async Task<T?> GetById(int id)
         {
             return await Set.FirstOrDefaultAsync(s => s.Id == id);
         }
@@ -48,7 +48,7 @@ namespace AutoParts.Infrastructure.Repositories
             return await GetById(model.Id);
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> expression = null!)
+        public virtual async Task<List<T>> GetAll(Expression<Func<T, bool>> expression = null!)
         {
             IQueryable<T> query = null!;
             List<T> models = new();
