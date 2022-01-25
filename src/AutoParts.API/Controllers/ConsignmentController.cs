@@ -27,9 +27,8 @@ public class ConsignmentController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create(CreateConsignmentCommand command)
     {
-        var consignment = await Mediator.Send(command);
-
-        return Created($"api/consignment/{consignment.Id}", consignment);
+        await Mediator.Send(command);
+        return Ok();
     }
 
     #endregion
@@ -44,7 +43,7 @@ public class ConsignmentController : BaseController
     #endregion
 
     #region DELETE
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await Mediator.Send(new DeleteConsignmentCommand(id));

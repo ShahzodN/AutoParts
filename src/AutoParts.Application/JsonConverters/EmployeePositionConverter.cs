@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using AutoParts.Domain.Enums;
 
-namespace AutoParts.Application.Attributes;
+namespace AutoParts.Application.JsonConverters;
 
 public class EmployeePositionConverter : JsonConverter<EmployeePosition>
 {

@@ -33,9 +33,7 @@ public class ConsignmentRepository : BaseRepository<Consignment, ApplicationDbCo
         }
         else
         {
-            models = await Set.Include(s => s.ConsignmentDetails)
-                                .ThenInclude(s => s.Product)
-                                .ToListAsync();
+            models = await Set.ToListAsync();
         }
 
         return models;

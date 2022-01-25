@@ -1,18 +1,17 @@
 using AutoMapper;
-using AutoParts.Application.Consignments.Queries;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
 using MediatR;
 
 namespace AutoParts.Application.Consignments.Commands.Create;
 
-public class CreateConsignmentCommand : IRequest<ConsignmentDto>
+public class CreateConsignmentCommand : IRequest
 {
     public DateTime Date { get; set; }
     public Dictionary<int, int> ProductsList { get; set; } = null!;
 }
 
-public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignmentCommand, ConsignmentDto>
+public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignmentCommand, Unit>
 {
     private readonly IConsignmentRepository consignmentRepo;
     private readonly IMapper mapper;
@@ -23,7 +22,7 @@ public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignment
         this.mapper = mapper;
     }
 
-    public async Task<ConsignmentDto> Handle(CreateConsignmentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateConsignmentCommand request, CancellationToken cancellationToken)
     {
         Consignment consignment = new() { Date = request.Date };
 
@@ -40,6 +39,6 @@ public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignment
 
         consignment = await consignmentRepo.Create(consignment);
 
-        return mapper.Map<ConsignmentDto>(consignment);
+        return Unit.Value;
     }
 }

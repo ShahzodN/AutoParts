@@ -25,7 +25,6 @@ app.UseCookiePolicy(new CookiePolicyOptions()
 app.UseRouting();
 
 app.UseMiddleware<TokenWriter>();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

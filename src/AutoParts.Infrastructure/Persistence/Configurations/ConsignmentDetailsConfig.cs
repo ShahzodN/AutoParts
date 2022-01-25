@@ -14,7 +14,8 @@ public class ConsignmentDetailsConfig : IEntityTypeConfiguration<ConsignmentDeta
 
         builder.HasOne(s => s.Consignment)
             .WithMany(s => s.ConsignmentDetails)
-            .HasForeignKey(s => s.ConsignmentId);
+            .HasForeignKey(s => s.ConsignmentId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(s => s.Product)
             .WithMany(s => s.ConsignmentDetails)
