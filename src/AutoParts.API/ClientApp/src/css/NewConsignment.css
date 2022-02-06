@@ -1,0 +1,18 @@
+.suggestions {
+    display: none;
+    overflow-y: scroll;
+    max-height: 300px;
+    width: 300px;
+    position: absolute;
+    border: 1px black;
+}
+
+.modal-90w {
+    max-width: none;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    left: 50%;
+}

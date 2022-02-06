@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
-using AutoParts.Application.Attributes;
 using AutoParts.Application.Identity.Models;
+using AutoParts.Application.JsonConverters;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Enums;
 using MediatR;

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { NavMenu } from "./NavMenu";
+import { NavMenu } from "../components/NavMenu";
 
 export class Home extends Component {
     render() {

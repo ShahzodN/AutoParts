@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { CreateEmployee } from "./CreateEmployee"
-import "../css/Employee.css"
-import { AllEmployees } from './AllEmployees';
+import { CreateEmployee } from "../components/CreateEmployee"
 import { Button, Modal } from "react-bootstrap";
 import EmployeeService from "../services/employee.service"
-import { EmployeeCard } from './EmployeeCard';
+import { EmployeeCard } from '../components/EmployeeCard';
+import "../css/Employee.css"
 
 export class Employee extends Component {
   constructor(props) {
@@ -67,11 +65,6 @@ export class Employee extends Component {
             )
           })}
         </div>
-
-        <Routes>
-          <Route path="/create" element={<CreateEmployee />} />
-          <Route path="/all" element={<AllEmployees />} />
-        </Routes>
       </section>) : <h2>Loading</h2>
   }
 }

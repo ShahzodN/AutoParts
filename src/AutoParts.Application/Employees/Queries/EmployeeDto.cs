@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using AutoParts.Application.Attributes;
+using AutoParts.Application.JsonConverters;
 using AutoParts.Domain.Enums;
 
 namespace AutoParts.Application.Employees.Queries

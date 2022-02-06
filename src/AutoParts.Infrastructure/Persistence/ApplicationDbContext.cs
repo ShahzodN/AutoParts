@@ -8,13 +8,14 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+
     }
 
     static ApplicationDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<EmployeePosition>();
     }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.HasPostgresEnum<EmployeePosition>();
