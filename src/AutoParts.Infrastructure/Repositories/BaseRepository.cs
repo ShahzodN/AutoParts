@@ -32,7 +32,7 @@ namespace AutoParts.Infrastructure.Repositories
             if (entity != null)
                 Set.Remove(entity);
             else
-                throw new NotFoundException("Car with provided id was not found.");
+                throw new NotFoundException("Entity with provided id was not found.");
             await context.SaveChangesAsync();
         }
 
