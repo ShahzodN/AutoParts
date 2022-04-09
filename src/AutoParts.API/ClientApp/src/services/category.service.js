@@ -5,39 +5,15 @@ class CategoryService {
 
     #baseUrl;
 
-    getAll() {
-        return [
-            {
-                name: 'cat1'
-            },
-            {
-                name: 'cat2'
-            },
-            {
-                name: 'cat3'
-            },
-            {
-                name: 'cat4'
-            },
-            {
-                name: 'cat5'
-            },
-            {
-                name: 'cat6'
-            },
-            {
-                name: 'cat7'
-            },
-            {
-                name: 'cat8'
-            },
-            {
-                name: 'cat9'
-            },
-            {
-                name: 'cat10'
-            },
-        ]
+    async getAll() {
+        const response = await fetch(this.#baseUrl, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+
+        return result;
     }
 
     async getById(id) {
@@ -52,7 +28,7 @@ class CategoryService {
     async create(category) {
         const response = await fetch(this.#baseUrl, {
             method: 'post',
-            headers: { 'Content-Type': 'application/type' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(category)
         })
 

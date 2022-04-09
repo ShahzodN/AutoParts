@@ -4,6 +4,7 @@ using AutoParts.Application.Identity;
 using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
+using AutoParts.Domain.Interfaces;
 using AutoParts.Infrastructure.Identity;
 using AutoParts.Infrastructure.Repositories;
 using AutoParts.Infrastructure.Services;
@@ -59,6 +60,7 @@ namespace AutoParts.Infrastructure
 
             services.AddScoped<IRoleManager, RoleManager>();
             services.AddScoped<IAccountManager, AccountManager>();
+            services.AddScoped<IImageService, ImageService>();
 
             return services;
         }

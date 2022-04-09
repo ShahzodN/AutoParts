@@ -1,15 +1,17 @@
-import { CloseButton, Modal, Button } from "react-bootstrap";
+import { CloseButton, Modal, Button, Spinner } from "react-bootstrap";
+import { BsCheckCircle } from 'react-icons/bs';
 import { useForm } from "react-hook-form";
-import EmployeeService from "../services/employee.service";
-import user from "../assets/user.png"
+import employeeService from "../services/employee.service";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import $ from "jquery";
+import { useState } from "react";
 
 export function EmployeeUpdateDeleteModal(props) {
 
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
-
   let base64Image = "";
+  const contentUrl = 'api/content/employee';
 
   function validate(data) {
     let finalResult = 1;
@@ -28,7 +30,7 @@ export function EmployeeUpdateDeleteModal(props) {
     if (validate(data) === 1) {
       data.picture = base64Image;
 
-      EmployeeService.update(data)
+      employeeService.update(data)
         .then(res => {
           console.log(res.status);
           props.handleShowHide();
@@ -42,7 +44,7 @@ export function EmployeeUpdateDeleteModal(props) {
     if (validate(data) === 1) {
       data.picture = base64Image;
 
-      EmployeeService.createAccount(data)
+      employeeService.createAccount(data)
         .then(res => {
           if (res.ok)
             props.handleShowHide();
@@ -67,10 +69,21 @@ export function EmployeeUpdateDeleteModal(props) {
   }
 
   const deleteEmployee = () => {
-    EmployeeService.deleteEmployee(props.id)
-      .then(res => console.log(res.status));
+    setLoading(true);
 
-    props.handleShowHide();
+    employeeService.deleteEmployee(props.id)
+      .then(res => {
+        if (res.ok) {
+          $('.spinner-border').hide();
+          $('.done').show();
+
+          setInterval(() => {
+            props.handleShowHide();
+          }, 1500);
+          window.location.reload();
+        }
+      });
+
   }
 
   const toggleForms = (e) => {
@@ -80,7 +93,7 @@ export function EmployeeUpdateDeleteModal(props) {
     $('.empCreateAccount-btns').toggle();
   }
 
-  return (
+  return !loading ? (
     <Modal show={props.show}
       onHide={props.handleShowHide}
       aria-labelledby="contained-modal-title-vcenter"
@@ -98,7 +111,7 @@ export function EmployeeUpdateDeleteModal(props) {
                 <div className="d-flex flex-column align-items-center m-2"
                   style={{ width: "200px" }}
                   onClick={onIconClick}>
-                  <img src={user} alt="" id="prev" style={{ width: "100%" }} />
+                  <img src={`${contentUrl}/${props.id}`} alt="" id="prev" style={{ width: "100%" }} />
                   <input hidden={true} type="file" {...register("picture")} onChange={onFileUpload} name="fileUploadBtn" />
                 </div>
                 <input className="m-1" placeholder="Имя" defaultValue={props.firstName} {...register("firstName")} />
@@ -144,5 +157,16 @@ export function EmployeeUpdateDeleteModal(props) {
 
       </Modal.Footer>
     </Modal>
-  );
+  ) : (
+    <Modal
+      show={loading}
+      backdrop="static"
+      centered
+      className="modal-90w">
+      <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Spinner animation="border" size="large" />
+        <BsCheckCircle className="done" style={{ display: 'none', fontSize: '1.8em' }} />
+      </Modal.Body>
+    </Modal>
+  )
 }

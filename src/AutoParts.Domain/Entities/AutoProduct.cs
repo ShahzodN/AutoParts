@@ -12,4 +12,5 @@ public class AutoProduct : IEntity
     public int CategoryId { get; set; }
     public string? Description { get; set; }
     public List<ConsignmentDetails> ConsignmentDetails { get; set; } = new();
+    public List<Image> Images { get; set; } = null!;
 }

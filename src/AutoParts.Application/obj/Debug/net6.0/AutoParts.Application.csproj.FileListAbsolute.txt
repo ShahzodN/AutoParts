@@ -1,6 +1,5 @@
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/AutoParts.Application.deps.json
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/AutoParts.Application.dll
-/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/ref/AutoParts.Application.dll
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/AutoParts.Application.pdb
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/AutoParts.Domain.dll
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/bin/Debug/net6.0/AutoParts.Domain.pdb
@@ -13,3 +12,4 @@
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/obj/Debug/net6.0/AutoParts.Application.dll
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/obj/Debug/net6.0/ref/AutoParts.Application.dll
 /home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/obj/Debug/net6.0/AutoParts.Application.pdb
+/home/shakhzod/projects/autoParts_eCommerce/src/AutoParts.Application/obj/Debug/net6.0/refint/AutoParts.Application.dll

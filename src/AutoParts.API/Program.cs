@@ -12,7 +12,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-DbInitializer.Init(app.Services);
+// DbInitializer.Init(app.Services);
 if (!app.Environment.IsDevelopment())
     app.UseMiddleware<ExceptionHandler>();
 app.UseStaticFiles();

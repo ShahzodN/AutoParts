@@ -12,7 +12,7 @@ namespace AutoParts.Application.Mappings
         {
             CreateMap<Employee, EmployeeDto>();
             CreateMap<EmployeeDto, Employee>();
-            CreateMap<CreateEmployeeCommand, Employee>();
+            CreateMap<CreateEmployeeCommand, Employee>().ForMember(d => d.Image, opt => opt.Ignore());
             CreateMap<UpdateEmployeeCommand, Employee>();
         }
     }

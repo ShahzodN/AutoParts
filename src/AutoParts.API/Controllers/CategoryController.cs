@@ -17,7 +17,7 @@ public class CategoryController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<CategoryDto> GetAll(int id)
+    public async Task<CategoryDto> GetById(int id)
     {
         return await Mediator.Send(new GetCategoryByIdQuery(id));
     }

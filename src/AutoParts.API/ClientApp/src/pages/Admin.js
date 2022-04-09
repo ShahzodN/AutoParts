@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Employee } from "./Employee";
+import { Employees } from "./Employees";
 import { DeliveryOfGoods } from "./DeliveryOfGoods";
 import "../css/Admin.css"
 import { Categories } from "./Categories";
@@ -28,7 +28,7 @@ export class Admin extends Component {
 
         <Routes>
           <Route exact path="/" element={<AdminMainPage />} />
-          <Route path="/employee" element={<Employee />} />
+          <Route path="/employee" element={<Employees />} />
           <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
           <Route path="/categories/*" element={<Categories />} />
         </Routes>

@@ -13,12 +13,6 @@ export class NavMenu extends Component {
                 <Link className="nav-link navbar-brand" to="/">Autoparts</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/about">About</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/person">Person</Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link" to="/admin">Admin</Link>
               </li>
             </ul>

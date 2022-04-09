@@ -10,8 +10,11 @@ export function CategoryUpdateDeleteModal(props) {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
   let base64Image = '';
+  const contentUrl = 'api/content/category';
 
   const deleteCategory = () => {
+    setLoading(!loading);
+
     categoryService.remove(props.category.id).then(res => {
       if (res.ok) {
         $('.spinner-border').hide();
@@ -75,7 +78,7 @@ export function CategoryUpdateDeleteModal(props) {
               onClick={(e) => { $('#categoryImage').trigger('click') }}
             >
               <img
-                src="https://f.nodacdn.net/325135"
+                src={`${contentUrl}/${props.category.id}`}
                 alt="categoryImage"
                 style={{ width: '100%' }}
                 id="prev"

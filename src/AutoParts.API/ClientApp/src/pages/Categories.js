@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from 'react-bootstrap';
 import { BsCheckCircle } from "react-icons/bs";
 import { CategoryCard } from "../components/CategoryCard";
@@ -12,9 +12,11 @@ export function Categories() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
-    const arr = categoryService.getAll();
-    setCategories(arr);
-    setLoading(false);
+    categoryService.getAll().then(res => {
+      console.log(res);
+      setCategories(res);
+      setLoading(false);
+    });
   }, []);
 
   return !loading ? (

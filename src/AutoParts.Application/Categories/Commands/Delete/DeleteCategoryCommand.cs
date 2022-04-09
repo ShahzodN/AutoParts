@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
 using MediatR;
@@ -16,16 +17,20 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
 {
     private readonly IMapper mapper;
     private readonly ICategoryRepository categoryRepo;
+    private readonly IImageService imageService;
 
-    public DeleteCategoryCommandHandler(IMapper mapper, ICategoryRepository categoryRepo)
+    public DeleteCategoryCommandHandler(IMapper mapper, ICategoryRepository categoryRepo, IImageService imageService)
     {
         this.mapper = mapper;
         this.categoryRepo = categoryRepo;
+        this.imageService = imageService;
     }
 
     public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
+        string? imagePath = (await categoryRepo.GetById(request.Id))?.Image.Path;
         await categoryRepo.Delete(request.Id);
+        imageService.DeleteImage(imagePath);
 
         return Unit.Value;
     }
