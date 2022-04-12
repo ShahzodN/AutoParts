@@ -9,15 +9,22 @@ namespace AutoParts.Infrastructure.Services
 {
     public class ImageService : IImageService
     {
-        public ImageService(ICategoryRepository categoryRepo, IEmployeeRepository employeeRepo)
+        public ImageService(ICategoryRepository categoryRepo,
+                            IEmployeeRepository employeeRepo,
+                            ICarRepository carRepo,
+                            IManufactorRepository manufactorRepo)
         {
             this.categoryRepo = categoryRepo;
             this.employeeRepo = employeeRepo;
+            this.carRepo = carRepo;
+            this.manufactorRepo = manufactorRepo;
         }
 
         private readonly string imagesPath = "/home/shakhzod/Pictures/proj_images";
         private readonly ICategoryRepository categoryRepo;
         private readonly IEmployeeRepository employeeRepo;
+        private readonly ICarRepository carRepo;
+        private readonly IManufactorRepository manufactorRepo;
 
         public async Task<byte[]> GetCategoryImage(int id)
         {
@@ -29,6 +36,23 @@ namespace AutoParts.Infrastructure.Services
             try
             {
                 return await File.ReadAllBytesAsync(category.Image.Path!);
+            }
+            catch (Exception)
+            {
+                throw new Exception("File not found.");
+            }
+        }
+
+        public async Task<byte[]> GetManufactorLogo(int id)
+        {
+            Manufactor? manufactor = await manufactorRepo.GetById(id);
+
+            if (manufactor == null)
+                throw new NotFoundException("Manufactor with provided id was not found.");
+
+            try
+            {
+                return await File.ReadAllBytesAsync(manufactor.Image?.Path!);
             }
             catch (Exception)
             {
@@ -90,11 +114,6 @@ namespace AutoParts.Infrastructure.Services
                 }
                 catch { }
             }
-        }
-
-        public void DeleteImages(List<Image> images)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -13,5 +13,9 @@ public class CarProfile : Profile
         CreateMap<CreateCarCommand, Car>();
         CreateMap<Car, CarDto>();
         CreateMap<UpdateCarCommand, Car>();
+
+        CreateMap<Manufactor, ManufactorDto>();
+        CreateMap<CreateManufactorCommand, Manufactor>()
+            .ForMember(d => d.Image, opt => opt.Ignore());
     }
 }

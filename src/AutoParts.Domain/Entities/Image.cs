@@ -10,5 +10,8 @@ namespace AutoParts.Domain.Entities
         public int? EmployeeId { get; set; }
         public AutoProduct? Product { get; set; }
         public int? ProductId { get; set; }
+        public Car? Car { get; set; }
+        public int? CarId { get; set; }
+
     }
 }

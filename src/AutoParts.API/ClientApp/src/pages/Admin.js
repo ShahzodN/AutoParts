@@ -4,6 +4,7 @@ import { Employees } from "./Employees";
 import { DeliveryOfGoods } from "./DeliveryOfGoods";
 import "../css/Admin.css"
 import { Categories } from "./Categories";
+import { Cars } from "./Cars";
 
 export class Admin extends Component {
   render() {
@@ -23,6 +24,9 @@ export class Admin extends Component {
             <li className="list-group-item">
               <Link className="btn btn-primary" to="/admin/categories">Категория</Link>
             </li>
+            <li className="list-group-item">
+              <Link className="btn btn-primary" to="/admin/cars">Автомобили</Link>
+            </li>
           </ul>
         </aside>
 
@@ -31,6 +35,7 @@ export class Admin extends Component {
           <Route path="/employee" element={<Employees />} />
           <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
           <Route path="/categories/*" element={<Categories />} />
+          <Route path="/cars/*" element={<Cars />} />
         </Routes>
       </div>
     )
