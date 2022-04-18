@@ -12,9 +12,9 @@ public class DeleteModelCommand : IRequest
 
 public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand, Unit>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
 
-    public DeleteModelCommandHandler(ICarRepository carRepo)
+    public DeleteModelCommandHandler(IModelRepository carRepo)
     {
         this.carRepo = carRepo;
     }

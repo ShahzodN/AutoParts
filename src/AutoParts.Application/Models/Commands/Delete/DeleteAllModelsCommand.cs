@@ -11,9 +11,9 @@ public class DeleteAllModelsCommand : IRequest
 
 public class DeleteAllModelsCommandHandler : IRequestHandler<DeleteAllModelsCommand, Unit>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
 
-    public DeleteAllModelsCommandHandler(ICarRepository carRepo)
+    public DeleteAllModelsCommandHandler(IModelRepository carRepo)
     {
         this.carRepo = carRepo;
     }

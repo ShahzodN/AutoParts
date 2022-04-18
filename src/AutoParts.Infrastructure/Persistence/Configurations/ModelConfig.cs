@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace AutoParts.Infrastructure.Persistence.Configurations;
 
-public class CarConfig : IEntityTypeConfiguration<Car>
+public class ModelConfig : IEntityTypeConfiguration<Model>
 {
-    public void Configure(EntityTypeBuilder<Car> builder)
+    public void Configure(EntityTypeBuilder<Model> builder)
     {
-        builder.ToTable("Cars");
+        builder.ToTable("Models");
 
         builder.HasKey(s => s.Id);
 
         builder.HasOne(s => s.Manufactor)
-                .WithMany(s => s.Cars)
+                .WithMany(s => s.Models)
                 .HasForeignKey(s => s.ManufactorId);
     }
 }

@@ -6,15 +6,15 @@ using AutoParts.Domain.Entities;
 
 namespace AutoParts.Application.Mappings;
 
-public class CarProfile : Profile
+public class ModelProfile : Profile
 {
-    public CarProfile()
+    public ModelProfile()
     {
-        CreateMap<CreateModelCommand, Car>()
+        CreateMap<CreateModelCommand, Model>()
             .ForMember(d => d.Manufactor, opt => opt.Ignore());
-        CreateMap<Car, ModelDto>()
+        CreateMap<Model, ModelDto>()
             .ForPath(d => d.Manufactor, opt => opt.MapFrom(src => src.Manufactor.Name));
-        CreateMap<UpdateModelCommand, Car>();
+        CreateMap<UpdateModelCommand, Model>();
 
         CreateMap<Manufactor, ManufactorDto>();
         CreateMap<CreateManufactorCommand, Manufactor>()

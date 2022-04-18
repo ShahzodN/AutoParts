@@ -6,7 +6,7 @@ public class AutoProduct : IEntity
 {
     public string? Name { get; set; }
     public int Price { get; set; }
-    public Car? Car { get; set; }
+    public List<Model> Models { get; set; } = new();
     public int? CarId { get; set; }
     public Category Category { get; set; } = null!;
     public int CategoryId { get; set; }

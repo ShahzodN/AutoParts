@@ -15,10 +15,10 @@ public class GetModelQuery : IRequest<ModelDto>
 
 public class GetModelQueryHandler : IRequestHandler<GetModelQuery, ModelDto>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
     private readonly IMapper mapper;
 
-    public GetModelQueryHandler(ICarRepository carRepo, IMapper mapper)
+    public GetModelQueryHandler(IModelRepository carRepo, IMapper mapper)
     {
         this.carRepo = carRepo;
         this.mapper = mapper;
@@ -26,7 +26,7 @@ public class GetModelQueryHandler : IRequestHandler<GetModelQuery, ModelDto>
 
     public async Task<ModelDto> Handle(GetModelQuery request, CancellationToken cancellationToken)
     {
-        Car? car = await carRepo.GetById(request.Id);
+        Model? car = await carRepo.GetById(request.Id);
 
         return car is null ?
             throw new NotFoundException("Car with the provided id was not found.") :

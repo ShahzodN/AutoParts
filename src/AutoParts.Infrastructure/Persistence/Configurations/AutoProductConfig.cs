@@ -12,10 +12,8 @@ public class AutoProductConfig : IEntityTypeConfiguration<AutoProduct>
 
         builder.HasKey(s => s.Id);
 
-        builder.HasOne(s => s.Car)
-            .WithMany(s => s.Products)
-            .HasForeignKey(s => s.CarId)
-            .IsRequired(false);
+        builder.HasMany(s => s.Models)
+            .WithMany(s => s.Products);
 
         builder.HasOne(s => s.Category)
             .WithMany(s => s.Products)
