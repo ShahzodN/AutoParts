@@ -4,7 +4,7 @@ using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
 using MediatR;
 
-namespace AutoParts.Application.Cars.Commands.Delete;
+namespace AutoParts.Application.Models.Commands.Delete;
 
 public class DeleteManufactorCommand : IRequest
 {
@@ -33,7 +33,7 @@ public class DeleteManufactorCommandHandler : IRequestHandler<DeleteManufactorCo
         if (manufactor == null)
             throw new NotFoundException("Manufactor with provided id was not found.");
 
-        imageService.DeleteImage(manufactor.Image.Path);
+        imageService.DeleteImage(manufactor.Image!.Path);
 
         await manufactorRepo.Delete(request.Id);
 

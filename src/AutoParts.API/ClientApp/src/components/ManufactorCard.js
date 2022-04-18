@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { Link } from "react-router-dom";
 
 export function ManufactorCard(props) {
 
@@ -15,13 +16,19 @@ export function ManufactorCard(props) {
   }
 
   return (
-    <div className="manuf-card" onContextMenu={(e) => onRightClick(e)}>
-      <div className="shadow mx-5 my-3">
-        <div style={{ width: '200px', height: '200px' }}>
-          <img src={`${contentUrl}/${props.manufactor.id}`} alt="manufactorImage" style={{ width: '100%' }} />
+    <Link to={`/admin/manufactors/${props.manufactor.name}`} className="me-3 mb-3">
+      <div className="manuf-card" onContextMenu={(e) => onRightClick(e)}>
+        <div className="shadow p-2 my-3">
+          <div style={{ width: '200px', height: '200px' }} className="mb-2">
+            <img
+              src={`${contentUrl}/${props.manufactor.id}`}
+              alt="manufactorImage"
+              style={{ width: '100%', height: '100%' }}
+            />
+          </div>
+          <h6>{props.manufactor.name}</h6>
         </div>
-        <h6>{props.manufactor.name}</h6>
       </div>
-    </div>
+    </Link>
   )
 }

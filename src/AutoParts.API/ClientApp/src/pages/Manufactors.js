@@ -4,11 +4,11 @@ import { Spinner } from "react-bootstrap";
 import { BsCheckCircle } from "react-icons/bs";
 import { ManufactorCard } from "../components/ManufactorCard.js";
 import { ManufactorCreateModal } from "../components/ManufactorCreateModal.js";
-import carService from "../services/car.service.js";
+import modelService from "../services/model.service.js";
 import $ from "jquery";
-import "../css/Cars.css";
+import "../css/Models.css";
 
-export function Cars() {
+export function Manufactors() {
 
   const [loading, setLoading] = useState(true);
   const [manufactors, setManufactors] = useState([]);
@@ -16,16 +16,22 @@ export function Cars() {
   const [selectedCardId, setSelectedCardId] = useState(0);
 
   useEffect(() => {
-    carService.getAllManufactors().then(r => {
+    modelService.getAllManufactors().then(r => {
       setManufactors(r);
       setLoading(false);
     });
   }, []);
 
+  document.onclick = () => {
+    let contextMenu = document.getElementById('context-menu');
+    if (contextMenu)
+      contextMenu.style.display = 'none';
+  };
+
   const deleteManufactor = (e) => {
     setLoading(!loading);
 
-    carService.deleteManufactor(selectedCardId).then(res => {
+    modelService.deleteManufactor(selectedCardId).then(res => {
       if (res.ok) {
         e.target.parentElement.style.display = 'none';
 
@@ -66,8 +72,7 @@ export function Cars() {
           })}
         </div>
       </div>
-
-    </div >
+    </div>
   ) : (
     <div>
       <Modal

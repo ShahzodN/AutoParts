@@ -1,4 +1,4 @@
-namespace AutoParts.Application.Cars.Queries;
+namespace AutoParts.Application.Models.Queries;
 public class ManufactorDto
 {
     public int Id { get; set; }

@@ -2,7 +2,7 @@ using AutoMapper;
 using AutoParts.Application.Repositories;
 using MediatR;
 
-namespace AutoParts.Application.Cars.Queries;
+namespace AutoParts.Application.Models.Queries;
 
 public class GetManufactorsQuery : IRequest<List<ManufactorDto>>
 {

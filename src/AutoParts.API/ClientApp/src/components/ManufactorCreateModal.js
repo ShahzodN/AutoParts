@@ -1,7 +1,7 @@
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { BsCheckCircle } from "react-icons/bs";
-import carService from "../services/car.service";
+import modelService from "../services/model.service";
 import $ from "jquery";
 import { useState } from "react";
 import emptyImage from "../assets/emptyImage.webp";
@@ -20,7 +20,7 @@ export function ManufactorCreateModal(props) {
     else {
       setLoading(true);
 
-      carService.createManufactor(data).then(res => {
+      modelService.createManufactor(data).then(res => {
         if (res.ok) {
           $('.spinner-border').hide();
           $('.done').show();

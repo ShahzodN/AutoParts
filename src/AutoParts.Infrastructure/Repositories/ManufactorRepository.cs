@@ -13,7 +13,7 @@ namespace AutoParts.Infrastructure.Repositories
 
         }
 
-        public override async Task<List<Manufactor>> GetAll(Expression<Func<Manufactor, bool>> expression = null)
+        public override async Task<List<Manufactor>> GetAll(Expression<Func<Manufactor, bool>> expression = null!)
         {
             IQueryable<Manufactor> query = null!;
             List<Manufactor> models = new();
@@ -34,6 +34,11 @@ namespace AutoParts.Infrastructure.Repositories
         public override async Task<Manufactor?> GetById(int id)
         {
             return await Set.Include(s => s.Image).FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task<Manufactor?> GetByName(string? name)
+        {
+            return await Set.FirstOrDefaultAsync(s => s.Name == name);
         }
     }
 }

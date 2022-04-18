@@ -1,6 +1,6 @@
-class CarService {
+class ModelService {
     constructor() {
-        this.#baseUrl = 'api/cars';
+        this.#baseUrl = 'api/models';
     }
 
     #baseUrl;
@@ -35,8 +35,8 @@ class CarService {
         return response;
     }
 
-    async getAll() {
-        const response = await fetch(this.#baseUrl, {
+    async getAll(manufactor) {
+        const response = await fetch(`${this.#baseUrl}?manufactor=${manufactor}`, {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -55,33 +55,52 @@ class CarService {
         return response;
     }
 
-    async create(category) {
+    async create(model) {
         const response = await fetch(this.#baseUrl, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(category)
+            body: JSON.stringify(model)
         })
 
         return response;
     }
 
-    async update(category) {
+    async update(model) {
         const response = await fetch(this.#baseUrl, {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(category)
+            body: JSON.stringify(model)
         });
 
         return response;
     }
 
-    async remove(id) {
+    async removeSpecificModel(id) {
         const response = await fetch(`${this.#baseUrl}/${id}`, {
             method: 'delete'
         });
 
         return response;
     }
+
+    async removeAllModels(modelName) {
+        const response = await fetch(`${this.#baseUrl}/all/${modelName}`, {
+            method: 'delete'
+        });
+
+        return response;
+    }
+
+    async getBodyTypes() {
+        const response = await fetch(`${this.#baseUrl}/bodyTypes`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+
+        return result;
+    }
 }
 
-export default new CarService();
+export default new ModelService();

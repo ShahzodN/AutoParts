@@ -11,19 +11,16 @@ namespace AutoParts.Infrastructure.Services
     {
         public ImageService(ICategoryRepository categoryRepo,
                             IEmployeeRepository employeeRepo,
-                            ICarRepository carRepo,
                             IManufactorRepository manufactorRepo)
         {
             this.categoryRepo = categoryRepo;
             this.employeeRepo = employeeRepo;
-            this.carRepo = carRepo;
             this.manufactorRepo = manufactorRepo;
         }
 
         private readonly string imagesPath = "/home/shakhzod/Pictures/proj_images";
         private readonly ICategoryRepository categoryRepo;
         private readonly IEmployeeRepository employeeRepo;
-        private readonly ICarRepository carRepo;
         private readonly IManufactorRepository manufactorRepo;
 
         public async Task<byte[]> GetCategoryImage(int id)

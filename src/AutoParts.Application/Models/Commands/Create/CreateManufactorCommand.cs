@@ -4,7 +4,7 @@ using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
 using MediatR;
 
-namespace AutoParts.Application.Cars.Commands.Create;
+namespace AutoParts.Application.Models.Commands.Create;
 public class CreateManufactorCommand : IRequest
 {
     public string? Name { get; set; }

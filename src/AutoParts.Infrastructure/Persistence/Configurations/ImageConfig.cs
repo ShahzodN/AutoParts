@@ -20,10 +20,6 @@ namespace AutoParts.Infrastructure.Persistence.Configurations
             builder.HasOne(s => s.Product)
                 .WithMany(s => s.Images)
                 .HasForeignKey(s => s.ProductId);
-
-            builder.HasOne(s => s.Car)
-                .WithOne(s => s.ManufactorLogo)
-                .HasForeignKey<Image>(s => s.CarId);
         }
     }
 }
