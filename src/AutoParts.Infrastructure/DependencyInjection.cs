@@ -1,10 +1,8 @@
-using System;
 using System.Text;
 using AutoParts.Application.Identity;
 using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
-using AutoParts.Domain.Interfaces;
 using AutoParts.Infrastructure.Identity;
 using AutoParts.Infrastructure.Repositories;
 using AutoParts.Infrastructure.Services;
@@ -56,6 +54,7 @@ namespace AutoParts.Infrastructure
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<IConsignmentRepository, ConsignmentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IManufactorRepository, ManufactorRepository>();
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddScoped<IRoleManager, RoleManager>();

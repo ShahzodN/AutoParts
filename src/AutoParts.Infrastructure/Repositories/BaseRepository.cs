@@ -58,8 +58,9 @@ namespace AutoParts.Infrastructure.Repositories
                 query = Set.Where(expression);
                 models = await query.ToListAsync();
             }
+            else
+                models = await Set.ToListAsync();
 
-            models = await Set.ToListAsync();
             return models;
         }
     }

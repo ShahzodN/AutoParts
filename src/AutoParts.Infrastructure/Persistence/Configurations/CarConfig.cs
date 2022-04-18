@@ -11,5 +11,8 @@ public class CarConfig : IEntityTypeConfiguration<Car>
 
         builder.HasKey(s => s.Id);
 
+        builder.HasOne(s => s.Manufactor)
+                .WithMany(s => s.Cars)
+                .HasForeignKey(s => s.ManufactorId);
     }
 }

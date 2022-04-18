@@ -1,0 +1,16 @@
+#context-menu {
+    display: none;
+    position: fixed;
+    width: 200px;
+    z-index: 1000;
+    background-color: white;
+}
+
+#context-menu span {
+    width: 100%;
+}
+
+#context-menu span:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}

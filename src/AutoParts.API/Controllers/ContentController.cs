@@ -27,4 +27,11 @@ public class ContentController : Controller
         byte[] imageBytes = await imageService.GetEmployeeImage(id);
         return File(imageBytes, "image/jpeg");
     }
+
+    [HttpGet("manufactor/{id}")]
+    public async Task<IActionResult> GetManufactorLogoImage(int id)
+    {
+        byte[] imageBytes = await imageService.GetManufactorLogo(id);
+        return File(imageBytes, "image/jpeg");
+    }
 }

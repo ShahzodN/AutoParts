@@ -3,7 +3,7 @@ import { Button, Modal, Spinner } from 'react-bootstrap';
 import { BsCheckCircle } from "react-icons/bs";
 import { CategoryCard } from "../components/CategoryCard";
 import { CreateCategoryModal } from "../components/CreateCategoryModal";
-import categoryService from '../services/category.service';
+import categoryService from "../services/category.service";
 
 export function Categories() {
 
@@ -13,14 +13,13 @@ export function Categories() {
 
   useEffect(() => {
     categoryService.getAll().then(res => {
-      console.log(res);
       setCategories(res);
       setLoading(false);
     });
   }, []);
 
   return !loading ? (
-    <div className="container">
+    <div className="p-2">
       <CreateCategoryModal
         show={showCreateModal}
         onHide={() => setShowCreateModal(!showCreateModal)}

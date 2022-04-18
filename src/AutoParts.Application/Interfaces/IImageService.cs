@@ -7,9 +7,8 @@ namespace AutoParts.Application.Interfaces
     {
         Task<Image> SetImages(IEntity entity, string base64);
         Task<byte[]> GetCategoryImage(int id);
+        Task<byte[]> GetManufactorLogo(int id);
         Task<byte[]> GetEmployeeImage(int id);
         void DeleteImage(string? path);
-        void DeleteImages(List<Image> images);
-
     }
 }
