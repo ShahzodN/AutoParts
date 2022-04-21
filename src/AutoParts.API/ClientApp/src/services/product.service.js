@@ -1,61 +1,30 @@
 class ProductService {
     #baseUrl = 'api/products';
-    products = [
-        {
-            id: 1,
-            name: 'p1'
-        },
-        {
-            id: 2,
-            name: 'p2'
-        },
-        {
-            id: 3,
-            name: 'p3'
-        },
-        {
-            id: 4,
-            name: 'p3'
-        },
-        {
-            id: 5,
-            name: 'p3'
-        },
-        {
-            id: 6,
-            name: 'p3'
-        },
-        {
-            id: 1,
-            name: 'p1'
-        },
-        {
-            id: 2,
-            name: 'p2'
-        },
-        {
-            id: 3,
-            name: 'p3'
-        },
-        {
-            id: 4,
-            name: 'p3'
-        },
-        {
-            id: 5,
-            name: 'p3'
-        },
-        {
-            id: 6,
-            name: 'p3'
-        }
-    ]
 
+    async getPreliminaryData() {
+        const response = await fetch(`${this.#baseUrl}/preliminary`, {
+            method: 'get',
+        });
+
+        const result = await response.json();
+
+        return result;
+    }
 
     async getAll(name) {
         const response = await fetch(`${this.#baseUrl}`);
 
         return await response.json();
+    }
+
+    async create(product) {
+        const response = await fetch(`${this.#baseUrl}`, {
+            method: 'post',
+            body: JSON.stringify(product),
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        return response;
     }
 }
 

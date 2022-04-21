@@ -6,6 +6,8 @@ import "../css/Admin.css"
 import { Categories } from "./Categories";
 import { Manufactors } from "./Manufactors";
 import { Models } from "./Models";
+import { Products } from "./Products";
+import { NewProduct } from "./NewProduct";
 
 export class Admin extends Component {
   render() {
@@ -28,6 +30,9 @@ export class Admin extends Component {
             <li className="list-group-item">
               <Link className="btn btn-primary" to="/admin/manufactors">Производители</Link>
             </li>
+            <li className="list-group-item">
+              <Link className="btn btn-primary" to="/admin/products">Продукты</Link>
+            </li>
           </ul>
         </aside>
 
@@ -38,6 +43,8 @@ export class Admin extends Component {
           <Route path="/categories/*" element={<Categories />} />
           <Route path="/manufactors" element={<Manufactors />} />
           <Route path="/manufactors/:manufName" element={<Models />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/new" element={<NewProduct />} />
         </Routes>
       </div>
     )
