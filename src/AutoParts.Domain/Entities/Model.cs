@@ -10,6 +10,6 @@ namespace AutoParts.Domain.Entities
         public BodyType BodyType { get; set; }
         public Manufactor Manufactor { get; set; } = null!;
         public int ManufactorId { get; set; }
-        public List<AutoProduct> Products { get; set; } = new();
+        public List<Product> Products { get; set; } = new();
     }
 }

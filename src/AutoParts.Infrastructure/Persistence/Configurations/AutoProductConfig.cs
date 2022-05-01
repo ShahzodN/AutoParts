@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AutoParts.Infrastructure.Persistence.Configuration;
 
-public class AutoProductConfig : IEntityTypeConfiguration<AutoProduct>
+public class AutoProductConfig : IEntityTypeConfiguration<Product>
 {
-    public void Configure(EntityTypeBuilder<AutoProduct> builder)
+    public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("AutoProducts");
+        builder.ToTable("Products");
 
         builder.HasKey(s => s.Id);
 

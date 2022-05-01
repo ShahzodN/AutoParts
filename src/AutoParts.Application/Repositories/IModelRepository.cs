@@ -5,4 +5,5 @@ namespace AutoParts.Application.Repositories;
 public interface IModelRepository : IRepository<Model>
 {
     Task Delete(string? modelName);
+    Task<object[]> GetByName(string name);
 }

@@ -1,9 +1,19 @@
 import { DefaultButton } from "@fluentui/react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { ProductCard } from "../components/ProductCard";
 import { ProductFilters } from "../components/ProductFilters"
+import productService from "../services/product.service";
 
 export function Products() {
 
+  const [data, setData] = useState({ manufactors: [], categories: [] });
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    productService.getPreliminaryData().then(result => setData(result));
+    productService.getAll().then(result => setProducts(result));
+  }, [])
 
   return (
     <div className="container-fluid">
@@ -18,9 +28,29 @@ export function Products() {
         </Link>
       </div>
       <div className="row">
-        <aside className="col-2">
-          <ProductFilters />
-        </aside>
+        <div className="col-12 col-lg-4 col-xl-3 col-xxl-2 mb-4 mb-lg-0">
+          <ProductFilters
+            data={data}
+            setProducts={setProducts}
+          />
+        </div>
+        <div className="col">
+          <div className="d-flex flex-wrap gap-1">
+            {products.map(p => {
+              return (
+                <Link
+                  to={`/admin/products/${p.id}`}
+                  className="product-link"
+                  key={p.id}
+                >
+                  <ProductCard
+                    product={p}
+                  />
+                </Link>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div >
   )

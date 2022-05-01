@@ -101,6 +101,18 @@ class ModelService {
 
         return result;
     }
+
+    async getModelsWithYearsOfIssue(manufactorId) {
+        const response = await fetch(`${this.#baseUrl}/withYears/${manufactorId}`);
+
+        return await response.json();
+    }
+
+    async getModelsName(name) {
+        const response = await fetch(`${this.#baseUrl}/names/${name}`);
+
+        return await response.json();
+    }
 }
 
 export default new ModelService();

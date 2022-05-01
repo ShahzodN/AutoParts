@@ -10,7 +10,9 @@ public class CategoryProfile : Profile
 {
     public CategoryProfile()
     {
-        CreateMap<Category, CategoryDto>();
+        CreateMap<Category, CategoryDto>()
+            .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image.Name));
+
         CreateMap<Category, Category>().ForMember(d => d.Image, opt => opt.Ignore());
         CreateMap<CreateCategoryCommand, Category>().ForMember(dest => dest.Image, opt => opt.Ignore());
         CreateMap<UpdateCategoryCommand, Category>();

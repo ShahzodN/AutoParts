@@ -1,35 +1,24 @@
-import { Button, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom"
 import productService from "../services/product.service";
-import modelService from "../services/model.service";
 import Select from "react-select";
 import { Image, ImageFit } from "@fluentui/react";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { OperationResultModal } from "../components/OperationResultModal";
+import modelService from "../services/model.service";
 
-export function NewProduct() {
 
+export function ProductDetail() {
+
+  const imageSrc = `${window.location.protocol}//${window.location.hostname}:5000/images`;
+
+  const params = useParams();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    name: '',
-    price: 0,
-    isEnabled: false,
-    forAllManufactors: false,
-    forAllModels: false,
-    manufactorId: 0,
-    models: [],
-    categoryId: 0,
-    description: '',
-    image: ''
-  });
+  const [product, setProduct] = useState();
+  const [data, setData] = useState({ categories: [], manufactors: [] });
 
-  const [data, setData] = useState({
-    manufactors: [],
-    categories: []
-  });
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showOperationResultModal, setShowOperationResultModal] = useState(false);
 
   const [models, setModels] = useState([]);
@@ -39,14 +28,23 @@ export function NewProduct() {
   const [yearsSelectValues, setYearsSelectValues] = useState([]);
 
   useEffect(() => {
-    productService.getPreliminaryData().then(result => setData(result));
+    productService.getProductById(params.id).then(res => {
+      setProduct(res);
+      setModelsSelectValues(res.models.map(model => ({ value: model.model, label: model.model })));
+      setLoading(false);
+
+      if (res.manufactorId)
+        modelService.getModelsWithYearsOfIssue(res.manufactorId).then(r => setModels(r));
+    });
+
+    productService.getPreliminaryData().then(res => setData(res));
   }, []);
 
   const onFileUpload = (e) => {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      setForm({ ...form, image: e.target.result });
+      setProduct({ ...product, image: e.target.result });
     }
 
     reader.readAsDataURL(e.target.files[0]);
@@ -57,7 +55,7 @@ export function NewProduct() {
     setYearsSelectValues([]);
     setYearsOfIssue([]);
 
-    setForm({ ...form, manufactorId: e.value, models: [] });
+    setProduct({ ...product, manufactorId: e.value, models: [] });
     modelService.getModelsWithYearsOfIssue(e.value).then(res => {
       setModels(res);
     });
@@ -81,13 +79,13 @@ export function NewProduct() {
 
       setModelsSelectValues([...modelsSelectValues.filter(x => x !== deletedModel)]);
       setYearsOfIssue([...yearsOfIssue.filter(x => x.label !== deletedModel.label)]);
-      setForm({ ...form, models: form.models.filter(m => m.model !== deletedModel.label) })
+      setProduct({ ...product, models: product.models.filter(m => m.model !== deletedModel.label) })
       setYearsSelectValues([...yearsSelectValues.filter(x => x.model !== deletedModel.label)])
     }
   }
 
   const onYearsListChange = (e) => {
-    let models = [...form.models];
+    let models = [...product.models];
 
     // adding something
     if (yearsSelectValues === null || yearsSelectValues?.length < e.length) {
@@ -108,7 +106,7 @@ export function NewProduct() {
         models = [...models, model];
 
       }
-      setForm({ ...form, models: models });
+      setProduct({ ...product, models: models });
     }
     // removing something
     else {
@@ -117,7 +115,7 @@ export function NewProduct() {
       let model = models.find(x => x.model === deletingModel.model);
       console.log("models", models);
       model.yearsOfIssue = [...model.yearsOfIssue.filter(x => x !== parseInt(deletingModel.label))];
-      setForm({ ...form, models: models });
+      setProduct({ ...product, models: models });
     }
     setYearsSelectValues([...e]);
   }
@@ -125,7 +123,7 @@ export function NewProduct() {
   const uploadProduct = () => {
     setLoading(true);
 
-    productService.create(form).then(res => {
+    productService.create(product).then(res => {
       setShowOperationResultModal(true);
       if (res.ok) {
         document.getElementById("success").style.display = "block";
@@ -146,7 +144,7 @@ export function NewProduct() {
     });
   }
 
-  return (
+  return !loading ? (
     <div className="container-fluid p-xxl-5">
       <div className="row mb-4">
         <div className="col-12 col-md-4 col-lg-3">
@@ -156,7 +154,7 @@ export function NewProduct() {
                 imageFit={ImageFit.centerCover}
                 width={200}
                 height={200}
-                src={form.image}
+                src={`${imageSrc}/product/${product.id}/${product.image}`}
                 alt="productImage"
               />
             </div>
@@ -179,7 +177,8 @@ export function NewProduct() {
               <input
                 className="form-control"
                 id="productName"
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                defaultValue={product.name}
+                onChange={(e) => setProduct({ ...product, name: e.target.value })}
               />
             </div>
             <div className="col-md-12 col-lg-4 mt-2">
@@ -187,13 +186,15 @@ export function NewProduct() {
               <input
                 className="form-control"
                 id="productPrice"
-                onChange={(e) => setForm({ ...form, price: parseInt(e.target.value) })}
+                defaultValue={product.price}
+                onChange={(e) => setProduct({ ...product, price: parseInt(e.target.value) })}
               />
             </div>
             <div className="col-md-12 col-lg-4 mt-2">
               <Select
                 options={data.categories.map(x => ({ value: x.id, label: x.name }))}
-                onChange={(newValue) => setForm({ ...form, categoryId: newValue.value })}
+                defaultValue={{ value: product.categoryId, label: product.categoryName }}
+                onChange={(newValue) => setProduct({ ...product, categoryId: newValue.value })}
               />
             </div>
           </div>
@@ -205,7 +206,8 @@ export function NewProduct() {
                   type="checkbox"
                   role="switch"
                   id="isEnabled"
-                  onChange={(e) => setForm({ ...form, isEnabled: e.target.checked })}
+                  defaultChecked={product.isEnabled}
+                  onChange={(e) => setProduct({ ...product, isEnabled: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="isEnabled">Видно пользователям</label>
               </div>
@@ -214,7 +216,8 @@ export function NewProduct() {
           <div className="row mt-2">
             <div className="col">
               <textarea
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                defaultValue={product.description}
+                onChange={(e) => setProduct({ ...product, description: e.target.value })}
                 placeholder="Описание товара"
                 className="form-control"
               >
@@ -232,7 +235,8 @@ export function NewProduct() {
               type="checkbox"
               role="switch"
               id="forAllManufactors"
-              onChange={(e) => setForm({ ...form, forAllManufactors: e.target.checked })}
+              defaultChecked={product.forAllManufactors}
+              onChange={(e) => setProduct({ ...product, forAllManufactors: e.target.checked })}
             />
             <label className="form-check-label" htmlFor="forAllManufactors">Совместим со всеми производителями</label>
           </div>
@@ -244,7 +248,7 @@ export function NewProduct() {
               type="checkbox"
               role="switch"
               id="forAllModels"
-              onChange={(e) => setForm({ ...form, forAllModels: e.target.checked })}
+              onChange={(e) => setProduct({ ...product, forAllModels: e.target.checked })}
             />
             <label className="form-check-label" htmlFor="forAllModels">Совместим со всеми моделями</label>
           </div>
@@ -256,7 +260,11 @@ export function NewProduct() {
             placeholder="Производители"
             options={data.manufactors.map(x => ({ value: x.id, label: x.name }))}
             onChange={(e) => onManufactorChange(e)}
-            isDisabled={form.forAllManufactors}
+            defaultValue={() => {
+              const m = data.manufactors.find(x => x.id === product.manufactorId);
+              return { value: m?.id, label: m?.name }
+            }}
+            isDisabled={product.forAllManufactors}
           />
         </div>
         <div className="col-12 col-md-4 mt-2">
@@ -267,7 +275,7 @@ export function NewProduct() {
             onChange={(e) => onModelsListChange(e)}
             value={modelsSelectValues}
             closeMenuOnSelect={false}
-            isDisabled={form.forAllModels || form.forAllManufactors}
+            isDisabled={product.forAllModels || product.forAllManufactors}
           />
         </div>
         <div className="col-12 col-md-4 mt-2">
@@ -278,7 +286,7 @@ export function NewProduct() {
             onChange={(e) => onYearsListChange(e)}
             value={yearsSelectValues}
             closeMenuOnSelect={false}
-            isDisabled={form.forAllModels || form.forAllManufactors}
+            isDisabled={product.forAllModels || product.forAllManufactors}
           />
         </div>
       </div>
@@ -286,18 +294,25 @@ export function NewProduct() {
         onClick={(e) => uploadProduct()}
         className="my-2"
       >
-        {loading && <Spinner
-
-          animation="border"
-          as="span"
-          size="sm"
-          role="alert"
-        />}
-        {loading ? "  Ждите..." : "Сохранить"}
+        Сохранить
       </Button>
       <OperationResultModal
         show={showOperationResultModal}
       />
     </div >
+  ) : (
+    <Modal
+      show={loading}
+      backdrop="static"
+      centered
+      className="modal-90w"
+    >
+      <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Spinner
+          animation="border"
+          role="status"
+        />
+      </Modal.Body>
+    </Modal>
   )
 }

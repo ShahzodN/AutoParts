@@ -19,7 +19,7 @@ namespace AutoParts.Infrastructure.Repositories
         protected readonly TContext context;
         protected readonly DbSet<T> Set;
 
-        public async Task<T> Create(T model)
+        public virtual async Task<T> Create(T model)
         {
             await Set.AddAsync(model);
             await context.SaveChangesAsync();

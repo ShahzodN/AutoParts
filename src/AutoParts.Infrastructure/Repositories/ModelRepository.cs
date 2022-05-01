@@ -33,4 +33,22 @@ public class ModelRepository : BaseRepository<Model, ApplicationDbContext>, IMod
 
         return models;
     }
+
+    public async Task<object[]> GetByName(string? name)
+    {
+        if (name == null)
+            throw new Exception("Bad request");
+
+        var products = await Set.Where(x => x.ModelName!.ToUpper().StartsWith(name.ToUpper()))
+                                .Include(x => x.Manufactor)
+                                .Select(x => new { Name = x.ModelName, Manufactor = x.Manufactor.Name }).ToArrayAsync();
+
+        var grouped = products.DistinctBy(x => x.Name).GroupBy(x => x.Manufactor).Select(g => new
+        {
+            Label = g.Key,
+            Options = g.Select(o => new { Value = o.Name, Label = o.Name }).ToArray()
+        }).ToArray();
+
+        return grouped;
+    }
 }

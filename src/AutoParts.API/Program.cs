@@ -1,7 +1,6 @@
 using AutoParts.API.Middleware;
 using AutoParts.Application;
 using AutoParts.Infrastructure;
-using AutoParts.Infrastructure.Persistence;
 using Microsoft.AspNetCore.CookiePolicy;
 
 var builder = WebApplication.CreateBuilder(args);

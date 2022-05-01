@@ -33,7 +33,7 @@ public class DeleteManufactorCommandHandler : IRequestHandler<DeleteManufactorCo
         if (manufactor == null)
             throw new NotFoundException("Manufactor with provided id was not found.");
 
-        imageService.DeleteImage(manufactor.Image!.Path);
+        imageService.DeleteImage(manufactor.Image!.Name);
 
         await manufactorRepo.Delete(request.Id);
 

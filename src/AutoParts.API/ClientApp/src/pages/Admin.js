@@ -8,13 +8,14 @@ import { Manufactors } from "./Manufactors";
 import { Models } from "./Models";
 import { Products } from "./Products";
 import { NewProduct } from "./NewProduct";
+import { ProductDetail } from "./ProductDetail";
 
 export class Admin extends Component {
   render() {
     return (
-      <div className="d-flex flex-row">
-        <aside className="left-bar">
-          <ul className="list-group">
+      <div className="d-flex flex-column">
+        <aside>
+          <ul className="list-group d-flex flex-lg-row">
             <li className="list-group-item">
               <Link className="btn btn-primary" to="/admin">Главная</Link>
             </li>
@@ -45,6 +46,7 @@ export class Admin extends Component {
           <Route path="/manufactors/:manufName" element={<Models />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/new" element={<NewProduct />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
         </Routes>
       </div>
     )

@@ -13,25 +13,4 @@ public class ContentController : Controller
     {
         this.imageService = imageService;
     }
-
-    [HttpGet("category/{id}")]
-    public async Task<IActionResult> GetCategoryImage(int id)
-    {
-        byte[] imageBytes = await imageService.GetCategoryImage(id);
-        return File(imageBytes, "image/jpeg");
-    }
-
-    [HttpGet("employee/{id}")]
-    public async Task<IActionResult> GetEmployeeImage(int id)
-    {
-        byte[] imageBytes = await imageService.GetEmployeeImage(id);
-        return File(imageBytes, "image/jpeg");
-    }
-
-    [HttpGet("manufactor/{id}")]
-    public async Task<IActionResult> GetManufactorLogoImage(int id)
-    {
-        byte[] imageBytes = await imageService.GetManufactorLogo(id);
-        return File(imageBytes, "image/jpeg");
-    }
 }
