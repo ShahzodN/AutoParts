@@ -16,10 +16,10 @@ public class UpdateModelCommand : IRequest
 
 public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand, Unit>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
     private readonly IMapper mapper;
 
-    public UpdateModelCommandHandler(ICarRepository carRepo, IMapper mapper)
+    public UpdateModelCommandHandler(IModelRepository carRepo, IMapper mapper)
     {
         this.carRepo = carRepo;
         this.mapper = mapper;
@@ -27,13 +27,13 @@ public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand, Uni
 
     public async Task<Unit> Handle(UpdateModelCommand request, CancellationToken cancellationToken)
     {
-        Car? car = await carRepo.GetById(request.Id);
+        Model? model = await carRepo.GetById(request.Id);
 
-        if (car == null)
+        if (model == null)
             throw new NotFoundException("Car with the provided id was not found.");
 
-        mapper.Map(request, car);
-        await carRepo.Update(car);
+        mapper.Map(request, model);
+        await carRepo.Update(model);
 
         return Unit.Value;
     }

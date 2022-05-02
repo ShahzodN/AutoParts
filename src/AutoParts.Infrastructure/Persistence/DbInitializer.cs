@@ -23,14 +23,14 @@ public class DbInitializer
             Name = "Аккумуляторы"
         };
 
-        AutoProduct pr1 = new()
+        Product pr1 = new()
         {
             CategoryId = category.Id,
             Name = "Зарядное устройство со встроенным микропроцессором и цифровым дисплеем, ZIPOWER",
             Price = 5400
         };
 
-        AutoProduct pr2 = new()
+        Product pr2 = new()
         {
             CategoryId = category.Id,
             Name = "Аккумулятор 100 а/ч, европейская полярность BOSCH 600 402 083 S5 (013)",

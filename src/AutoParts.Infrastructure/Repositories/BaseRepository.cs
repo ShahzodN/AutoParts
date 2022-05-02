@@ -19,20 +19,22 @@ namespace AutoParts.Infrastructure.Repositories
         protected readonly TContext context;
         protected readonly DbSet<T> Set;
 
-        public async Task<T> Create(T model)
+        public virtual async Task<T> Create(T model)
         {
             await Set.AddAsync(model);
             await context.SaveChangesAsync();
             return model;
         }
 
-        public async Task Delete(int id)
+        public virtual async Task Delete(int id)
         {
             var entity = await GetById(id);
+
             if (entity != null)
                 Set.Remove(entity);
             else
                 throw new NotFoundException("Entity with provided id was not found.");
+
             await context.SaveChangesAsync();
         }
 
@@ -41,11 +43,13 @@ namespace AutoParts.Infrastructure.Repositories
             return await Set.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<T?> Update(T model)
+        public async Task<T> Update(T model)
         {
             Set.Update(model);
+
             await context.SaveChangesAsync();
-            return await GetById(model.Id);
+
+            return model;
         }
 
         public virtual async Task<List<T>> GetAll(Expression<Func<T, bool>> expression = null!)

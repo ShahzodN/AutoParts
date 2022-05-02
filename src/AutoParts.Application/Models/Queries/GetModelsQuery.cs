@@ -14,10 +14,10 @@ public class GetModelsQuery : IRequest<List<ModelDto>>
 
 public class GetModelsQueryHandler : IRequestHandler<GetModelsQuery, List<ModelDto>>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
     private readonly IMapper mapper;
 
-    public GetModelsQueryHandler(ICarRepository carRepo, IMapper mapper)
+    public GetModelsQueryHandler(IModelRepository carRepo, IMapper mapper)
     {
         this.carRepo = carRepo;
         this.mapper = mapper;
@@ -30,7 +30,7 @@ public class GetModelsQueryHandler : IRequestHandler<GetModelsQuery, List<ModelD
         if (cars == null)
             throw new NotFoundException("Manufactor not found");
 
-        var groupedByModel = cars.GroupBy(s => s.Model).Select(s => new
+        var groupedByModel = cars.GroupBy(s => s.ModelName).Select(s => new
         {
             Model = s.Key,
             Manufactor = s.First().Manufactor.Name,

@@ -36,6 +36,17 @@ public class ModelsController : BaseController
         return Ok(Enum.GetNames<BodyType>());
     }
 
+    [HttpGet("withYears/{id}")]
+    public async Task<ActionResult<List<ModelWithYearsOfIssueDto>>> GetModelsWithYearsOfIssue(int id)
+    {
+        return Ok(await Mediator.Send(new GetModelsWithYearsOfIssueQuery(manufactorId: id)));
+    }
+
+    [HttpGet("names/{name}")]
+    public async Task<ActionResult<List<ModelWithYearsOfIssueDto>>> GetModelsNames(string name)
+    {
+        return Ok(await Mediator.Send(new GetModelsNamesQuery(name)));
+    }
     #endregion
 
     #region POST

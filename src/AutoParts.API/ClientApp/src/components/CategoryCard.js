@@ -4,7 +4,7 @@ import { CategoryUpdateDeleteModal } from "./CategoryUpdateDeleteModal";
 export function CategoryCard(props) {
 
   const [showModal, setShowModal] = useState(false);
-  const contentUrl = 'api/content/category';
+  const contentUrl = 'http://localhost:5000/images';
 
   return (
     <div>
@@ -16,9 +16,13 @@ export function CategoryCard(props) {
 
       <div className="shadow mx-5 my-3" onClick={() => setShowModal(!showModal)}>
         <div style={{ width: '200px', height: '200px' }}>
-          <img src={`${contentUrl}/${props.category.id}`} alt="categoryImage" style={{ width: '100%' }} />
+          <img
+            src={`${contentUrl}/category/${props.category.id}/${props.category.image}`}
+            alt="categoryImage"
+            style={{ width: '100%' }}
+          />
         </div>
-        <h6>{props.category.name}</h6>
+        <h6 className="mt-3 p-1">{props.category.name}</h6>
       </div>
     </div>
   )

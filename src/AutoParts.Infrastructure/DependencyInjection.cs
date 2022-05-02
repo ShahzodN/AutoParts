@@ -51,7 +51,7 @@ namespace AutoParts.Infrastructure
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IConsignmentRepository, ConsignmentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IManufactorRepository, ManufactorRepository>();

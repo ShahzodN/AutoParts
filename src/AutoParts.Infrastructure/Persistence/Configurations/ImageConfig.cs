@@ -18,8 +18,8 @@ namespace AutoParts.Infrastructure.Persistence.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(s => s.Product)
-                .WithMany(s => s.Images)
-                .HasForeignKey(s => s.ProductId);
+                .WithOne(s => s.Image)
+                .HasForeignKey<Image>(s => s.ProductId);
         }
     }
 }

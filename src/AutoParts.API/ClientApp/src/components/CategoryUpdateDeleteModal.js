@@ -82,7 +82,7 @@ export function CategoryUpdateDeleteModal(props) {
                 alt="categoryImage"
                 style={{ width: '100%' }}
                 id="prev"
-                className="mb-3"
+                className="mb-3 img-fluid"
               />
               <input
                 hidden

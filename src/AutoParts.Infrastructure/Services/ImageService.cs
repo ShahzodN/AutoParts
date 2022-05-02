@@ -1,96 +1,55 @@
 using AutoParts.Application.Exceptions;
-using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Interfaces;
-using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
 using AutoParts.Domain.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AutoParts.Infrastructure.Services
 {
     public class ImageService : IImageService
     {
-        public ImageService(ICategoryRepository categoryRepo,
-                            IEmployeeRepository employeeRepo,
-                            IManufactorRepository manufactorRepo)
+        public ImageService(IWebHostEnvironment environment)
         {
-            this.categoryRepo = categoryRepo;
-            this.employeeRepo = employeeRepo;
-            this.manufactorRepo = manufactorRepo;
+            this.environment = environment;
         }
 
-        private readonly string imagesPath = "/home/shakhzod/Pictures/proj_images";
-        private readonly ICategoryRepository categoryRepo;
-        private readonly IEmployeeRepository employeeRepo;
-        private readonly IManufactorRepository manufactorRepo;
-
-        public async Task<byte[]> GetCategoryImage(int id)
-        {
-            Category? category = await categoryRepo.GetById(id);
-
-            if (category == null)
-                throw new NotFoundException("Category with provided id was not found.");
-
-            try
-            {
-                return await File.ReadAllBytesAsync(category.Image.Path!);
-            }
-            catch (Exception)
-            {
-                throw new Exception("File not found.");
-            }
-        }
-
-        public async Task<byte[]> GetManufactorLogo(int id)
-        {
-            Manufactor? manufactor = await manufactorRepo.GetById(id);
-
-            if (manufactor == null)
-                throw new NotFoundException("Manufactor with provided id was not found.");
-
-            try
-            {
-                return await File.ReadAllBytesAsync(manufactor.Image?.Path!);
-            }
-            catch (Exception)
-            {
-                throw new Exception("File not found.");
-            }
-        }
-
-        public async Task<byte[]> GetEmployeeImage(int id)
-        {
-            Employee? employee = await employeeRepo.GetById(id);
-
-            if (employee == null)
-                throw new NotFoundException("Category with provided id was not found.");
-
-            try
-            {
-                return await File.ReadAllBytesAsync(employee.Image.Path!);
-            }
-            catch (Exception)
-            {
-                throw new Exception("File not found.");
-            }
-        }
+        private readonly IWebHostEnvironment environment;
+        public string ImagePath { get { return environment.WebRootPath; } }
 
         public async Task<Image> SetImages(IEntity entity, string base64)
         {
-            string type = entity.GetType().Name.ToLower();
+            string type = entity.GetType().Name;
             string fileExtension = ParseFileExtension(base64);
             string fileName = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-            Directory.CreateDirectory($"{imagesPath}/{type}/{entity.Id}");
+            Directory.CreateDirectory($"{ImagePath}/images/{type}/{entity.Id}");
 
             byte[] imageBytes = Convert.FromBase64String(base64.Substring(base64.IndexOf(',') + 1));
-            using (FileStream stream = new FileStream($"{imagesPath}/{type}/{entity.Id}/{fileName}.{fileExtension}", FileMode.Create))
+
+            using (FileStream stream = new FileStream($"{ImagePath}/images/{type}/{entity.Id}/{fileName}.{fileExtension}", FileMode.Create))
             {
                 await stream.WriteAsync(imageBytes, 0, imageBytes.Count());
             }
 
-            return new Image()
+            return new Image() { Name = $"{fileName}.{fileExtension}" };
+        }
+
+        public async Task<string> UpdateImage(string type, int id, string base64)
+        {
+            if (base64?.Length < 50)
+                return base64;
+
+            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").GetFiles().FirstOrDefault()?.Delete();
+
+            string fileExtension = ParseFileExtension(base64!);
+            string fileName = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
+            byte[] imageBytes = Convert.FromBase64String(base64!.Substring(base64.IndexOf(',') + 1));
+
+            using (FileStream stream = new FileStream($"{ImagePath}/images/{type}/{id}/{fileName}.{fileExtension}", FileMode.Create))
             {
-                Path = $"{imagesPath}/{type}/{entity.Id}/{fileName}.{fileExtension}"
-            };
+                await stream.WriteAsync(imageBytes, 0, imageBytes.Count());
+            }
+
+            return $"{fileName}.{fileExtension}";
         }
 
         private string ParseFileExtension(string base64)
@@ -101,16 +60,9 @@ namespace AutoParts.Infrastructure.Services
             return extension;
         }
 
-        public void DeleteImage(string? path)
+        public void DeleteImage(string type, int id)
         {
-            if (path != null)
-            {
-                try
-                {
-                    Directory.Delete(Path.GetDirectoryName(path)!, true);
-                }
-                catch { }
-            }
+            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").Delete(true);
         }
     }
 }

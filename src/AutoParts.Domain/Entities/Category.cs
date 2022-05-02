@@ -8,7 +8,7 @@ public class Category : IEntity
     public Category? Parent { get; set; }
     public int? ParentId { get; set; }
     public List<Category> SubCategories { get; set; } = new();
-    public List<AutoProduct> Products { get; set; } = new();
+    public List<Product> Products { get; set; } = new();
     public Image Image { get; set; } = null!;
     public int ImageId { get; set; }
 }

@@ -3,13 +3,13 @@ using AutoParts.Domain.Interfaces;
 
 namespace AutoParts.Domain.Entities
 {
-    public class Car : IEntity
+    public class Model : IEntity
     {
-        public string? Model { get; set; }
+        public string? ModelName { get; set; }
         public int YearOfIssue { get; set; }
         public BodyType BodyType { get; set; }
         public Manufactor Manufactor { get; set; } = null!;
         public int ManufactorId { get; set; }
-        public List<AutoProduct> Products { get; set; } = new();
+        public List<Product> Products { get; set; } = new();
     }
 }

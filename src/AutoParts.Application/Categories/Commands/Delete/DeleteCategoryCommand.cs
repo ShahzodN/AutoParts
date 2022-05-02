@@ -28,9 +28,7 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
 
     public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        string? imagePath = (await categoryRepo.GetById(request.Id))?.Image.Path;
         await categoryRepo.Delete(request.Id);
-        imageService.DeleteImage(imagePath);
 
         return Unit.Value;
     }

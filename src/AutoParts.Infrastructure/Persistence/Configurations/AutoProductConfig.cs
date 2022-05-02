@@ -4,18 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AutoParts.Infrastructure.Persistence.Configuration;
 
-public class AutoProductConfig : IEntityTypeConfiguration<AutoProduct>
+public class AutoProductConfig : IEntityTypeConfiguration<Product>
 {
-    public void Configure(EntityTypeBuilder<AutoProduct> builder)
+    public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("AutoProducts");
+        builder.ToTable("Products");
 
         builder.HasKey(s => s.Id);
 
-        builder.HasOne(s => s.Car)
-            .WithMany(s => s.Products)
-            .HasForeignKey(s => s.CarId)
-            .IsRequired(false);
+        builder.HasMany(s => s.Models)
+            .WithMany(s => s.Products);
 
         builder.HasOne(s => s.Category)
             .WithMany(s => s.Products)

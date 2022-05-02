@@ -21,11 +21,11 @@ public class CreateModelCommand : IRequest
 
 public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand>
 {
-    private readonly ICarRepository carRepo;
+    private readonly IModelRepository carRepo;
     private readonly IManufactorRepository manufactorRepo;
     private readonly IMapper mapper;
 
-    public CreateModelCommandHandler(ICarRepository carRepo, IManufactorRepository manufactorRepo, IMapper mapper)
+    public CreateModelCommandHandler(IModelRepository carRepo, IManufactorRepository manufactorRepo, IMapper mapper)
     {
         this.carRepo = carRepo;
         this.manufactorRepo = manufactorRepo;
@@ -38,10 +38,10 @@ public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand>
         if (manufactor == null)
             throw new NotFoundException("Manufactor with provided name was not found");
 
-        Car car = mapper.Map<Car>(request);
+        Model model = mapper.Map<Model>(request);
 
-        car.Manufactor = manufactor;
-        await carRepo.Create(car);
+        model.Manufactor = manufactor;
+        await carRepo.Create(model);
 
         return Unit.Value;
     }
