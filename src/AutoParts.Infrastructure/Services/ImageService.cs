@@ -18,7 +18,7 @@ namespace AutoParts.Infrastructure.Services
 
         public async Task<Image> SetImages(IEntity entity, string base64)
         {
-            string type = entity.GetType().Name.ToLower();
+            string type = entity.GetType().Name;
             string fileExtension = ParseFileExtension(base64);
             string fileName = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
             Directory.CreateDirectory($"{ImagePath}/images/{type}/{entity.Id}");
@@ -33,6 +33,25 @@ namespace AutoParts.Infrastructure.Services
             return new Image() { Name = $"{fileName}.{fileExtension}" };
         }
 
+        public async Task<string> UpdateImage(string type, int id, string base64)
+        {
+            if (base64?.Length < 50)
+                return base64;
+
+            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").GetFiles().FirstOrDefault()?.Delete();
+
+            string fileExtension = ParseFileExtension(base64!);
+            string fileName = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
+            byte[] imageBytes = Convert.FromBase64String(base64!.Substring(base64.IndexOf(',') + 1));
+
+            using (FileStream stream = new FileStream($"{ImagePath}/images/{type}/{id}/{fileName}.{fileExtension}", FileMode.Create))
+            {
+                await stream.WriteAsync(imageBytes, 0, imageBytes.Count());
+            }
+
+            return $"{fileName}.{fileExtension}";
+        }
+
         private string ParseFileExtension(string base64)
         {
             string head = base64.Split(';')[0];
@@ -41,19 +60,9 @@ namespace AutoParts.Infrastructure.Services
             return extension;
         }
 
-        public void DeleteImage(string? path)
+        public void DeleteImage(string type, int id)
         {
-            if (path != null)
-            {
-                try
-                {
-                    Directory.Delete(Path.GetDirectoryName(path)!, true);
-                }
-                catch
-                {
-                    throw new NotFoundException("Image was not found");
-                }
-            }
+            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").Delete(true);
         }
     }
 }

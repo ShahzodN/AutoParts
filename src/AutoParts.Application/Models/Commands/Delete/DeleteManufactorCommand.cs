@@ -28,13 +28,6 @@ public class DeleteManufactorCommandHandler : IRequestHandler<DeleteManufactorCo
 
     public async Task<Unit> Handle(DeleteManufactorCommand request, CancellationToken cancellationToken)
     {
-        var manufactor = await manufactorRepo.GetById(request.Id);
-
-        if (manufactor == null)
-            throw new NotFoundException("Manufactor with provided id was not found.");
-
-        imageService.DeleteImage(manufactor.Image!.Name);
-
         await manufactorRepo.Delete(request.Id);
 
         return Unit.Value;

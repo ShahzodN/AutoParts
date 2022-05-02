@@ -37,12 +37,33 @@ class ProductService {
         return await response.json();
     }
 
+    // post
     async create(product) {
         const response = await fetch(`${this.#baseUrl}`, {
-            method: 'post',
+            method: "post",
             body: JSON.stringify(product),
             headers: { 'Content-Type': 'application/json' }
         })
+
+        return response;
+    }
+
+    // update
+    async update(product) {
+        const response = await fetch(`${this.#baseUrl}`, {
+            method: "put",
+            body: JSON.stringify(product),
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        return response;
+    }
+
+    // delete
+    async delete(id) {
+        const response = await fetch(`${this.#baseUrl}/${id}`, {
+            method: "delete",
+        });
 
         return response;
     }

@@ -2,7 +2,6 @@ using AutoMapper;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Models.Queries;
 using AutoParts.Application.Repositories;
-using AutoParts.Domain.Entities;
 using MediatR;
 
 namespace AutoParts.Application.Products.Commands;
@@ -44,6 +43,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
             product.Image = await imageService.SetImages(product, request.Image);
 
         await productRepo.Update(product);
+
         return Unit.Value;
     }
 }

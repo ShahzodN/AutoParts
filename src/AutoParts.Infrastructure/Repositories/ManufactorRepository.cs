@@ -26,7 +26,7 @@ namespace AutoParts.Infrastructure.Repositories
                 models = await query.ToListAsync();
             }
             else
-                models = await Set.ToListAsync();
+                models = await query.ToListAsync();
 
             return models;
         }

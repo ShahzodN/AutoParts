@@ -7,7 +7,7 @@ export function ProductCard({ product }) {
   return (
     <div className="d-flex flex-column product-card p-2">
       <img
-        src={`${imageSrc}/product/${product.id}/${product.image}`}
+        src={`${imageSrc}/Product/${product.id}/${product.image}`}
         alt="productImage"
         className="p-card-img"
       />

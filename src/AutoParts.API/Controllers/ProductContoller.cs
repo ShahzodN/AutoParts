@@ -43,9 +43,20 @@ public class ProductsController : BaseController
     }
     #endregion
 
+    #region UPDATE
+
+    [HttpPut]
+    public async Task<IActionResult> Update(UpdateProductCommand command)
+    {
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+    #endregion
+
     #region DELETE
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await Mediator.Send(new DeleteProductCommand(id));

@@ -30,15 +30,26 @@ export function ProductDetail() {
   useEffect(() => {
     productService.getProductById(params.id).then(res => {
       setProduct(res);
+
       setModelsSelectValues(res.models.map(model => ({ value: model.model, label: model.model })));
-      setLoading(false);
+
+      setYearsSelectValues(...res.models.map(model => {
+        return model.yearsOfIssue.map(y => ({ value: model.model + y, label: y, model: model.model }))
+      }));
+
+      setYearsOfIssue(res.models.map(model => ({
+        label: model.model,
+        options: model.yearsOfIssue.map(y => ({ value: model.model + y, label: y }))
+      })));
 
       if (res.manufactorId)
         modelService.getModelsWithYearsOfIssue(res.manufactorId).then(r => setModels(r));
+
+      setLoading(false);
     });
 
     productService.getPreliminaryData().then(res => setData(res));
-  }, []);
+  }, [params.id]);
 
   const onFileUpload = (e) => {
     const reader = new FileReader();
@@ -113,7 +124,6 @@ export function ProductDetail() {
       let deletingModel = yearsSelectValues.filter(x => !e.includes(x))[0];
 
       let model = models.find(x => x.model === deletingModel.model);
-      console.log("models", models);
       model.yearsOfIssue = [...model.yearsOfIssue.filter(x => x !== parseInt(deletingModel.label))];
       setProduct({ ...product, models: models });
     }
@@ -123,9 +133,30 @@ export function ProductDetail() {
   const uploadProduct = () => {
     setLoading(true);
 
-    productService.create(product).then(res => {
-      setShowOperationResultModal(true);
+    productService.update(product).then(res => {
+
       if (res.ok) {
+        setLoading(false);
+        setShowOperationResultModal(true);
+
+        document.getElementById("success").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Успешно!";
+
+        setTimeout(() => {
+          setShowOperationResultModal(false);
+          navigate("/admin/products");
+        }, 1500)
+      }
+    });
+  }
+
+  const deleteProduct = () => {
+    setLoading(true);
+    setShowOperationResultModal(true);
+
+    productService.delete(product.id).then(res => {
+      if (res.ok) {
+        setLoading(false);
         document.getElementById("success").style.display = "block";
         document.getElementById("op-result-message").innerText = "Успешно!";
       }
@@ -141,11 +172,19 @@ export function ProductDetail() {
         if (res.ok)
           navigate("/admin/products");
       }, 1200);
-    });
+    })
+  }
+
+  const getDefaultManufactor = () => {
+    const manufactor = data.manufactors.find(x => x.id === product.manufactorId);
+    if (manufactor)
+      return { value: manufactor.id, label: manufactor.name };
+
+    return [];
   }
 
   return !loading ? (
-    <div className="container-fluid p-xxl-5">
+    <div className="container-fluid p-xxl-5 mt-2">
       <div className="row mb-4">
         <div className="col-12 col-md-4 col-lg-3">
           <div className="d-flex flex-column align-items-center">
@@ -154,7 +193,7 @@ export function ProductDetail() {
                 imageFit={ImageFit.centerCover}
                 width={200}
                 height={200}
-                src={`${imageSrc}/product/${product.id}/${product.image}`}
+                src={product.image.length < 50 ? `${imageSrc}/Product/${product.id}/${product.image}` : product.image}
                 alt="productImage"
               />
             </div>
@@ -260,10 +299,7 @@ export function ProductDetail() {
             placeholder="Производители"
             options={data.manufactors.map(x => ({ value: x.id, label: x.name }))}
             onChange={(e) => onManufactorChange(e)}
-            defaultValue={() => {
-              const m = data.manufactors.find(x => x.id === product.manufactorId);
-              return { value: m?.id, label: m?.name }
-            }}
+            value={getDefaultManufactor()}
             isDisabled={product.forAllManufactors}
           />
         </div>
@@ -290,12 +326,21 @@ export function ProductDetail() {
           />
         </div>
       </div>
-      <Button
-        onClick={(e) => uploadProduct()}
-        className="my-2"
-      >
-        Сохранить
-      </Button>
+      <div className="d-flex flex-column d-md-block my-2">
+        <Button
+          onClick={(e) => uploadProduct()}
+          className="me-md-2"
+        >
+          Сохранить
+        </Button>
+        <Button
+          onClick={(e) => deleteProduct()}
+          className="mt-2 mt-md-0"
+        >
+          Удалить
+        </Button>
+      </div>
+
       <OperationResultModal
         show={showOperationResultModal}
       />

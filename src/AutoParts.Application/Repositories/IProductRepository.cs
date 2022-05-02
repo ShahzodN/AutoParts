@@ -8,5 +8,6 @@ public interface IProductRepository : IRepository<Product>
 {
     Task<ProductForAutocompleteDto[]> GetAllForAutocomplete();
     Task<Product> Create(CreateProductCommand command);
+    Task<Product> Update(UpdateProductCommand command);
     Task<Product[]> GetPagedProducts(int page = 1);
 }

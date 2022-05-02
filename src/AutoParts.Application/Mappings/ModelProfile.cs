@@ -13,11 +13,15 @@ public class ModelProfile : Profile
         CreateMap<CreateModelCommand, Model>()
             .ForMember(d => d.Manufactor, opt => opt.Ignore())
             .ForPath(d => d.ModelName, opt => opt.MapFrom(src => src.Model));
+
         CreateMap<Model, ModelDto>()
             .ForPath(d => d.Manufactor, opt => opt.MapFrom(src => src.Manufactor.Name));
+
         CreateMap<UpdateModelCommand, Model>();
 
-        CreateMap<Manufactor, ManufactorDto>();
+        CreateMap<Manufactor, ManufactorDto>()
+            .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image!.Name));
+
         CreateMap<CreateManufactorCommand, Manufactor>()
             .ForMember(d => d.Image, opt => opt.Ignore());
     }
