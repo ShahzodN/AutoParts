@@ -1,175 +1,152 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
-import { BsArrowLeft, BsCheckCircle, BsXLg } from 'react-icons/bs';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { BsXLg } from 'react-icons/bs';
 import productService from '../services/product.service';
 import consignmentService from '../services/consignment.service';
-import { Button, Modal, Spinner } from 'react-bootstrap';
-import $ from 'jquery';
+import { Button, Spinner } from 'react-bootstrap';
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ru from "date-fns/locale/ru";
+import AsyncSelect from "react-select/async";
 import '../css/NewConsignment.css';
+registerLocale("ru", ru);
 
 
 export function NewConsignment() {
-  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
   const [productsInTable, setProductsInTable] = useState([]);
-  const [suggestion, setSuggestion] = useState([]);
-  const [inputValue, setInputValue] = useState();
-  const [prodList, setProdList] = useState({ date: '', productsList: {} });
-  const [uploading, setUploading] = useState(false);
-
-  useEffect(() => {
-    $('.consignments').toggle();
-    productService.getAll().then(res => setProducts(res));
-
-    return (() => {
-      $('.consignments').toggle();
-    })
-  }, [])
+  const [quantity, setQuantity] = useState("");
+  const [prodList, setProdList] = useState({ date: new Date(), productsList: {} });
+  const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
 
-  function searchProduct(value) {
-    setInputValue(inputValue);
-    if (value.length === 0) {
-      $('.suggestions').toggle();
-      setSuggestion([]);
-      return;
-    }
-    $('.suggestions').show();
-    const res = products.filter(s => s.name.toLowerCase().includes(value.toLowerCase()));
-    setSuggestion(res);
-  }
+  function addProduct() {
+    if (!selectedProduct.value || quantity === 0) return;
 
-  function selectSuggestion(e) {
-    $('#productInput').val(e.target.innerHTML).attr('data-id', e.target.attributes['data-id'].value)
-    setSuggestion([]);
-  }
+    let productsListCopy = { ...prodList.productsList };
+    productsListCopy[selectedProduct.value] = quantity;
+    setProdList({ ...prodList, productsList: productsListCopy });
 
-  function addProduct(e) {
-    if ($('#productInput').val() === '' || $('#quantity').val() === '') return;
+    let newRecord = {
+      id: selectedProduct.value,
+      name: selectedProduct.label,
+      quantity: quantity
+    };
 
-    const id = $('#productInput').attr('data-id');
+    setProductsInTable([...productsInTable, newRecord]);
 
-    let copy = { ...prodList };
-    copy.productsList[id] = $('#quantity').val();
-    setProdList(copy);
-
-    productsInTable.push({
-      id: id,
-      name: $('#productInput').val(),
-      quantity: $('#quantity').val()
-    });
-
-    setProductsInTable(productsInTable);
-
-    $('#productInput').val('');
-    $('#quantity').val('');
-  }
-
-  function onDateChange(e) {
-    let copy = { ...prodList };
-    copy.date = e.target.value;
-    setProdList(copy);
+    setSelectedProduct(null);
+    setQuantity("");
+    document.getElementById("asd").focus();
   }
 
   function deleteProduct(e) {
-    const id = parseInt(e.target.attributes['data-id'].value);
-
-    const productsInTableCopy = productsInTable.filter(s => s.id !== id);
-    setProductsInTable(productsInTableCopy);
-
+    const rowNumber = e.target.parentElement.parentElement.firstChild.innerText;
+    const id = productsInTable[rowNumber - 1].id;
     delete prodList.productsList[id];
-
     setProdList(prodList);
+    setProductsInTable(productsInTable.filter((v, i) => i !== rowNumber - 1));
   }
 
   function sendConsignment(e) {
-    setUploading(true);
+    setLoading(true);
 
     consignmentService.create(prodList)
       .then(res => {
         if (res.ok) {
-          $('.spinner-border').hide();
-          $('.done').show();
-
           setInterval(() => {
-            setUploading(false);
+            setLoading(false);
             navigate('/admin/delivery-of-goods');
           }, 1500);
         }
       });
   }
 
+  function loadProducts(value, callback) {
+    productService.getSuggestions(value.trim()).then(result => callback(result.map(item => ({ value: item.id, label: item.name }))));
+  }
 
-  return !uploading ? (
-    <div>
-      <div className="py-1">
-        <Link to="/admin/delivery-of-goods" className="btn btn-primary"><BsArrowLeft color="white" fontSize="1.2em" /></Link>
-        <Button className="mx-1" onClick={sendConsignment}>Готово</Button>
-        <input type="date" id="conDate" onChange={onDateChange} />
+  return !loading ? (
+    <div className="container-fluid">
+      <div className="row mt-lg-2 align-items-center">
+        <div className="col-12 col-lg-2 col-xl-2">
+          <DatePicker
+            selected={prodList.date}
+            locale="ru"
+            onChange={(date) => setProdList({ ...prodList, date: date })}
+            className="datepicker"
+          />
+        </div>
+        <div className="col-12 col-lg-6 col-xl-8 mt-2 mt-lg-0">
+          <AsyncSelect
+            cacheOptions
+            placeholder="Продукты"
+            isSearchable
+            value={selectedProduct}
+            onChange={(newValue) => {
+              setSelectedProduct(newValue);
+              document.getElementById("quantity").focus();
+            }}
+            loadOptions={loadProducts}
+          />
+        </div>
+        <div className="col-12 col-lg-2 col-xl-1 mt-2 mt-lg-0">
+          <input
+            placeholder="Количество"
+            id="quantity"
+            className="form-control"
+            value={quantity}
+            onChange={e => setQuantity(e.target.value)}
+            onKeyPress={e => {
+              if (e.code === "Enter")
+                addProduct();
+            }}
+          />
+        </div>
+        <div className="col-12 col-lg-2 col-xl-1 mt-2 mt-lg-0">
+          <div className="d-grid d-lg-block">
+            <Button onClick={e => addProduct(e.target)} variant="secondary">Добавить</Button>
+          </div>
+        </div>
       </div>
-      <div className="d-flex">
-        <input type="text"
-          onChange={e => searchProduct(e.target.value)}
-          id="productInput"
-          onBlur={() => {
-            setTimeout(() => setSuggestion([]), 100)
-          }}
-          placeholder="Товар"
-          required={true}
-          className="mx-0" />
-        <input type="text"
-          placeholder="Количество"
-          id="quantity"
-          className="mx-1"
-          required />
-        <Button onClick={e => addProduct(e.target)}>Добавить</Button>
+      <div className="col-12 col-lg-1 mt-2">
+        <div className="d-grid d-lg-block">
+          <Button variant="primary" onClick={sendConsignment}>Сохранить</Button>
+        </div>
       </div>
-      <div className="suggestions">
-        <ul className="list-group">
-          {suggestion.map((v, i) => {
-            return <li className="list-group-item" key={i} data-id={v.id} onClick={selectSuggestion}>{v.name}</li>
-          })}
-        </ul>
+      <div className="table-responsive">
+        <table className="table products my-1">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Товар</th>
+              <th>Количество</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {productsInTable.map((v, i) => {
+              return (
+                <tr key={i}>
+                  <th scope="row">{i + 1}</th>
+                  <td className="col-product-name">{v.name}</td>
+                  <td>{v.quantity}</td>
+                  <td>
+                    <Button variant="danger" onClick={deleteProduct} data-id={v.id}>
+                      <BsXLg pointerEvents={'none'} />
+                    </Button>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
-      <table className="table products my-1">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Товар</th>
-            <th>Количество</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {productsInTable.map((v, i) => {
-            return (
-              <tr key={i}>
-                <th scope="row">{i + 1}</th>
-                <td>{v.name}</td>
-                <td>{v.quantity}</td>
-                <td>
-                  <Button variant="danger" onClick={deleteProduct} data-id={v.id}>
-                    <BsXLg pointerEvents={'none'} />
-                  </Button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
     </div >
   ) : (
-    <div>
-      <Modal
-        show={uploading}
-        backdrop="static"
-        centered
-        className="modal-90w">
-        <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Spinner animation="border" size="large" />
-          <BsCheckCircle className="done" style={{ display: 'none', fontSize: '1.8em' }} />
-        </Modal.Body>
-      </Modal>
+    <div className="container-fluid justify-content-center">
+      <Spinner animation="border" size="large" />
     </div>
   )
 }

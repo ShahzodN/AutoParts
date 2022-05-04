@@ -10,6 +10,8 @@ import { Products } from "./Products";
 import { NewProduct } from "./NewProduct";
 import { ProductDetail } from "./ProductDetail";
 import { AdminNavbar } from "../components/AdminNavbar";
+import { NewConsignment } from "./NewConsignment";
+import { Consignment } from "./Consignment";
 
 export class Admin extends Component {
   render() {
@@ -21,6 +23,8 @@ export class Admin extends Component {
           <Route exact path="/" element={<AdminMainPage />} />
           <Route path="/employee" element={<Employees />} />
           <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
+          <Route path="/delivery-of-goods/:id" element={<Consignment />} />
+          <Route path="/delivery-of-goods/new" element={<NewConsignment />} />
           <Route path="/categories/*" element={<Categories />} />
           <Route path="/manufactors" element={<Manufactors />} />
           <Route path="/manufactors/:manufName" element={<Models />} />
@@ -33,10 +37,11 @@ export class Admin extends Component {
   }
 }
 
-class AdminMainPage extends Component {
-  render() {
-    return (
-      <h1>main</h1>
-    )
-  }
+export function AdminMainPage() {
+  return (
+    <div className="container-fluid">
+      <h1>Главная страница</h1>
+
+    </div>
+  )
 }

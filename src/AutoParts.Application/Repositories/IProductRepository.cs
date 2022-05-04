@@ -6,7 +6,7 @@ namespace AutoParts.Application.Repositories;
 
 public interface IProductRepository : IRepository<Product>
 {
-    Task<ProductForAutocompleteDto[]> GetAllForAutocomplete();
+    Task<ProductForAutocompleteDto[]> GetAllForAutocomplete(string productName = "");
     Task<Product> Create(CreateProductCommand command);
     Task<Product> Update(UpdateProductCommand command);
     Task<Product[]> GetPagedProducts(int page = 1);

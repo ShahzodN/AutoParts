@@ -17,9 +17,7 @@ export function ProductFilters({ data, setProducts }) {
   }, []);
 
   const loadModels = (value, callback) => {
-    modelService.getModelsName(value).then(res => {
-      callback(res);
-    });
+    modelService.getModelsName(value).then(res => callback(res));
   }
 
   const filterData = () => {
