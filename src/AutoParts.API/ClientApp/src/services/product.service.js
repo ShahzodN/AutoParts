@@ -1,6 +1,7 @@
 class ProductService {
     #baseUrl = 'api/products';
 
+    // get
     async getProductById(id) {
         const response = await fetch(`${this.#baseUrl}/${id}`, {
             method: 'get',
@@ -21,8 +22,17 @@ class ProductService {
         return result;
     }
 
-    async getAll(name) {
+    async getAll() {
         const response = await fetch(`${this.#baseUrl}`, {
+            headers: { "Content-Type": "application/json" }
+        });
+
+        return await response.json();
+    }
+
+    async getSuggestions(productName) {
+        const response = await fetch(`${this.#baseUrl}/suggestion?value=${productName}`, {
+            method: "get",
             headers: { "Content-Type": "application/json" }
         });
 

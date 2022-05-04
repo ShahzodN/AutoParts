@@ -6,6 +6,7 @@ using AutoParts.Application.Products.Commands;
 using AutoMapper;
 using AutoParts.Application.Exceptions;
 using AutoParts.Application.Interfaces;
+using System.Text;
 
 namespace AutoParts.Infrastructure.Repositories;
 
@@ -121,9 +122,51 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
         return products;
     }
 
-    public async Task<ProductForAutocompleteDto[]> GetAllForAutocomplete()
+    public async Task<ProductForAutocompleteDto[]> GetAllForAutocomplete(string productName = "")
     {
-        return await Set.Select(s => new ProductForAutocompleteDto(s.Id, s.Name)).ToArrayAsync();
+        var products = await Set.Include(x => x.Models)
+                                .ThenInclude(x => x.Manufactor)
+                                .Where(p => p.Name!.ToUpper().StartsWith(productName.ToUpper()))
+                                .ToArrayAsync();
+
+        var manufactors = await context.Set<Manufactor>().Include(x => x.Models).ToArrayAsync();
+
+        var dtos = products.Select(p =>
+        {
+            int modelsCount = 0;
+            if (p.Models.Count != 0)
+            {
+                modelsCount = manufactors.Where(x => x.Id == p.Models[0].ManufactorId)
+                                        .Select(x => x.Models.Count)
+                                        .FirstOrDefault();
+            }
+
+            string manufactor = p.Models.Count == 0 ? "Для всех марок" : p.Models[0].Manufactor?.Name!;
+
+            StringBuilder models = new();
+
+            if (p.Models.Count != 0)
+            {
+                bool forAllModels = p.Models.Count == modelsCount;
+                if (forAllModels)
+                    models.Append("Для всех моделей");
+                else
+                {
+                    p.Models.ForEach(m =>
+                    {
+                        if (models.Length == 0)
+                            models.Append(m.ModelName);
+                        else
+                            models.Append(", ").Append(m.ModelName);
+                    });
+                }
+            }
+
+            string name = $"{p.Name} /{manufactor}/{models.ToString()}";
+            return new ProductForAutocompleteDto(p.Id, name);
+        }).ToArray();
+
+        return dtos;
     }
 
     public override async Task<Product?> GetById(int id)

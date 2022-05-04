@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import consignmentService from "../services/consignment.service";
 import $ from 'jquery';
-import { Modal, Spinner } from "react-bootstrap";
-import { BsCheckCircle } from 'react-icons/bs';
+import { Spinner } from "react-bootstrap";
 
-export function Consignment(props) {
+export function Consignment() {
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const [consignment, setConsignment] = useState({ date: '', products: [] });
@@ -16,12 +15,6 @@ export function Consignment(props) {
       setConsignment(res);
       setLoading(false);
     });
-
-    $('.consignments').toggle();
-
-    return () => {
-      $('.consignments').toggle();
-    }
   }, [params.id])
 
   function onChange(e) {
@@ -69,50 +62,53 @@ export function Consignment(props) {
   }
 
   return !loading ? (
-    <div className="container mt-1">
-      <Link className="btn btn-primary" to="/admin/delivery-of-goods">Назад</Link>
-      <button className="btn btn-primary mx-2" onClick={edit}>Редактировать</button>
-      <button className="btn btn-primary" id="submitUpdate" onClick={sendConsignment} hidden>Сохранить</button>
+    <div className="container-fluid">
       <h2>{consignment.date}</h2>
-      <table className="table">Поставка товаров
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Наименование товара</th>
-            <th scope="col">Количество</th>
-          </tr>
-        </thead>
-        <tbody>
-          {consignment.products.map((v, i) => {
-            return (
-              <tr key={v.productId}>
-                <th scope="row">{i + 1}</th>
-                <td>{v.product}</td>
-                <td>
-                  <input type="text"
-                    className="cq"
-                    value={v.quantity}
-                    onChange={onChange}
-                    data-id={`${v.productId}`}
-                    disabled />
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <div className="row">
+        <div className="col-12 col-lg-2 mt-1">
+          <div className="d-grid d-lg-block">
+            <button className="btn btn-secondary" onClick={edit}>Редактировать</button>
+          </div>
+        </div>
+        <div className="col-12 col-lg-2 mt-2">
+          <div className="d-grid d-lg-block">
+            <button className="btn btn-primary" id="submitUpdate" onClick={sendConsignment} hidden>Сохранить</button>
+          </div>
+        </div>
+      </div>
+      <div className="table-responsive">
+        <table className="table table-hover table-sm align-middle">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Наименование товара</th>
+              <th scope="col">Количество</th>
+            </tr>
+          </thead>
+          <tbody>
+            {consignment.products.map((v, i) => {
+              return (
+                <tr key={v.productId}>
+                  <th scope="row">{i + 1}</th>
+                  <td>{v.product}</td>
+                  <td style={{ maxWidth: "4rem" }}>
+                    <input type="text"
+                      className="cq form-control"
+                      value={v.quantity}
+                      onChange={onChange}
+                      data-id={`${v.productId}`}
+                      disabled
+                    />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </div >
   ) :
-    <div className="container d-flex justify-content-center align-items-center">
-      <Modal
-        show={loading}
-        backdrop="static"
-        centered
-        className="modal-90w">
-        <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Spinner animation="border" size="large" />
-          <BsCheckCircle className="done" style={{ display: 'none', fontSize: '1.8em' }} />
-        </Modal.Body>
-      </Modal>
+    <div className="container-fluid justify-content-center">
+      <Spinner animation="border" size="large" />
     </div>
 }

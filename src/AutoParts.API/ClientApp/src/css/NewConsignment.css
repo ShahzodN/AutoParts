@@ -16,3 +16,7 @@
     justify-items: center;
     left: 50%;
 }
+
+.datepicker {
+    width: 100%;
+}

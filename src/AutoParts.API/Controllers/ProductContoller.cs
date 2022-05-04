@@ -32,6 +32,13 @@ public class ProductsController : BaseController
         var a = 12;
         return Ok($"{name}, {item.Length}");
     }
+
+    [HttpGet("suggestion")]
+    public async Task<ActionResult<ProductForAutocompleteDto[]>> GetSuggestions([FromQuery] string value)
+    {
+        return Ok(await Mediator.Send(new GetSuggestionsQuery(value)));
+    }
+
     #endregion
 
     #region POST
