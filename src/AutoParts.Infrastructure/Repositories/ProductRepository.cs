@@ -74,7 +74,7 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
             if (product.Image == null)
                 product.Image = new Image() { Name = imageName };
             else
-                product.Image.Name = await imageService.UpdateImage(product.GetType().Name, product.Id, command.Image);
+                product.Image.Name = imageName;
         }
         product.Models.Clear();
 

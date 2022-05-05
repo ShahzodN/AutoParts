@@ -14,7 +14,7 @@ public class EmployeePositionConverter : JsonConverter<EmployeePosition>
         EmployeePosition position = pos switch
         {
             "Администратор" => EmployeePosition.Администратор,
-            "Сотрудник" => EmployeePosition.Сотрудник,
+            "Продавец" => EmployeePosition.Продавец,
             "Охрана" => EmployeePosition.Охрана,
             "Уборщица" => EmployeePosition.Уборщица,
             _ => default

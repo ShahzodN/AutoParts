@@ -12,6 +12,8 @@ import { ProductDetail } from "./ProductDetail";
 import { AdminNavbar } from "../components/AdminNavbar";
 import { NewConsignment } from "./NewConsignment";
 import { Consignment } from "./Consignment";
+import { EmployeeDetails } from "../components/EmployeeDetails";
+import { NewEmployee } from "./NewEmployee";
 
 export class Admin extends Component {
   render() {
@@ -22,6 +24,8 @@ export class Admin extends Component {
         <Routes>
           <Route exact path="/" element={<AdminMainPage />} />
           <Route path="/employee" element={<Employees />} />
+          <Route path="/employee/:id" element={<EmployeeDetails />} />
+          <Route path="/employee/new" element={<NewEmployee />} />
           <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
           <Route path="/delivery-of-goods/:id" element={<Consignment />} />
           <Route path="/delivery-of-goods/new" element={<NewConsignment />} />

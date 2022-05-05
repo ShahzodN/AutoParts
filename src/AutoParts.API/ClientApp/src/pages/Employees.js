@@ -1,68 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { CreateEmployee } from "../components/CreateEmployee"
-import { Button, Modal, Spinner } from "react-bootstrap";
-import { BsCheckCircle } from 'react-icons/bs';
-import EmployeeService from "../services/employee.service"
+import { Spinner } from "react-bootstrap";
+import employeeService from "../services/employee.service"
 import { EmployeeCard } from '../components/EmployeeCard';
 import "../css/Employee.css"
+import { Link } from 'react-router-dom';
 
-export function Employees(props) {
+export function Employees() {
 
-  const [show, setShow] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleShowHide = () => setShow(!show);
-
   useEffect(() => {
-    EmployeeService.getAll().then(emps => {
+    employeeService.getAll().then(emps => {
       setEmployees(emps);
       setLoading(false);
     });
   }, []);
 
   return !loading ? (
-    <section>
+    <div className="container-fluid">
       <h2>Сотрудники</h2>
 
-      <Button variant="primary" onClick={handleShowHide}>
-        Создать новый
-      </Button>
+      <div className="d-grid d-lg-block">
+        <Link
+          to="/admin/employee/new"
+          className="btn btn-primary"
+        >
+          Создать новый
+        </Link>
+      </div>
 
-      <Modal show={show}
-        onHide={handleShowHide}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered>
-        <Modal.Header>
-          <Modal.Title>Новый сотрудник</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <CreateEmployee handleShowHide={handleShowHide} />
-        </Modal.Body>
-      </Modal>
-
-      <div className="d-flex flex-wrap px-5">
+      <div className="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 gy-2 gx-2 mt-1">
         {employees.map(emp => {
           return (
-            <EmployeeCard key={emp.id} id={emp.id}
-              firstName={emp.firstName}
-              lastName={emp.lastName}
-              address={emp.address}
-              phoneNumber={emp.phoneNumber}
-              salary={emp.salary} />
+            <Link
+              to={`/admin/employee/${emp.id}`}
+              key={emp.id}
+            >
+              <EmployeeCard
+                employee={emp}
+              />
+            </Link>
           )
         })}
       </div>
-    </section>) : (
-    <Modal
-      show={loading}
-      backdrop="static"
-      centered
-      className="modal-90w">
-      <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Spinner animation="border" size="large" />
-        <BsCheckCircle className="done" style={{ display: 'none', fontSize: '1.8em' }} />
-      </Modal.Body>
-    </Modal>
+    </div>
+  ) : (
+    <div className="container d-flex justify-content-center">
+      <Spinner animation="border" size="large" />
+    </div>
   )
 }

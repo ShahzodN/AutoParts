@@ -10,7 +10,9 @@ namespace AutoParts.Application.Mappings
     {
         public EmployeeProfile()
         {
-            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Employee, EmployeeDto>()
+                .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Image.Name));
+
             CreateMap<EmployeeDto, Employee>();
             CreateMap<CreateEmployeeCommand, Employee>().ForMember(d => d.Image, opt => opt.Ignore());
             CreateMap<UpdateEmployeeCommand, Employee>();
