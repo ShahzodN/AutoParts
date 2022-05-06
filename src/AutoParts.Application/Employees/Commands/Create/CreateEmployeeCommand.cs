@@ -20,7 +20,7 @@ namespace AutoParts.Application.Employees.Commands.Create
         public EmployeePosition Position { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
-        public string Image { get; set; } = null!;
+        public string Photo { get; set; } = null!;
         public int Salary { get; set; }
     }
 
@@ -43,7 +43,7 @@ namespace AutoParts.Application.Employees.Commands.Create
 
             employee = await employeeRepo.Create(employee);
 
-            Image image = await imageService.SetImages(employee, request.Image);
+            Image image = await imageService.SetImages(employee, request.Photo);
             employee.Image = image;
             await employeeRepo.Update(employee);
 

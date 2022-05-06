@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
 using AutoParts.Application.Identity.Models;
+using AutoParts.Application.Interfaces;
 using AutoParts.Application.JsonConverters;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Enums;
@@ -19,16 +20,19 @@ namespace AutoParts.Application.Employees.Commands.Update
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int Salary { get; set; }
+        public string Photo { get; set; } = null!;
     }
 
     public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand>
     {
         private readonly IEmployeeRepository employeeRepo;
+        private readonly IImageService imageService;
         private readonly IMapper mapper;
 
-        public UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepo, IMapper mapper)
+        public UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepo, IImageService imageService, IMapper mapper)
         {
             this.employeeRepo = employeeRepo;
+            this.imageService = imageService;
             this.mapper = mapper;
         }
 
@@ -39,6 +43,7 @@ namespace AutoParts.Application.Employees.Commands.Update
             if (employee != null)
             {
                 mapper.Map(request, employee);
+                employee.Image.Name = await imageService.UpdateImage(employee.GetType().Name, employee.Id, request.Photo);
                 await employeeRepo.Update(employee);
             }
 

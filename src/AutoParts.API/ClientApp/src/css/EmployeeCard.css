@@ -1,3 +1,37 @@
 .emp-card:hover {
     cursor: pointer;
 }
+
+.employee-photo {
+    object-fit: cover;
+    width: 100%;
+    height: 14rem;
+    max-height: 18rem;
+}
+
+.emp-card {
+    height: 14rem;
+    max-width: 20rem;
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .emp-card {
+        height: 18rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .emp-card {
+        height: 22rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .emp-card {
+        height: 22rem;
+    }
+
+    .emp-card:hover {
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+}
