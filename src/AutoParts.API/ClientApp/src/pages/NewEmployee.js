@@ -7,7 +7,7 @@ import employeeService from "../services/employee.service";
 
 export function NewEmployee() {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState({});
   const navigate = useNavigate();
   const [showOperationResult, setShowOperationResult] = useState(false);
@@ -46,7 +46,6 @@ export function NewEmployee() {
         setShowOperationResult(false);
       }, 1500);
     })
-    console.log(employee);
   }
 
   return !loading ? (

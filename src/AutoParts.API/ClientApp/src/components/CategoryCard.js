@@ -1,29 +1,31 @@
-import { useState } from "react";
-import { CategoryUpdateDeleteModal } from "./CategoryUpdateDeleteModal";
+import "../css/NewCategory.css";
 
-export function CategoryCard(props) {
+export function CategoryCard({ category }) {
 
-  const [showModal, setShowModal] = useState(false);
-  const contentUrl = 'http://localhost:5000/images';
+  function productsCount() {
+    let str = `${category.productsCount} `;
+    if (category.productsCount === 1)
+      str += "товар";
+    else if (category.productsCount > 1 && category.productsCount < 5)
+      str += "товара";
+    else
+      str += "товаров";
+    return str;
+  }
 
+  const IMAGE_SRC = `${window.location.protocol}//${window.location.hostname}:5000/images`;
   return (
-    <div>
-      <CategoryUpdateDeleteModal
-        show={showModal}
-        handleShow={() => setShowModal(!showModal)}
-        category={props.category}
-      />
-
-      <div className="shadow mx-5 my-3" onClick={() => setShowModal(!showModal)}>
-        <div style={{ width: '200px', height: '200px' }}>
-          <img
-            src={`${contentUrl}/category/${props.category.id}/${props.category.image}`}
-            alt="categoryImage"
-            style={{ width: '100%' }}
-          />
-        </div>
-        <h6 className="mt-3 p-1">{props.category.name}</h6>
+    <div className="category-card p-2">
+      <div>
+        <img
+          src={`${IMAGE_SRC}/Category/${category.id}/${category.image}`}
+          alt="categoryImage"
+          className="category-photo"
+          style={{ width: '100%' }}
+        />
       </div>
+      <h6 className="category-name mt-2">{category.name}</h6>
+      <span className="products-count">{productsCount()}</span>
     </div>
   )
 }

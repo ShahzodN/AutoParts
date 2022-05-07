@@ -17,12 +17,13 @@ class CategoryService {
     }
 
     async getById(id) {
-        const response = await fetch('', {
+        const response = await fetch(`${this.#baseUrl}/${id}`, {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         });
 
-        return response;
+        const result = await response.json();
+        return result;
     }
 
     async create(category) {

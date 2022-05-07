@@ -1,0 +1,21 @@
+.category-photo {
+    object-fit: cover;
+    width: 100%;
+    max-width: 18rem;
+    height: 14rem;
+    max-height: 18rem;
+}
+
+.category-card {
+    max-width: 18rem;
+}
+
+.products-count {
+    color: gray;
+}
+
+@media (min-width: 992px) {
+    .category-card:hover {
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+}
