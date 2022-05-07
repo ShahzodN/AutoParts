@@ -12,12 +12,12 @@ public class CategoryRepository : BaseRepository<Category, ApplicationDbContext>
 
     }
 
-    public override async Task<List<Category>> GetAll(Expression<Func<Category, bool>> expression = null)
+    public override async Task<List<Category>> GetAll(Expression<Func<Category, bool>> expression = null!)
     {
         IQueryable<Category> query = Set;
         List<Category> categories = new();
 
-        query = Set.Include(s => s.Image);
+        query = Set.Include(s => s.Image).Include(x => x.Products);
 
         if (expression != null)
             query = query.Where(expression);

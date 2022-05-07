@@ -11,10 +11,14 @@ public class CategoryProfile : Profile
     public CategoryProfile()
     {
         CreateMap<Category, CategoryDto>()
-            .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image.Name));
+            .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image.Name))
+            .ForMember(d => d.ProductsCount, opt => opt.MapFrom(src => src.Products.Count));
 
         CreateMap<Category, Category>().ForMember(d => d.Image, opt => opt.Ignore());
+
         CreateMap<CreateCategoryCommand, Category>().ForMember(dest => dest.Image, opt => opt.Ignore());
-        CreateMap<UpdateCategoryCommand, Category>();
+
+        CreateMap<UpdateCategoryCommand, Category>()
+            .ForMember(d => d.Image, opt => opt.Ignore());
     }
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "../css/EmployeeCard.css";
 
 export function EmployeeCard({ employee }) {

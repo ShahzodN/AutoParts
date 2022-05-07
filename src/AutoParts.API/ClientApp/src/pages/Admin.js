@@ -14,6 +14,8 @@ import { NewConsignment } from "./NewConsignment";
 import { Consignment } from "./Consignment";
 import { EmployeeDetails } from "../components/EmployeeDetails";
 import { NewEmployee } from "./NewEmployee";
+import { NewCategory } from "./NewCategory";
+import { Category } from "./Category";
 
 export class Admin extends Component {
   render() {
@@ -29,7 +31,9 @@ export class Admin extends Component {
           <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
           <Route path="/delivery-of-goods/:id" element={<Consignment />} />
           <Route path="/delivery-of-goods/new" element={<NewConsignment />} />
-          <Route path="/categories/*" element={<Categories />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/new" element={<NewCategory />} />
+          <Route path="/category/:id" element={<Category />} />
           <Route path="/manufactors" element={<Manufactors />} />
           <Route path="/manufactors/:manufName" element={<Models />} />
           <Route path="/products" element={<Products />} />

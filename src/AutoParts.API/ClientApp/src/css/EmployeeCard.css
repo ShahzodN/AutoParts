@@ -14,18 +14,21 @@
     max-width: 20rem;
 }
 
+/* sm */
 @media (min-width: 576px) and (max-width: 767px) {
     .emp-card {
         height: 18rem;
     }
 }
 
+/* md */
 @media (min-width: 768px) and (max-width: 991px) {
     .emp-card {
         height: 22rem;
     }
 }
 
+/* lg */
 @media (min-width: 992px) {
     .emp-card {
         height: 22rem;
