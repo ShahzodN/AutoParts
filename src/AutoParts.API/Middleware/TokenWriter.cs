@@ -11,7 +11,7 @@ namespace AutoParts.API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string? token = context.Request.Cookies["asp.net_auth"];
+            string? token = context.Request.Cookies["ASP.NET_CR"];
             if (token != null)
                 context.Request.Headers.Append("Authorization", "Bearer " + token);
 

@@ -1,4 +1,4 @@
-using AutoParts.Application.Identity.Models;
+using AutoParts.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

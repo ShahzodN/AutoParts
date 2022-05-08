@@ -1,9 +1,11 @@
 using AutoParts.Application.Products.Commands;
 using AutoParts.Application.Products.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoParts.API.Controllers;
 
+[Authorize(Roles = "Admin,Employee")]
 [Route("api/[controller]")]
 public class ProductsController : BaseController
 {

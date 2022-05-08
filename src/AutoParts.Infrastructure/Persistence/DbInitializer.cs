@@ -1,6 +1,4 @@
-using AutoParts.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutoParts.Infrastructure.Persistence;
@@ -11,37 +9,29 @@ public class DbInitializer
     {
         var scope = services.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser<int>>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-        if ((ctx.GetService<IDatabaseCreator>() as RelationalDatabaseCreator)!.Exists())
-            return;
-
-        ctx.Database.EnsureCreated();
-
-        Category category = new()
-        {
-            Id = 1,
-            Name = "Аккумуляторы"
-        };
-
-        Product pr1 = new()
-        {
-            CategoryId = category.Id,
-            Name = "Зарядное устройство со встроенным микропроцессором и цифровым дисплеем, ZIPOWER",
-            Price = 5400
-        };
-
-        Product pr2 = new()
-        {
-            CategoryId = category.Id,
-            Name = "Аккумулятор 100 а/ч, европейская полярность BOSCH 600 402 083 S5 (013)",
-            Price = 16000
-        };
+        // if ((ctx.GetService<IDatabaseCreator>() as RelationalDatabaseCreator)!.Exists())
+        //     return;
 
         ctx.Database.EnsureCreated();
-        ctx.Add(category);
-        ctx.AddRange(pr1, pr2);
-        ctx.SaveChanges();
+        IdentityResult result;
+        if (roleManager.FindByNameAsync("Customer").GetAwaiter().GetResult() == null)
+            result = roleManager.CreateAsync(new("Customer")).GetAwaiter().GetResult();
 
+        if (roleManager.FindByNameAsync("Admin").GetAwaiter().GetResult() == null)
+            result = roleManager.CreateAsync(new("Admin")).GetAwaiter().GetResult();
+
+        if (roleManager.FindByNameAsync("Employee").GetAwaiter().GetResult() == null)
+            result = roleManager.CreateAsync(new("Employee")).GetAwaiter().GetResult();
+
+        if (userManager.FindByNameAsync("admin").GetAwaiter().GetResult() == null)
+        {
+            IdentityUser<int> user = new("admin");
+            userManager.CreateAsync(user, "admin123").GetAwaiter().GetResult();
+            userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
+        }
         scope.Dispose();
     }
 }

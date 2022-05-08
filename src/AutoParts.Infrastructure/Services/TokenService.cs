@@ -1,41 +1,41 @@
 using System.IdentityModel.Tokens.Jwt;
-using AutoParts.Application.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using AutoParts.Application.Identity.Models;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
-namespace AutoParts.Infrastructure.Services
+namespace AutoParts.Infrastructure.Services;
+public class TokenService
 {
-    public class TokenService : ITokenService
+    private readonly IConfiguration configuration;
+    private readonly UserManager<IdentityUser<int>> userManager;
+
+    public TokenService(IConfiguration configuration, UserManager<IdentityUser<int>> userManager)
     {
-        private readonly IConfiguration configuration;
+        this.configuration = configuration;
+        this.userManager = userManager;
+    }
 
-        public TokenService(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
+    public async Task<string> GenerateToken(IdentityUser<int> user)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        var claims = new List<Claim>();
+        claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.UserName));
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
-        public string GenerateToken(Account account)
-        {
-            var roles = account.Roles.Select(r => new System.Security.Claims.Claim("role", r.Name!));
-            byte[] secretKey = Encoding.UTF32.GetBytes("qwertyuiop[]asdfghjkl;'zxcvbnm,.");
+        byte[] secretKey = Encoding.ASCII.GetBytes(configuration["JWT:Secret"]);
+        var securityKey = new SymmetricSecurityKey(secretKey);
 
-            JwtSecurityTokenHandler handler = new();
-            SecurityTokenDescriptor descriptor = new()
-            {
-                Audience = "localhost",
-                Subject = new ClaimsIdentity(roles),
-                Issuer = "localhost",
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature),
-                Expires = DateTime.UtcNow.AddDays(14)
-            };
+        JwtSecurityTokenHandler handler = new();
 
-            SecurityToken token = handler.CreateToken(descriptor);
-            return handler.WriteToken(token);
-        }
+        var token = new JwtSecurityToken(
+            issuer: configuration["JWT:ValidIssuer"],
+            audience: configuration["JWT:ValidAudience"],
+            claims: claims,
+            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
+        );
+
+        return handler.WriteToken(token);
     }
 }

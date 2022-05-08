@@ -2,10 +2,12 @@ using AutoParts.Application.Consignments.Commands.Create;
 using AutoParts.Application.Consignments.Commands.Delete;
 using AutoParts.Application.Consignments.Commands.Update;
 using AutoParts.Application.Consignments.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoParts.API.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("api/consignment")]
 public class ConsignmentController : BaseController
 {

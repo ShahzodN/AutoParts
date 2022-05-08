@@ -1,12 +1,10 @@
 using System.Text;
-using AutoParts.Application.Identity;
-using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
-using AutoParts.Infrastructure.Identity;
 using AutoParts.Infrastructure.Repositories;
 using AutoParts.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,10 +16,20 @@ namespace AutoParts.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                options.UseNpgsql(config.GetConnectionString("psql"));
+                opt.UseNpgsql(config.GetConnectionString("psql"));
             });
+
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(opt =>
+            {
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 8;
+                opt.Password.RequireLowercase = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>
             {
@@ -32,33 +40,27 @@ namespace AutoParts.Infrastructure
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
                 options.TokenValidationParameters = new()
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidIssuer = "localhost",
-                    ValidAudience = "localhost",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF32.GetBytes("qwertyuiop[]asdfghjkl;'zxcvbnm,.")),
-                    ValidateLifetime = true,
+                    ValidIssuer = config["JWT:ValidIssuer"],
+                    ValidAudience = config["JWT:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config["JWT:Secret"])),
+                    ValidateLifetime = false,
                     ClockSkew = TimeSpan.Zero
                 };
             });
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IConsignmentRepository, ConsignmentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IManufactorRepository, ManufactorRepository>();
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<TokenService>();
 
-            services.AddScoped<IRoleManager, RoleManager>();
-            services.AddScoped<IAccountManager, AccountManager>();
             services.AddScoped<IImageService, ImageService>();
 
             return services;
