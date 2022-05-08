@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
 using AutoParts.Application.Employees.Queries;
-using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.JsonConverters;
 using AutoParts.Application.Repositories;

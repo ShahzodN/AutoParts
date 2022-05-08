@@ -2,11 +2,13 @@ using AutoParts.Application.Categories.Commands.Create;
 using AutoParts.Application.Categories.Commands.Delete;
 using AutoParts.Application.Categories.Commands.Update;
 using AutoParts.Application.Categories.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoParts.API.Controllers;
 
-[Route("api/category")]
+[Authorize(Roles = "Admin, Employee")]
+[Route("api/[controller]")]
 public class CategoryController : BaseController
 {
     #region GET

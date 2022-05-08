@@ -1,4 +1,4 @@
-using AutoParts.Application.Identity.Models;
+using AutoParts.Domain.Entities;
 
 namespace AutoParts.Application.Repositories
 {

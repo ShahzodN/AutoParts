@@ -1,43 +1,77 @@
-using System.Threading.Tasks;
-using AutoParts.Application.Identity.Models;
-using AutoParts.Application.Identity.QueryModels;
-using AutoParts.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using AutoParts.Infrastructure.Identity;
+using AutoParts.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoParts.API.Controllers
 {
     [ApiController]
-    [Route("api/account")]
+    [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly ITokenService tokenService;
-        private readonly IAccountManager accountManager;
+        private readonly TokenService tokenService;
+        private readonly UserManager<IdentityUser<int>> userManager;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
 
-        public AccountController(ITokenService tokenService, IAccountManager accountManager)
+        public AccountController(TokenService tokenService, UserManager<IdentityUser<int>> userManager,
+                                RoleManager<IdentityRole<int>> roleManager)
         {
             this.tokenService = tokenService;
-            this.accountManager = accountManager;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromForm] LoginQueryModel model)
+        public async Task<ActionResult<object>> SignIn(SignInCommand command)
         {
-            var account = await accountManager.FindByEmail(model.Email!);
-            if (account != null)
-            {
-                string token = tokenService.GenerateToken(account);
-                HttpContext.Response.Cookies.Append("asp.net_auth", token);
-                return Ok();
-            }
+            var user = await userManager.FindByNameAsync(command.Email);
 
-            return NotFound();
+            if (user != null && await userManager.CheckPasswordAsync(user, command.Password))
+            {
+                var token = await tokenService.GenerateToken(user);
+                string redirect;
+                var userRoles = await userManager.GetRolesAsync(user);
+                if (userRoles.Any(x => x == "Admin" || x == "Employee"))
+                    redirect = "/admin";
+                else
+                    redirect = "/";
+
+                HttpContext.Response.Cookies.Append("ASP.NET_CR", token);
+                return Ok(new { Redirect = redirect });
+            }
+            return Unauthorized(new { Error = "Неправильный логин или пароль" });
         }
 
-        [HttpPost("signout")]
-        public IActionResult _SignOut()
+        [HttpPost("signup")]
+        public async Task<ActionResult<object>> SignUp(SignUpCommand command)
         {
-            HttpContext.Response.Cookies.Delete("asp.net_auth");
+            if ((await userManager.FindByNameAsync(command.Email)) == null)
+            {
+                var user = new IdentityUser<int>(command.Email);
+                var createResult = await userManager.CreateAsync(user, command.Password);
+
+                if (!createResult.Succeeded)
+                    throw new Exception("Что-то пошло не так. Повторите позже");
+
+                if (!(await userManager.AddToRoleAsync(user, "Customer")).Succeeded)
+                {
+                    await userManager.DeleteAsync(user);
+                    throw new Exception("Что-то пошло не так. Повторите позже");
+                }
+
+                return new
+                {
+                    Token = await tokenService.GenerateToken(user)
+                };
+            }
+
+            throw new Exception("Пользователь таким email уже существует");
+        }
+
+        [HttpGet("signout")]
+        public IActionResult Signout()
+        {
+            HttpContext.Response.Cookies.Delete("ASP.NET_CR");
             return Ok();
         }
     }

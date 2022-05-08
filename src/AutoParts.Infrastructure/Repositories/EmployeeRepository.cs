@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
-using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Repositories;
+using AutoParts.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoParts.Infrastructure.Repositories

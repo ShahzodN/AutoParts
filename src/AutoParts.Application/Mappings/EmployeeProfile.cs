@@ -2,7 +2,7 @@ using AutoMapper;
 using AutoParts.Application.Employees.Commands.Create;
 using AutoParts.Application.Employees.Commands.Update;
 using AutoParts.Application.Employees.Queries;
-using AutoParts.Application.Identity.Models;
+using AutoParts.Domain.Entities;
 
 namespace AutoParts.Application.Mappings
 {

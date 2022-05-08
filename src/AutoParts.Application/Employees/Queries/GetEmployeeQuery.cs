@@ -1,7 +1,7 @@
 using AutoMapper;
 using AutoParts.Application.Exceptions;
-using AutoParts.Application.Identity.Models;
 using AutoParts.Application.Repositories;
+using AutoParts.Domain.Entities;
 using MediatR;
 
 namespace AutoParts.Application.Employees.Queries

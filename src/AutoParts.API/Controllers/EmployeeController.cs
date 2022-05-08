@@ -1,38 +1,28 @@
 using AutoParts.Application.Employees.Queries;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoParts.Application.Employees.Commands.Update;
 using AutoParts.Application.Employees.Commands.Delete;
 using AutoParts.Application.Employees.Commands.Create;
-using AutoParts.Application.Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoParts.API.Controllers
 {
-    [ApiController]
-    [Route("api/employee")]
-    public class EmployeeController : Controller
+    [Authorize(Roles = "Admin")]
+    [Route("api/[controller]")]
+    public class EmployeeController : BaseController
     {
-        private readonly IMediator mediator;
-        private readonly IAccountManager accountManager;
-
-        public EmployeeController(IMediator mediator, IAccountManager accountManager)
-        {
-            this.mediator = mediator;
-            this.accountManager = accountManager;
-        }
-
         #region GET
 
         [HttpGet("all")]
         public async Task<ActionResult<List<EmployeeDto>>> GetEmployees()
         {
-            return Ok(await mediator.Send(new GetEmployeesQuery()));
+            return Ok(await Mediator.Send(new GetEmployeesQuery()));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeDto>> GetEmployee(int id)
         {
-            return Ok(await mediator.Send(new GetEmployeeQuery(id)));
+            return Ok(await Mediator.Send(new GetEmployeeQuery(id)));
         }
         #endregion
 
@@ -41,16 +31,9 @@ namespace AutoParts.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEmployee(CreateEmployeeCommand command)
         {
-            EmployeeDto createdEmployee = await mediator.Send(command);
+            EmployeeDto createdEmployee = await Mediator.Send(command);
 
             return Created($"/api/employee/{createdEmployee.Id}", createdEmployee);
-        }
-
-        [HttpPost("create-account")]
-        public async Task<IActionResult> CreateAccount(CreateAccountForEmployeeCommand command)
-        {
-            await mediator.Send(command);
-            return NoContent();
         }
 
         #endregion
@@ -60,7 +43,7 @@ namespace AutoParts.API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(UpdateEmployeeCommand command)
         {
-            await mediator.Send(command);
+            await Mediator.Send(command);
 
             return NoContent();
         }
@@ -72,7 +55,7 @@ namespace AutoParts.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            await mediator.Send(new DeleteEmployeeCommand(id));
+            await Mediator.Send(new DeleteEmployeeCommand(id));
 
             return NoContent();
         }

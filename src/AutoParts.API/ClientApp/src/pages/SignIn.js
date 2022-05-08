@@ -1,62 +1,57 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import '../css/SignIn.css';
+import authService from "../services/auth.service";
 
-export class SignIn extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: ''
-    };
-    this.onChange = this.onChange.bind(this);
-    this.submitHandler = this.submitHandler.bind(this);
+export function SignIn() {
+
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
+  function submitForm() {
+    authService.signIn(form).then(response => response.json())
+      .then(result => {
+        console.log("result", result);
+
+        if (result.redirect)
+          navigate(result.redirect);
+        else
+          setError(result.error);
+      });
   }
 
-  onChange(e) {
-    const name = e.target.name;
-
-    this.setState({ [name]: e.target.value });
-  }
-
-  async submitHandler(e) {
-    // `e.preventDefault();
-
-    // const response = await fetch('api/account/login', {
-    //   method: 'post',
-    //   body: new Url
-    // })`
-  }
-
-  render() {
-    return (
-      <div className="background d-flex align-items-center justify-content-center shadow-lg">
-        <div className="form-holder d-flex flex-column p-5">
-          <span className="text-dark fs-3">Autoparts</span>
-          <span className="text-dark fs-3 fw-bold">Вход</span>
-          <form action="api/account/signin"
-            method="post"
-            className="d-flex flex-column"
-            onSubmit={this.submitHandler}>
-            <input type="email"
-              name="email"
-              value={this.state.email}
-              onChange={this.onChange}
-              placeholder="Email"
-              className="mb-2" />
-
-            <input type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.onChange}
-              placeholder="Пароль"
-              className="mb-2" />
-
-            <span className="mb-4">Нет учетной записи? <Link className="text-decoration-none" to="/register">Создать</Link></span>
-            <button type="submit" className="btn btn-primary fs-5">Войти</button>
-          </form>
+  return (
+    <div className="background d-flex align-items-center justify-content-center shadow-lg">
+      <div className="form-holder d-flex flex-column p-5">
+        <span className="text-dark fs-3">Autoparts</span>
+        <span className="text-dark fs-3 fw-bold">Вход</span>
+        <span className="text-danger" style={{ display: error === null ? "none" : "block" }}>{error}</span>
+        <div className="d-flex flex-column">
+          <input
+            type="email"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            placeholder="Email"
+            className="form-control mb-2"
+          />
+          <input
+            type="password"
+            value={form.password}
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            placeholder="Пароль"
+            className="form-control mb-2"
+          />
+          <span className="mb-4">Нет учетной записи? <Link className="text-decoration-none" to="/register">Создать</Link></span>
+          <button
+            type="submit"
+            className="btn btn-primary fs-5"
+            onClick={submitForm}
+          >
+            Войти
+          </button>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
