@@ -38,7 +38,6 @@ export function NewConsignment() {
 
     setSelectedProduct(null);
     setQuantity("");
-    document.getElementById("asd").focus();
   }
 
   function deleteProduct(e) {
@@ -145,7 +144,7 @@ export function NewConsignment() {
       </div>
     </div >
   ) : (
-    <div className="container-fluid justify-content-center">
+    <div className="container d-flex justify-content-center">
       <Spinner animation="border" size="large" />
     </div>
   )

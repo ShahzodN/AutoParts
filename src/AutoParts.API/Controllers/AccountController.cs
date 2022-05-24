@@ -36,8 +36,8 @@ namespace AutoParts.API.Controllers
                 else
                     redirect = "/";
 
-                HttpContext.Response.Cookies.Append("ASP.NET_CR", token);
-                return Ok(new { Redirect = redirect });
+                // HttpContext.Response.Cookies.Append("ASP.NET_CR", token);
+                return Ok(new { AccessToken = token, User = userRoles.FirstOrDefault() });
             }
             return Unauthorized(new { Error = "Неправильный логин или пароль" });
         }

@@ -50,6 +50,8 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
             await Set.AddAsync(product);
         }
 
+        product.EAN = await MakeEAN(command);
+
         await context.SaveChangesAsync();
 
         return product;
@@ -175,5 +177,43 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
                         .Include(x => x.Models)
                         .Include(x => x.Category)
                         .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<Product?> GetByEAN(string ean)
+    {
+        var product = await Set.AsNoTracking()
+                                .Include(x => x.Image)
+                                .FirstOrDefaultAsync(x => x.EAN == ean);
+        return product;
+    }
+    public void UpdateRange(params Product[] products)
+    {
+        Set.UpdateRange(products);
+    }
+
+    private async Task<string> MakeEAN(CreateProductCommand command)
+    {
+        string ean = "20";
+
+        string? productId = await context.Set<Product>().OrderBy(s => s.Id).Select(s => s.Id + 1.ToString()).LastOrDefaultAsync();
+        if (productId == null)
+            productId = "1";
+
+        var manufactorId = command.ManufactorId.ToString();
+        ean += new string('0', 5 - manufactorId.Length) + manufactorId;
+        ean += new string('0', 5 - productId.Length) + productId;
+
+        int oddPosition = 0;
+        int evenPosition = 0;
+
+        for (int i = 0; i < 12; i += 2)
+            oddPosition += Convert.ToInt32(ean[i].ToString());
+        for (int i = 1; i < 12; i += 2)
+            evenPosition += Convert.ToInt32(ean[i].ToString()) * 3;
+
+        int checkDigit = 10 - ((oddPosition + evenPosition) % 10);
+        ean += checkDigit.ToString();
+
+        return ean;
     }
 }

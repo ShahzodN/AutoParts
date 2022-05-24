@@ -6,6 +6,7 @@ import { Image, ImageFit } from "@fluentui/react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { OperationResultModal } from "../components/OperationResultModal";
 import modelService from "../services/model.service";
+import bwipjs from "bwip-js";
 
 
 export function ProductDetail() {
@@ -46,6 +47,16 @@ export function ProductDetail() {
         modelService.getModelsWithYearsOfIssue(res.manufactorId).then(r => setModels(r));
 
       setLoading(false);
+
+      bwipjs.toCanvas("barcode", {
+        bcid: "ean13",
+        text: res.ean,
+        scale: 3,
+        height: 10,
+        includetext: true,
+        textxalign: "center",
+        width: 30
+      });
     });
 
     productService.getPreliminaryData().then(res => setData(res));
@@ -261,6 +272,11 @@ export function ProductDetail() {
                 className="form-control"
               >
               </textarea>
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="col justify-content-center">
+              <canvas id="barcode"></canvas>
             </div>
           </div>
         </div>

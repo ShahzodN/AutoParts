@@ -1,0 +1,21 @@
+.wrapper {
+    width: 100%;
+}
+
+.history {
+    width: 50%;
+}
+
+.products {
+    width: 50%;
+}
+
+.product-photo {
+    object-fit: cover;
+    width: 6rem;
+
+}
+
+.products-table {
+    max-width: 300px;
+}

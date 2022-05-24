@@ -12,6 +12,6 @@ public class ConsignmentConfig : IEntityTypeConfiguration<Consignment>
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.Date)
-            .HasColumnType("timestamp");
+            .HasColumnType("timestamp with time zone");
     }
 }

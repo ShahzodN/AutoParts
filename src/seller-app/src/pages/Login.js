@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import '../css/SignIn.css';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import "../css/Login.css";
 import authService from "../services/auth.service";
 
-export function SignIn() {
+export function Login() {
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState();
   const navigate = useNavigate();
 
   function submitForm() {
-    authService.signIn(form).then(response => response.json())
-      .then(result => {
-        if (result.redirect)
-          navigate(result.redirect);
-        else
-          setError(result.error);
-      });
+    authService.signIn(form).then(res => {
+      if (res.status === "ok") {
+        navigate("/sale");
+      }
+      else
+        setError(res.error);
+    })
   }
 
   return (
     <div className="background d-flex align-items-center justify-content-center shadow-lg">
       <div className="form-holder d-flex flex-column p-5">
-        <span className="text-dark fs-3">Autoparts</span>
+        <span className="text-dark fs-3">AUTOPARTS.CASHIER</span>
         <span className="text-dark fs-3 fw-bold">Вход</span>
         <span className="text-danger" style={{ display: error === null ? "none" : "block" }}>{error}</span>
         <div className="d-flex flex-column">
@@ -40,7 +40,6 @@ export function SignIn() {
             placeholder="Пароль"
             className="form-control mb-2"
           />
-          <span className="mb-4">Нет учетной записи? <Link className="text-decoration-none" to="/register">Создать</Link></span>
           <button
             type="submit"
             className="btn btn-primary fs-5"

@@ -53,12 +53,15 @@ namespace AutoParts.Infrastructure
                 };
             });
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IConsignmentRepository, ConsignmentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IManufactorRepository, ManufactorRepository>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
             services.AddScoped<TokenService>();
 
             services.AddScoped<IImageService, ImageService>();
