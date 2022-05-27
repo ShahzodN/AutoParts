@@ -1,81 +1,42 @@
+import { axios } from "../axios/axios";
+
 class ProductService {
-    #baseUrl = 'api/products';
+    #baseUrl = 'products';
 
     // get
     async getProductById(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'get',
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}/${id}`);
     }
 
     async getPreliminaryData() {
-        const response = await fetch(`${this.#baseUrl}/preliminary`, {
-            method: 'get',
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}/preliminary`);
     }
 
     async getAll() {
-        const response = await fetch(`${this.#baseUrl}`, {
-            headers: { "Content-Type": "application/json" }
-        });
-
-        return await response.json();
+        return await axios.get(`${this.#baseUrl}`);
     }
 
     async getSuggestions(productName) {
-        const response = await fetch(`${this.#baseUrl}/suggestion?value=${productName}`, {
-            method: "get",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        return await response.json();
+        return await axios.get(`${this.#baseUrl}/suggestion?value=${productName}`);
     }
 
     async getFilteredProducts(params) {
-        const response = await fetch(`${this.#baseUrl}/filter${params}`, {
-            method: "get"
-        });
-
-        return await response.json();
+        return await axios.get(`${this.#baseUrl}/filter${params}`);
     }
 
     // post
     async create(product) {
-        const response = await fetch(`${this.#baseUrl}`, {
-            method: "post",
-            body: JSON.stringify(product),
-            headers: { 'Content-Type': 'application/json' }
-        })
-
-        return response;
+        return await axios.post(`${this.#baseUrl}`, product);
     }
 
     // update
     async update(product) {
-        const response = await fetch(`${this.#baseUrl}`, {
-            method: "put",
-            body: JSON.stringify(product),
-            headers: { 'Content-Type': 'application/json' }
-        })
-
-        return response;
+        return await axios.put(`${this.#baseUrl}`, product);
     }
 
     // delete
     async delete(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: "delete",
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/${id}`);
     }
 }
 

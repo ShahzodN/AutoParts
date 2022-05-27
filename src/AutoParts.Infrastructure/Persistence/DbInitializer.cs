@@ -29,7 +29,7 @@ public class DbInitializer
         if (userManager.FindByNameAsync("admin").GetAwaiter().GetResult() == null)
         {
             IdentityUser<int> user = new("admin");
-            userManager.CreateAsync(user, "admin123").GetAwaiter().GetResult();
+            userManager.CreateAsync(user, "12345678").GetAwaiter().GetResult();
             userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
         }
         scope.Dispose();

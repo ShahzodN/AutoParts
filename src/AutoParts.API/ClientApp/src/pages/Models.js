@@ -14,14 +14,14 @@ export function Models() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    modelService.getAll(params.manufName).then(res => {
-      setModels(res);
+    modelService.getAll(params.manufName).then(result => {
+      setModels(result.data);
       setLoading(false);
     });
   }, [params, loading]);
 
   return !loading ? (
-    <div className="p-2">
+    <div className="container">
       <h1>{params.manufName}</h1>
       <div className="d-flex flex-row">
         <Button

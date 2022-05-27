@@ -10,8 +10,8 @@ export function Categories() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    categoryService.getAll().then(res => {
-      setCategories(res);
+    categoryService.getAll().then(result => {
+      setCategories(result.data);
       setLoading(false);
     });
   }, []);
@@ -22,7 +22,7 @@ export function Categories() {
       <div className="row">
         <div className="d-grid d-lg-block">
           <Link
-            to="/admin/categories/new"
+            to="/categories/new"
             className="btn btn-primary"
           >
             Создать новый
@@ -32,7 +32,7 @@ export function Categories() {
           {categories.map((v) => {
             return (
               <Link
-                to={`/admin/category/${v.id}`}
+                to={`/category/${v.id}`}
                 key={v.id}
                 className="col justify-content-center align-items-center"
               >

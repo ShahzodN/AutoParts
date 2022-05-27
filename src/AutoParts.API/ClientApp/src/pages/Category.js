@@ -6,7 +6,7 @@ import categoryService from "../services/category.service";
 
 export function Category() {
 
-  const IMAGE_SRC = `${window.location.protocol}//${window.location.hostname}:5000/images`;
+  const IMAGE_SRC = `http://localhost:5000/images`;
 
   const params = useParams();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export function Category() {
 
   useEffect(() => {
     categoryService.getById(params.id).then(result => {
-      setCategory(result);
+      setCategory(result.data);
       setLoading(false);
     })
   }, [params.id]);
@@ -27,21 +27,20 @@ export function Category() {
     categoryService.update(category).then(result => {
       setLoading(false);
       setShowOperationResult(true);
-      if (result.ok) {
-        document.getElementById("success").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Успешно!";
-      }
-      else {
-        document.getElementById("fail").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Операция не выполнена";
-      }
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
 
       setTimeout(() => {
         setShowOperationResult(false);
         if (result.ok)
-          navigate("/admin/categories");
+          navigate("/categories");
       }, 1500);
     })
+      .catch(error => {
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      });
   }
 
   function onImageUpoad(e) {
@@ -59,21 +58,19 @@ export function Category() {
     categoryService.remove(category.id).then(result => {
       setLoading(false);
       setShowOperationResult(true);
-      if (result.ok) {
-        document.getElementById("success").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Успешно!";
-      }
-      else {
-        document.getElementById("fail").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Операция не выполнена";
-      }
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
 
       setTimeout(() => {
         setShowOperationResult(false);
-        if (result.ok)
-          navigate("/admin/categories");
-      }, 1500);
-    });
+        navigate("/categories");
+      }, 1200);
+    })
+      .catch(error => {
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      });
   }
 
   return !loading ? (

@@ -13,10 +13,9 @@ builder.Services.AddCors(builder =>
 {
     builder.AddPolicy("CashierApp", opt =>
     {
-        // opt.WithOrigins("http://localhost:3000");
-        // opt.WithHeaders("Content-Type", "Authorization");
-        // opt.AllowCredentials();
-        opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials();
+        opt.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
     });
 });
 

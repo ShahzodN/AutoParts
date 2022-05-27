@@ -1,61 +1,30 @@
+import { axios } from "../axios/axios";
 
 class EmployeeService {
-  async getAll() {
-    const response = await fetch("/api/employee/all", {
-      method: "get",
-      headers: { "Content-Type": "application/json" }
-    });
+  #baseUrl = "employee";
 
-    return await response.json();
+  async getAll() {
+    return await axios.get(`${this.#baseUrl}/all`);
   }
 
   async getById(id) {
-    const response = await fetch(`/api/employee/${id}`, {
-      method: "get",
-      headers: { "Content-Type": "application/json" }
-    });
-
-    const result = await response.json();
-    return result;
+    return await axios.get(`${this.#baseUrl}/${id}`);
   }
 
   async create(employee) {
-    const response = await fetch("/api/employee", {
-      method: "post",
-      body: JSON.stringify(employee),
-      headers: { "Content-Type": "application/json" }
-    })
-
-    return response;
+    return await axios.post(`${this.#baseUrl}`, employee);
   }
 
   async deleteEmployee(id) {
-    const response = await fetch(`/api/employee/${id}`, {
-      method: "delete",
-    });
-
-    return response;
+    return await axios.delete(`${this.#baseUrl}/${id}`);
   }
 
   async update(employee) {
-    console.log("employee " + JSON.stringify(employee))
-    const response = await fetch("/api/employee", {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(employee)
-    });
-
-    return response;
+    return await axios.put(`${this.#baseUrl}`, employee);
   }
 
   async createAccount(data) {
-    const response = await fetch("/api/employee/create-account", {
-      method: "post",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    return response;
+    return await axios.post(`${this.#baseUrl}/create-account`, data);
   }
 }
 

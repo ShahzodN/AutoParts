@@ -11,8 +11,8 @@ export function Consignment() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    consignmentService.getById(params.id).then(res => {
-      setConsignment(res);
+    consignmentService.getById(params.id).then(result => {
+      setConsignment(result.data);
       setLoading(false);
     });
   }, [params.id])
@@ -48,16 +48,14 @@ export function Consignment() {
     copy.date = copy.date.split('-').reverse().join('-');
 
     consignmentService.update(copy)
-      .then(res => {
-        if (res.ok) {
-          $('.spinner-border').hide();
-          $('.done').show();
+      .then(result => {
+        $('.spinner-border').hide();
+        $('.done').show();
 
-          setInterval(() => {
-            setLoading(false);
-            navigate(`/admin/delivery-of-goods/${params.id}`);
-          }, 1500);
-        }
+        setInterval(() => {
+          setLoading(false);
+          navigate(`/delivery-of-goods/${params.id}`);
+        }, 1500);
       })
   }
 

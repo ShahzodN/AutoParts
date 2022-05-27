@@ -1,14 +1,13 @@
-import { useState } from "react"
+import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import categoryService from "../services/category.service";
-import "../css/NewCategory.css";
-import { OperationResultModal } from "../components/OperationResultModal";
 import { useNavigate } from "react-router-dom";
+import { OperationResultModal } from "../components/OperationResultModal";
+import modelService from "../services/model.service";
 
-export function NewCategory() {
+export function NewManufactor() {
 
   const navigate = useNavigate();
-  const [category, setCategory] = useState({ name: "" });
+  const [manufactor, setManufactor] = useState();
   const [loading, setLoading] = useState(false);
   const [showOperationResult, setShowOperationResult] = useState(false);
 
@@ -17,26 +16,26 @@ export function NewCategory() {
 
     reader.onload = (e) => {
       document.getElementById("prev").setAttribute("src", e.target.result);
-      setCategory({ ...category, image: e.target.result });
+      setManufactor({ ...manufactor, image: e.target.result });
     }
 
     reader.readAsDataURL(e.target.files[0]);
   }
 
-  function uploadCategory() {
+  function uploadManufactor() {
     setLoading(true);
 
-    categoryService.create(category).then(result => {
+    modelService.createManufactor(manufactor).then(result => {
       setLoading(false);
       setShowOperationResult(true);
 
       document.getElementById("success").style.display = "block";
-      document.getElementById("op-result-message").innerText = "Успешно!";
 
+      document.getElementById("op-result-message").innerText = "Успешно!";
       setTimeout(() => {
         setShowOperationResult(false);
 
-        navigate("/categories");
+        navigate("/manufactors");
       }, 1500);
     })
       .catch(error => {
@@ -51,7 +50,7 @@ export function NewCategory() {
         <div className="col-12 col-md-4 col-lg-3">
           <div className="d-flex flex-column align-items-center">
             <img
-              src={category.image}
+              src={manufactor?.image}
               alt=""
               id="prev"
               className="category-photo"
@@ -76,12 +75,11 @@ export function NewCategory() {
           <input
             placeholder="Название"
             className="form-control mt-2"
-            value={category.name}
-            onChange={e => setCategory({ ...category, name: e.target.value })}
+            onChange={e => setManufactor({ ...manufactor, name: e.target.value })}
           />
           <div className="d-grid mt-2">
             <Button
-              onClick={uploadCategory}
+              onClick={uploadManufactor}
             >
               Сохранить
             </Button>

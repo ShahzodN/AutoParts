@@ -28,30 +28,26 @@ export function ModelCard(props) {
 
   const deleteSpecificModel = () => {
     setLoading(true);
-    modelService.removeSpecificModel(currentModelId).then(res => {
-      if (res.ok) {
-        $('.spinner-border').hide();
-        $('.done').show();
+    modelService.removeSpecificModel(currentModelId).then(result => {
+      $('.spinner-border').hide();
+      $('.done').show();
 
-        setInterval(() => {
-          window.location.reload();
-        }, 1500);
-      }
+      setInterval(() => {
+        window.location.reload();
+      }, 1500);
     });
   }
 
   const deleteAllModels = () => {
     setLoading(true);
 
-    modelService.removeAllModels(props.model.modelName).then(res => {
-      if (res.ok) {
-        $('.spinner-border').hide();
-        $('.done').show();
+    modelService.removeAllModels(props.model.modelName).then(result => {
+      $('.spinner-border').hide();
+      $('.done').show();
 
-        setInterval(() => {
-          window.location.reload();
-        }, 1500);
-      }
+      setInterval(() => {
+        window.location.reload();
+      }, 1200);
     })
   }
 

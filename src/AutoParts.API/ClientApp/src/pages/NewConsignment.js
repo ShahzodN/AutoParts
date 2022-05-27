@@ -53,17 +53,15 @@ export function NewConsignment() {
 
     consignmentService.create(prodList)
       .then(res => {
-        if (res.ok) {
-          setInterval(() => {
-            setLoading(false);
-            navigate('/admin/delivery-of-goods');
-          }, 1500);
-        }
+        setInterval(() => {
+          setLoading(false);
+          navigate('/delivery-of-goods');
+        }, 1500);
       });
   }
 
   function loadProducts(value, callback) {
-    productService.getSuggestions(value.trim()).then(result => callback(result.map(item => ({ value: item.id, label: item.name }))));
+    productService.getSuggestions(value.trim()).then(result => callback(result.data.map(item => ({ value: item.id, label: item.name }))));
   }
 
   return !loading ? (

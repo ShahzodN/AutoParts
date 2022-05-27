@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import '../css/SignIn.css';
 import authService from "../services/auth.service";
 
 export function SignIn() {
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const credentials = localStorage.getItem("credentials");
+    if (credentials) navigate("/");
+  }, []);
+
   function submitForm() {
-    authService.signIn(form).then(response => response.json())
-      .then(result => {
-        if (result.redirect)
-          navigate(result.redirect);
-        else
-          setError(result.error);
+    authService.signIn(form).then(result => {
+      if (result.status >= 200 && result.status < 300) {
+        localStorage.setItem("credentials", JSON.stringify(result.data));
+        navigate("/");
+      }
+    })
+      .catch(error => {
+        setError(error.response.data.error);
       });
   }
 

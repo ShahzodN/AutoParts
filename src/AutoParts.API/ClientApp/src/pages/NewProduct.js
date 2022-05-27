@@ -39,7 +39,9 @@ export function NewProduct() {
   const [yearsSelectValues, setYearsSelectValues] = useState([]);
 
   useEffect(() => {
-    productService.getPreliminaryData().then(result => setData(result));
+    productService.getPreliminaryData().then(result => {
+      setData(result.data)
+    });
   }, []);
 
   const onFileUpload = (e) => {
@@ -59,7 +61,7 @@ export function NewProduct() {
 
     setForm({ ...form, manufactorId: e.value, models: [] });
     modelService.getModelsWithYearsOfIssue(e.value).then(res => {
-      setModels(res);
+      setModels(res.data);
     });
   }
 
@@ -115,7 +117,6 @@ export function NewProduct() {
       let deletingModel = yearsSelectValues.filter(x => !e.includes(x))[0];
 
       let model = models.find(x => x.model === deletingModel.model);
-      console.log("models", models);
       model.yearsOfIssue = [...model.yearsOfIssue.filter(x => x !== parseInt(deletingModel.label))];
       setForm({ ...form, models: models });
     }
@@ -125,25 +126,23 @@ export function NewProduct() {
   const uploadProduct = () => {
     setLoading(true);
 
-    productService.create(form).then(res => {
+    productService.create(form).then(result => {
       setShowOperationResultModal(true);
-      if (res.ok) {
-        document.getElementById("success").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Успешно!";
-      }
-      else {
-        document.getElementById("fail").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Операция не выполнена";
-      }
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
 
       setTimeout(() => {
         setShowOperationResultModal(false);
         setLoading(false);
 
-        if (res.ok)
-          navigate("/admin/products");
+        navigate("/products");
       }, 1200);
-    });
+    })
+      .catch(error => {
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      });
   }
 
   return (
@@ -175,25 +174,26 @@ export function NewProduct() {
         <div className="col-sm-12 col-md-8 col-lg-9">
           <div className="row align-items-end">
             <div className="col-md-12 col-lg-4">
-              <label htmlFor="productName">Название</label>
               <input
                 className="form-control"
                 id="productName"
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Название"
               />
             </div>
             <div className="col-md-12 col-lg-4 mt-2">
-              <label htmlFor="productName">Цена</label>
               <input
                 className="form-control"
                 id="productPrice"
                 onChange={(e) => setForm({ ...form, price: parseInt(e.target.value) })}
+                placeholder="Цена"
               />
             </div>
             <div className="col-md-12 col-lg-4 mt-2">
               <Select
                 options={data.categories.map(x => ({ value: x.id, label: x.name }))}
                 onChange={(newValue) => setForm({ ...form, categoryId: newValue.value })}
+                placeholder="Категория"
               />
             </div>
           </div>

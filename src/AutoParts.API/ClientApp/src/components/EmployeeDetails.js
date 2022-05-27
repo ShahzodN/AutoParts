@@ -13,17 +13,19 @@ export function EmployeeDetails() {
   const [employee, setEmployee] = useState({ photo: "" });
   const positions = ["Администратор", "Уборщица", "Продавец", "Охрана"];
 
-  const imageSrc = `${window.location.protocol}//${window.location.hostname}:5000/images`;
+  const imageSrc = `http://localhost:5000/images`;
 
   useEffect(() => {
-    employeeService.getById(params.id).then(result => setEmployee(result));
+    employeeService.getById(params.id).then(result => {
+      if (result) setEmployee(result.data);
+    });
   }, [params.id]);
 
   const uploadEmployee = () => {
     setLoading(true);
     employeeService.update(employee).then(result => {
       setLoading(false);
-      navigate("/admin/employee");
+      navigate("/employees");
     });
   }
 
@@ -40,9 +42,9 @@ export function EmployeeDetails() {
   const deleteEmployee = () => {
     setLoading(true);
     employeeService.deleteEmployee(employee.id).then(result => {
-      if (result.ok) {
+      if (result) {
         setLoading(false);
-        navigate("/admin/employee");
+        navigate("/employees");
       }
     })
   }
@@ -80,7 +82,7 @@ export function EmployeeDetails() {
         <div className="col-sm-12 col-md-8 col-lg-9">
           <div className="row align-items-center">
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeeFirstname" className="form-label">Имя</label>
+              <label htmlFor="employeeFirstname" className="form-label"><strong>Имя</strong></label>
               <input
                 className="form-control"
                 id="employeeFirstname"
@@ -90,7 +92,7 @@ export function EmployeeDetails() {
               />
             </div>
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeeLastname" className="form-label">Фамилия</label>
+              <label htmlFor="employeeLastname" className="form-label"><strong>Фамилия</strong></label>
               <input
                 className="form-control"
                 id="employeeLastname"
@@ -100,7 +102,7 @@ export function EmployeeDetails() {
               />
             </div>
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeeAddress" className="form-label">Адрес</label>
+              <label htmlFor="employeeAddress" className="form-label"><strong>Адрес</strong></label>
               <input
                 className="form-control"
                 placeholder="Адрес"
@@ -109,7 +111,7 @@ export function EmployeeDetails() {
               />
             </div>
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeePhone" className="form-label">Номер телефона</label>
+              <label htmlFor="employeePhone" className="form-label"><strong>Номер телефона</strong></label>
               <input
                 className="form-control"
                 placeholder="Номер телефона"
@@ -118,7 +120,7 @@ export function EmployeeDetails() {
               />
             </div>
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeeSalary" className="form-label">Зарплата</label>
+              <label htmlFor="employeeSalary" className="form-label"><strong>Зарплата</strong></label>
               <input className="form-control"
                 placeholder="Зарплата"
                 defaultValue={employee.salary}
@@ -126,7 +128,7 @@ export function EmployeeDetails() {
               />
             </div>
             <div className="col-md-12 col-lg-6 mt-2">
-              <label htmlFor="employeePosition" className="form-label">Должность</label>
+              <label htmlFor="employeePosition" className="form-label"><strong>Должность</strong></label>
               <Select
                 options={positions.map(i => ({ value: i, label: i }))}
                 isSearchable={false}

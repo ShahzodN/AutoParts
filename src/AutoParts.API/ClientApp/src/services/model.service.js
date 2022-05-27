@@ -1,117 +1,54 @@
-class ModelService {
-    constructor() {
-        this.#baseUrl = 'api/models';
-    }
+import { axios } from "../axios/axios";
 
-    #baseUrl;
+class ModelService {
+    #baseUrl = "models";
 
     async getAllManufactors() {
-        const response = await fetch(`${this.#baseUrl}/manufactors`, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}/manufactors`);
     }
 
     async createManufactor(manufactor) {
-        const response = await fetch(`${this.#baseUrl}/manufactor`, {
-            method: 'post',
-            body: JSON.stringify(manufactor),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        return response;
+        return await axios.post(`${this.#baseUrl}/manufactor`, manufactor);
     }
 
     async deleteManufactor(id) {
-        const response = await fetch(`${this.#baseUrl}/manufactor/${id}`, {
-            method: 'delete',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/manufactor/${id}`);
     }
 
     async getAll(manufactor) {
-        const response = await fetch(`${this.#baseUrl}?manufactor=${manufactor}`, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}?manufactor=${manufactor}`);
     }
 
     async getById(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        return response;
+        return await axios.get(`${this.#baseUrl}/${id}`);
     }
 
     async create(model) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(model)
-        })
-
-        return response;
+        return await axios.post(`${this.#baseUrl}`, model);
     }
 
     async update(model) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(model)
-        });
-
-        return response;
+        return await axios.put(`${this.#baseUrl}`, model);
     }
 
     async removeSpecificModel(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'delete'
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/${id}`);
     }
 
     async removeAllModels(modelName) {
-        const response = await fetch(`${this.#baseUrl}/all/${modelName}`, {
-            method: 'delete'
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/all/${modelName}`);
     }
 
     async getBodyTypes() {
-        const response = await fetch(`${this.#baseUrl}/bodyTypes`, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}/bodyTypes`);
     }
 
     async getModelsWithYearsOfIssue(manufactorId) {
-        const response = await fetch(`${this.#baseUrl}/withYears/${manufactorId}`);
-
-        return await response.json();
+        return await axios.get(`${this.#baseUrl}/withYears/${manufactorId}`);
     }
 
     async getModelsName(name) {
-        const response = await fetch(`${this.#baseUrl}/names/${name}`);
-
-        return await response.json();
+        return await axios.get(`${this.#baseUrl}/names/${name}`);
     }
 }
 

@@ -18,13 +18,14 @@ import { NewCategory } from "./NewCategory";
 import { Category } from "./Category";
 import dashboardService from "../services/dashboard.service";
 import { Spinner } from "react-bootstrap";
+import { NewManufactor } from "./NewManufactor";
 
 export function Admin() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     dashboardService.getSecret().then(res => {
-      if (res.ok) {
+      if (res) {
         setLoading(false);
       }
     });
@@ -36,7 +37,7 @@ export function Admin() {
 
       <Routes>
         <Route exact path="/" element={<AdminMainPage />} />
-        <Route path="/employee" element={<Employees />} />
+        <Route path="/employees" element={<Employees />} />
         <Route path="/employee/:id" element={<EmployeeDetails />} />
         <Route path="/employee/new" element={<NewEmployee />} />
         <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
@@ -46,6 +47,7 @@ export function Admin() {
         <Route path="/categories/new" element={<NewCategory />} />
         <Route path="/category/:id" element={<Category />} />
         <Route path="/manufactors" element={<Manufactors />} />
+        <Route path="/manufactors/new" element={<NewManufactor />} />
         <Route path="/manufactors/:manufName" element={<Models />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/new" element={<NewProduct />} />

@@ -1,57 +1,26 @@
-class CategoryService {
-    constructor() {
-        this.#baseUrl = 'api/category';
-    }
+import { axios } from "../axios/axios";
 
-    #baseUrl;
+class CategoryService {
+    #baseUrl = "category";
 
     async getAll() {
-        const response = await fetch(this.#baseUrl, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}`);
     }
 
     async getById(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'get',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-        return result;
+        return await axios.get(`${this.#baseUrl}/${id}`);
     }
 
     async create(category) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(category)
-        })
-
-        return response;
+        return await axios.post(`${this.#baseUrl}`, category);
     }
 
     async update(category) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(category)
-        });
-
-        return response;
+        return await axios.put(`${this.#baseUrl}`, category);
     }
 
     async remove(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'delete'
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/${id}`);
     }
 }
 

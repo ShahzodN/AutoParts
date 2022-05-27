@@ -11,8 +11,8 @@ export function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    productService.getPreliminaryData().then(result => setData(result));
-    productService.getAll().then(result => setProducts(result));
+    productService.getPreliminaryData().then(result => setData(result.data));
+    productService.getAll().then(result => setProducts(result.data));
   }, [])
 
   return (
@@ -20,7 +20,7 @@ export function Products() {
       <div className="d-flex flex-row align-items-center p-1">
         <h2>Продукты</h2>
         <div style={{ height: 40, width: 1, backgroundColor: 'gray' }} className="ms-2"></div>
-        <Link to="/admin/products/new" >
+        <Link to="/products/new" >
           <DefaultButton
             iconProps={{ iconName: 'add' }}
             text="Новый продукт"
@@ -39,7 +39,7 @@ export function Products() {
             {products.map(p => {
               return (
                 <Link
-                  to={`/admin/products/${p.id}`}
+                  to={`/products/${p.id}`}
                   className="product-link"
                   key={p.id}
                 >

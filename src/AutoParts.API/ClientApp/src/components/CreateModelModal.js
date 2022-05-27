@@ -13,8 +13,8 @@ export function CreateModelModal(props) {
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    modelService.getBodyTypes().then(res => {
-      setBodyTypes(res);
+    modelService.getBodyTypes().then(result => {
+      setBodyTypes(result.data);
     })
   }, [params]);
 
@@ -27,16 +27,15 @@ export function CreateModelModal(props) {
       $('#errMsg').text('Выберите тип кузова!');
       setTimeout(() => setShowAlert(false), 2000);
     }
+
     modelService.create(data).then(res => {
-      if (res.ok) {
-        window.location.reload();
-      }
-      else {
+      window.location.reload();
+    })
+      .catch(error => {
         setShowAlert(true);
         $('#errMsg').text('Ошибка! Попробуйте позже');
         setTimeout(() => setShowAlert(false), 2000);
-      }
-    });
+      });
   }
 
   return (

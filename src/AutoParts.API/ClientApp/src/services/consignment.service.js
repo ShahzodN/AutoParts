@@ -1,53 +1,26 @@
+import { axios } from "../axios/axios";
+
 class ConsignmentService {
-
-    #baseUrl;
-
-    constructor() {
-        this.#baseUrl = '/api/consignment';
-    }
+    #baseUrl = "consignment";
 
     async getAll() {
-        const response = await fetch(this.#baseUrl);
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}`);
     }
 
     async getById(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`);
-
-        const result = await response.json();
-
-        return result;
+        return await axios.get(`${this.#baseUrl}/${id}`);
     }
 
     async create(consignment) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'post',
-            body: JSON.stringify(consignment),
-            headers: { "Content-Type": "application/json" }
-        });
-
-        return response;
+        return await axios.post(`${this.#baseUrl}`, consignment);
     }
 
     async update(consignment) {
-        const response = await fetch(this.#baseUrl, {
-            method: 'put',
-            body: JSON.stringify(consignment),
-            headers: { "Content-Type": "application/json" }
-        });
-
-        return response;
+        return await axios.put(`${this.#baseUrl}`, consignment);
     }
 
     async remove(id) {
-        const response = await fetch(`${this.#baseUrl}/${id}`, {
-            method: 'delete'
-        });
-
-        return response;
+        return await axios.delete(`${this.#baseUrl}/${id}`);
     }
 }
 
