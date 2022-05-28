@@ -22,8 +22,7 @@ builder.Services.AddCors(builder =>
 var app = builder.Build();
 
 DbInitializer.Init(app.Services);
-if (!app.Environment.IsDevelopment())
-    app.UseMiddleware<ExceptionHandler>();
+app.UseMiddleware<ExceptionHandler>();
 app.UseStaticFiles();
 app.UseCookiePolicy(new CookiePolicyOptions()
 {

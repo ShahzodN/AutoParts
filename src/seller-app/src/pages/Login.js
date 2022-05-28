@@ -10,13 +10,13 @@ export function Login() {
   const navigate = useNavigate();
 
   function submitForm() {
-    authService.signIn(form).then(res => {
-      if (res.status === "ok") {
-        navigate("/sale");
-      }
-      else
-        setError(res.error);
+    authService.signIn(form).then(result => {
+      localStorage.setItem("credentials", JSON.stringify(result.data));
+      navigate("/");
     })
+      .catch(error => {
+        setError(error.response.data.error);
+      })
   }
 
   return (
@@ -27,8 +27,7 @@ export function Login() {
         <span className="text-danger" style={{ display: error === null ? "none" : "block" }}>{error}</span>
         <div className="d-flex flex-column">
           <input
-            type="email"
-            value={form.email}
+            type="text"
             onChange={e => setForm({ ...form, email: e.target.value })}
             placeholder="Email"
             className="form-control mb-2"

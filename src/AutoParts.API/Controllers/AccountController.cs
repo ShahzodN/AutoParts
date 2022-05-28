@@ -31,7 +31,7 @@ namespace AutoParts.API.Controllers
                 var token = await tokenService.GenerateToken(user);
                 var userRoles = await userManager.GetRolesAsync(user);
 
-                return Ok(new { AccessToken = token, User = userRoles.FirstOrDefault() });
+                return Ok(new { AccessToken = token, User = user.UserName });
             }
             return Unauthorized(new { Error = "Неправильный логин или пароль" });
         }

@@ -7,7 +7,7 @@ export function ManufactorCard(props) {
       <div className="shadow p-2 my-3">
         <div style={{ width: '200px', height: '200px' }} className="mb-2">
           <img
-            src={`${imageSrc}/manufactor/${props.manufactor.id}/${props.manufactor.image}`}
+            src={`${imageSrc}/Manufactor/${props.manufactor.id}/${props.manufactor.image}`}
             alt="manufactorImage"
             style={{ width: '100%', height: '100%' }}
           />

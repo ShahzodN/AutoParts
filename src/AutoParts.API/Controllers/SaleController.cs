@@ -1,3 +1,4 @@
+using AutoParts.Application.Sales.Commands;
 using AutoParts.Application.Sales.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,17 @@ public class SaleController : BaseController
     public async Task<IActionResult> GetProduct([FromQuery] string ean)
     {
         return Ok(await Mediator.Send(new GetProductQuery(ean)));
+    }
+
+    #endregion
+
+    #region POST
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateSaleCommand command)
+    {
+        await Mediator.Send(command);
+        return NoContent();
     }
 
     #endregion
