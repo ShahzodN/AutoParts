@@ -43,7 +43,8 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDe
             Id = product.Id,
             Image = product.Image?.Name,
             IsEnabled = product.IsEnabled,
-            Price = product.Price
+            Price = product.Price,
+            EAN = product.EAN
         };
 
         var dtos = product.Models.GroupBy(x => x.ModelName)

@@ -1,0 +1,25 @@
+.wrapper {
+    width: 100%;
+}
+
+.history {
+    width: 50%;
+}
+
+.products {
+    width: 50%;
+}
+
+.product-photo {
+    object-fit: cover;
+    width: 6rem;
+    max-height: 2rem;
+}
+
+.products-table {
+    max-width: 300px;
+}
+
+#sale-sum {
+    font-size: 1.5rem;
+}

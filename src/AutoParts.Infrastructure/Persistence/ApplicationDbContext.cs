@@ -1,16 +1,17 @@
 using System.Reflection;
+using AutoParts.Application.Identity;
 using AutoParts.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-public class ApplicationDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
+public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole<int>, int>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+        // Database.EnsureCreated();
     }
 
     static ApplicationDbContext()

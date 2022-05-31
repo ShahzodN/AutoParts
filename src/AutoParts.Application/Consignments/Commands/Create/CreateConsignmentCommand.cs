@@ -14,20 +14,25 @@ public class CreateConsignmentCommand : IRequest
 public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignmentCommand, Unit>
 {
     private readonly IConsignmentRepository consignmentRepo;
+    private readonly IProductRepository productRepo;
     private readonly IMapper mapper;
 
-    public CreateConsignmentCommandHandler(IConsignmentRepository consignmentRepo, IMapper mapper)
+    public CreateConsignmentCommandHandler(IConsignmentRepository consignmentRepo, IProductRepository productRepo, IMapper mapper)
     {
         this.consignmentRepo = consignmentRepo;
+        this.productRepo = productRepo;
         this.mapper = mapper;
     }
 
     public async Task<Unit> Handle(CreateConsignmentCommand request, CancellationToken cancellationToken)
     {
-        Consignment consignment = new() { Date = request.Date };
+        Consignment consignment = new() { Date = request.Date.Date };
+        var ids = request.ProductsList.Keys.ToList();
+        var products = await productRepo.GetAll(x => ids.Contains(x.Id));
 
         foreach (var s in request.ProductsList)
         {
+            products.First(p => p.Id == s.Key).Count += s.Value;
             consignment.ConsignmentDetails.Add(new()
             {
                 Consignment = consignment,
@@ -38,6 +43,7 @@ public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignment
         }
 
         consignment = await consignmentRepo.Create(consignment);
+        productRepo.UpdateRange(products.ToArray());
 
         return Unit.Value;
     }

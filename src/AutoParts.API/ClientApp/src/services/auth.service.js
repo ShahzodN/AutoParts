@@ -1,3 +1,5 @@
+import { axios } from "../axios/axios";
+
 class AuthService {
     #_token;
     #BASE_URL = "/api/account";
@@ -14,20 +16,12 @@ class AuthService {
         return this.#_token ? true : false;
     }
 
-    async signIn(form) {
-        const response = await fetch(`${this.#BASE_URL}/signin`, {
-            method: "post",
-            redirect: "follow",
-            body: JSON.stringify(form),
-            headers: { "Content-Type": "application/json" }
-        });
-
-        return response;
+    async signIn(data) {
+        return await axios.post("/account/signin", data);
     }
 
-    async signOut() {
-        const response = await fetch(`${this.#BASE_URL}/signout`);
-        return response;
+    signOut() {
+        localStorage.removeItem("credentials");
     }
 }
 

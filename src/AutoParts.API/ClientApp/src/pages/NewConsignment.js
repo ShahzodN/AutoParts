@@ -38,7 +38,6 @@ export function NewConsignment() {
 
     setSelectedProduct(null);
     setQuantity("");
-    document.getElementById("asd").focus();
   }
 
   function deleteProduct(e) {
@@ -54,17 +53,15 @@ export function NewConsignment() {
 
     consignmentService.create(prodList)
       .then(res => {
-        if (res.ok) {
-          setInterval(() => {
-            setLoading(false);
-            navigate('/admin/delivery-of-goods');
-          }, 1500);
-        }
+        setInterval(() => {
+          setLoading(false);
+          navigate('/delivery-of-goods');
+        }, 1500);
       });
   }
 
   function loadProducts(value, callback) {
-    productService.getSuggestions(value.trim()).then(result => callback(result.map(item => ({ value: item.id, label: item.name }))));
+    productService.getSuggestions(value.trim()).then(result => callback(result.data.map(item => ({ value: item.id, label: item.name }))));
   }
 
   return !loading ? (
@@ -145,7 +142,7 @@ export function NewConsignment() {
       </div>
     </div >
   ) : (
-    <div className="container-fluid justify-content-center">
+    <div className="container d-flex justify-content-center">
       <Spinner animation="border" size="large" />
     </div>
   )

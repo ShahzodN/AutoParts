@@ -2,7 +2,7 @@ import "../css/ProductCard.css";
 
 export function ProductCard({ product }) {
 
-  const imageSrc = `${window.location.protocol}//${window.location.hostname}:5000/images`;
+  const imageSrc = `http://localhost:5000/images`;
 
   return (
     <div className="d-flex flex-column product-card p-2">

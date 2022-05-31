@@ -4,20 +4,21 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
+using AutoParts.Application.Identity;
 
 namespace AutoParts.Infrastructure.Services;
 public class TokenService
 {
     private readonly IConfiguration configuration;
-    private readonly UserManager<IdentityUser<int>> userManager;
+    private readonly UserManager<Account> userManager;
 
-    public TokenService(IConfiguration configuration, UserManager<IdentityUser<int>> userManager)
+    public TokenService(IConfiguration configuration, UserManager<Account> userManager)
     {
         this.configuration = configuration;
         this.userManager = userManager;
     }
 
-    public async Task<string> GenerateToken(IdentityUser<int> user)
+    public async Task<string> GenerateToken(Account user)
     {
         var roles = await userManager.GetRolesAsync(user);
         var claims = new List<Claim>();

@@ -1,5 +1,6 @@
 using AutoParts.Application.Products.Commands;
 using AutoParts.Application.Products.Queries;
+using AutoParts.Application.Sales.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,12 @@ public class ProductsController : BaseController
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateProductCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
+
+    [HttpPost("sale")]
+    public async Task<IActionResult> CreateSale(CreateSaleCommand command)
     {
         return Ok(await Mediator.Send(command));
     }

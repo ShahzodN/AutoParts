@@ -1,74 +1,66 @@
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 import { BsCheckCircle } from "react-icons/bs";
 import { ManufactorCard } from "../components/ManufactorCard.js";
-import { ManufactorCreateModal } from "../components/ManufactorCreateModal.js";
 import modelService from "../services/model.service.js";
 import $ from "jquery";
 import "../css/Models.css";
+import { Link } from "react-router-dom";
 
 export function Manufactors() {
 
   const [loading, setLoading] = useState(true);
   const [manufactors, setManufactors] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(0);
 
   useEffect(() => {
-    modelService.getAllManufactors().then(r => {
-      setManufactors(r);
+    modelService.getAllManufactors().then(result => {
+      setManufactors(result.data);
       setLoading(false);
     });
   }, []);
 
-  document.onclick = () => {
-    let contextMenu = document.getElementById('context-menu');
-    if (contextMenu)
-      contextMenu.style.display = 'none';
-  };
-
   const deleteManufactor = (e) => {
     setLoading(!loading);
 
-    modelService.deleteManufactor(selectedCardId).then(res => {
-      if (res.ok) {
-        e.target.parentElement.style.display = 'none';
+    modelService.deleteManufactor(selectedCardId).then(result => {
+      e.target.parentElement.style.display = 'none';
 
-        $('.spinner-border').hide();
-        $('.done').show();
+      $('.spinner-border').hide();
+      $('.done').show();
 
-        setInterval(() => {
-          window.location.reload();
-        }, 1500);
-      }
+      setInterval(() => {
+        window.location.reload();
+      }, 1500);
     });
   }
 
   return !loading ? (
-    <div className="m-2">
+    <div className="container">
       <div id="context-menu" className="border shadow-lg">
         <span className="p-2" onClick={(e) => deleteManufactor(e)}>Удалить</span>
       </div>
-      <Button
-        onClick={() => setShowModal(!showModal)}
+      <Link
+        to="/manufactors/new"
+        className="btn btn-primary"
       >
-        Создать
-      </Button>
-
-      <ManufactorCreateModal
-        show={showModal}
-        handleShow={() => setShowModal(!showModal)}
-      />
+        Создать производитель
+      </Link>
 
       <div className="container">
         <div className="d-flex flex-wrap">
           {manufactors.map((m, i) => {
-            return <ManufactorCard
+            return <Link
+              to={`/manufactors/${m.name}`}
               key={i}
-              manufactor={m}
-              selectedCard={setSelectedCardId}
-            />
+              className="me-3 mb-3"
+            >
+              <ManufactorCard
+                manufactor={m}
+                selectedCard={setSelectedCardId}
+              />
+            </Link>
           })}
         </div>
       </div>

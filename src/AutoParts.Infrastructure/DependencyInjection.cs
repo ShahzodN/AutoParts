@@ -1,4 +1,5 @@
 using System.Text;
+using AutoParts.Application.Identity;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
 using AutoParts.Infrastructure.Repositories;
@@ -21,7 +22,7 @@ namespace AutoParts.Infrastructure
                 opt.UseNpgsql(config.GetConnectionString("psql"));
             });
 
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(opt =>
+            services.AddIdentity<Account, IdentityRole<int>>(opt =>
             {
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
@@ -53,12 +54,15 @@ namespace AutoParts.Infrastructure
                 };
             });
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IConsignmentRepository, ConsignmentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IManufactorRepository, ManufactorRepository>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
             services.AddScoped<TokenService>();
 
             services.AddScoped<IImageService, ImageService>();

@@ -6,11 +6,12 @@ import { Image, ImageFit } from "@fluentui/react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { OperationResultModal } from "../components/OperationResultModal";
 import modelService from "../services/model.service";
+import bwipjs from "bwip-js";
 
 
 export function ProductDetail() {
 
-  const imageSrc = `${window.location.protocol}//${window.location.hostname}:5000/images`;
+  const imageSrc = "http://localhost:5000/images";
 
   const params = useParams();
   const navigate = useNavigate();
@@ -28,27 +29,37 @@ export function ProductDetail() {
   const [yearsSelectValues, setYearsSelectValues] = useState([]);
 
   useEffect(() => {
-    productService.getProductById(params.id).then(res => {
-      setProduct(res);
+    productService.getProductById(params.id).then(result => {
+      setProduct(result.data);
 
-      setModelsSelectValues(res.models.map(model => ({ value: model.model, label: model.model })));
+      setModelsSelectValues(result.data.models.map(model => ({ value: model.model, label: model.model })));
 
-      setYearsSelectValues(...res.models.map(model => {
+      setYearsSelectValues(...result.data.models.map(model => {
         return model.yearsOfIssue.map(y => ({ value: model.model + y, label: y, model: model.model }))
       }));
 
-      setYearsOfIssue(res.models.map(model => ({
+      setYearsOfIssue(result.data.models.map(model => ({
         label: model.model,
         options: model.yearsOfIssue.map(y => ({ value: model.model + y, label: y }))
       })));
 
-      if (res.manufactorId)
-        modelService.getModelsWithYearsOfIssue(res.manufactorId).then(r => setModels(r));
+      if (result.data.manufactorId)
+        modelService.getModelsWithYearsOfIssue(result.data.manufactorId).then(r => setModels(r.data));
 
       setLoading(false);
+
+      bwipjs.toCanvas("barcode", {
+        bcid: "ean13",
+        text: result.data.ean,
+        scale: 3,
+        height: 10,
+        includetext: true,
+        textxalign: "center",
+        width: 30
+      });
     });
 
-    productService.getPreliminaryData().then(res => setData(res));
+    productService.getPreliminaryData().then(result => setData(result.data));
   }, [params.id]);
 
   const onFileUpload = (e) => {
@@ -67,8 +78,8 @@ export function ProductDetail() {
     setYearsOfIssue([]);
 
     setProduct({ ...product, manufactorId: e.value, models: [] });
-    modelService.getModelsWithYearsOfIssue(e.value).then(res => {
-      setModels(res);
+    modelService.getModelsWithYearsOfIssue(e.value).then(result => {
+      setModels(result.data);
     });
   }
 
@@ -133,9 +144,9 @@ export function ProductDetail() {
   const uploadProduct = () => {
     setLoading(true);
 
-    productService.update(product).then(res => {
+    productService.update(product).then(result => {
 
-      if (res.ok) {
+      if (result) {
         setLoading(false);
         setShowOperationResultModal(true);
 
@@ -144,7 +155,7 @@ export function ProductDetail() {
 
         setTimeout(() => {
           setShowOperationResultModal(false);
-          navigate("/admin/products");
+          navigate("/products");
         }, 1500)
       }
     });
@@ -154,25 +165,22 @@ export function ProductDetail() {
     setLoading(true);
     setShowOperationResultModal(true);
 
-    productService.delete(product.id).then(res => {
-      if (res.ok) {
-        setLoading(false);
-        document.getElementById("success").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Успешно!";
-      }
-      else {
-        document.getElementById("fail").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Операция не выполнена";
-      }
+    productService.delete(product.id).then(result => {
+      setLoading(false);
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
 
       setTimeout(() => {
         setShowOperationResultModal(false);
         setLoading(false);
 
-        if (res.ok)
-          navigate("/admin/products");
+        navigate("/products");
       }, 1200);
     })
+      .catch(error => {
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      })
   }
 
   const getDefaultManufactor = () => {
@@ -261,6 +269,11 @@ export function ProductDetail() {
                 className="form-control"
               >
               </textarea>
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="col justify-content-center">
+              <canvas id="barcode"></canvas>
             </div>
           </div>
         </div>

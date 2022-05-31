@@ -31,21 +31,19 @@ export function NewEmployee() {
       setLoading(false);
       setShowOperationResult(true);
 
-      if (result.ok) {
-        document.getElementById("success").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Успешно!";
-      }
-      else {
-        document.getElementById("fail").style.display = "block";
-        document.getElementById("op-result-message").innerText = "Операция не выполнена";
-      }
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
 
       setTimeout(() => {
-        if (result.ok)
-          navigate("/admin/employee");
+        if (result)
+          navigate("/employees");
         setShowOperationResult(false);
       }, 1500);
     })
+      .catch(error => {
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      })
   }
 
   return !loading ? (

@@ -10,8 +10,8 @@ export function DeliveryOfGoods() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    consignmentService.getAll().then(res => {
-      setConsignments(res);
+    consignmentService.getAll().then(result => {
+      setConsignments(result.data);
       setLoading(true);
     });
   }, [])
@@ -20,7 +20,7 @@ export function DeliveryOfGoods() {
     const id = parseInt(e.target.attributes['data-id'].value);
 
     consignmentService.remove(id).then(response => {
-      if (response.ok) {
+      if (response) {
         let copy = consignments.filter(s => s.id !== id);
         setConsignments(copy);
       }
@@ -34,7 +34,7 @@ export function DeliveryOfGoods() {
         <div className="row">
           <div className="col-12">
             <div className="d-grid d-lg-block">
-              <Link to="/admin/delivery-of-goods/new" className="btn btn-primary">Новая поставка</Link>
+              <Link to="/delivery-of-goods/new" className="btn btn-primary">Новая поставка</Link>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export function DeliveryOfGoods() {
                   <tr key={v.id}>
                     <th scope="row">{i + 1}</th>
                     <td>{v.date}</td>
-                    <td><Link to={`/admin/delivery-of-goods/${v.id}`}>Подробнее</Link></td>
+                    <td><Link to={`/delivery-of-goods/${v.id}`}>Подробнее</Link></td>
                     <td>
                       <Button onClick={deleteConsignment} data-id={v.id}>
                         <BsXLg pointerEvents={'none'} />

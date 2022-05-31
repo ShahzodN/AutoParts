@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from "react-bootstrap";
 import employeeService from "../services/employee.service"
 import { EmployeeCard } from '../components/EmployeeCard';
-import "../css/Employee.css"
 import { Link } from 'react-router-dom';
+import "../css/Employee.css";
 
 export function Employees() {
 
@@ -11,19 +11,19 @@ export function Employees() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    employeeService.getAll().then(emps => {
-      setEmployees(emps);
+    employeeService.getAll().then(result => {
+      setEmployees(result.data);
       setLoading(false);
     });
   }, []);
 
   return !loading ? (
-    <div className="container-fluid">
+    <div className="container">
       <h2>Сотрудники</h2>
 
       <div className="d-grid d-lg-block">
         <Link
-          to="/admin/employee/new"
+          to="/employee/new"
           className="btn btn-primary"
         >
           Создать новый
@@ -34,7 +34,7 @@ export function Employees() {
         {employees.map(emp => {
           return (
             <Link
-              to={`/admin/employee/${emp.id}`}
+              to={`/employee/${emp.id}`}
               key={emp.id}
             >
               <EmployeeCard
