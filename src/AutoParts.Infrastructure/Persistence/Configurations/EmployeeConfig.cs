@@ -9,6 +9,8 @@ namespace AutoParts.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.ToTable("Employees");
+
+            builder.Ignore(x => x.FullName);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using AutoParts.Application.Identity;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.Repositories;
 using AutoParts.Infrastructure.Repositories;
@@ -21,7 +22,7 @@ namespace AutoParts.Infrastructure
                 opt.UseNpgsql(config.GetConnectionString("psql"));
             });
 
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(opt =>
+            services.AddIdentity<Account, IdentityRole<int>>(opt =>
             {
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireNonAlphanumeric = false;

@@ -1,8 +1,11 @@
 using AutoMapper;
 using AutoParts.Application.Exceptions;
+using AutoParts.Application.Identity;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoParts.Application.Sales.Commands;
 
@@ -10,6 +13,8 @@ public class CreateSaleCommand : IRequest
 {
     public ProductWithQuantity[] Products { get; set; } = null!;
     public string Seller { get; set; } = null!;
+    public decimal Taken { get; set; }
+    public decimal Change { get; set; }
 }
 
 public record ProductWithQuantity(int Id, int Quantity);
@@ -19,12 +24,14 @@ public class CreateSaleCommandHandler : IRequestHandler<CreateSaleCommand, Unit>
     private readonly ISaleRepository saleRepo;
     private readonly IProductRepository productRepo;
     private readonly IMapper mapper;
+    private readonly UserManager<Account> userManager;
 
-    public CreateSaleCommandHandler(ISaleRepository saleRepo, IProductRepository productRepo, IMapper mapper)
+    public CreateSaleCommandHandler(ISaleRepository saleRepo, IProductRepository productRepo, UserManager<Account> userManager, IMapper mapper)
     {
         this.saleRepo = saleRepo;
         this.productRepo = productRepo;
         this.mapper = mapper;
+        this.userManager = userManager;
     }
 
     public async Task<Unit> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
@@ -43,7 +50,17 @@ public class CreateSaleCommandHandler : IRequestHandler<CreateSaleCommand, Unit>
             p.Count -= request.Products.First(rp => rp.Id == p.Id).Quantity;
         });
 
-        Sale sale = new() { Seller = request.Seller, SaleTime = DateTime.Now };
+        var account = await userManager.Users.Include(x => x.Employee).FirstAsync(x => x.NormalizedUserName == request.Seller.ToUpper());
+
+        Sale sale = new()
+        {
+            Seller = account.Employee,
+            SaleTime = DateTime.Now,
+            Sum = Math.Round(products.Sum(x => x.Price * request.Products.First(p => p.Id == x.Id).Quantity)),
+            Taken = request.Taken,
+            Change = request.Change
+        };
+
         sale.SaleDetails = request.Products.Select(p => new SaleDetails()
         {
             ProductId = p.Id,

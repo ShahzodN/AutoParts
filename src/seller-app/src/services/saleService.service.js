@@ -15,7 +15,7 @@ class SaleService {
     }
 
     async getProduct(ean) {
-        return await axios.get(`${this.#BASE_URL}?ean=2000001000014`);
+        return await axios.get(`${this.#BASE_URL}/product?ean=2000001000014`);
     }
 
     async create(data) {

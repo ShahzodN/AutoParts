@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AutoParts.Infrastructure\AutoParts.Infrastructure.csproj" />
     <ProjectReference Include="..\AutoParts.Application\AutoParts.Application.csproj" />
     <ProjectReference Include="..\AutoParts.Domain\AutoParts.Domain.csproj" />
+    <ProjectReference Include="..\AutoParts.Infrastructure\AutoParts.Infrastructure.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

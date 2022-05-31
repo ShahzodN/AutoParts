@@ -19,6 +19,9 @@ import { Category } from "./Category";
 import dashboardService from "../services/dashboard.service";
 import { Spinner } from "react-bootstrap";
 import { NewManufactor } from "./NewManufactor";
+import { PageNotFound } from "./PageNotFound";
+import { Sales } from "./Sales";
+import { Sale } from "./Sale";
 
 export function Admin() {
   const [loading, setLoading] = useState(true);
@@ -37,21 +40,24 @@ export function Admin() {
 
       <Routes>
         <Route exact path="/" element={<AdminMainPage />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/employee/:id" element={<EmployeeDetails />} />
-        <Route path="/employee/new" element={<NewEmployee />} />
-        <Route path="/delivery-of-goods/*" element={<DeliveryOfGoods />} />
-        <Route path="/delivery-of-goods/:id" element={<Consignment />} />
-        <Route path="/delivery-of-goods/new" element={<NewConsignment />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/categories/new" element={<NewCategory />} />
-        <Route path="/category/:id" element={<Category />} />
-        <Route path="/manufactors" element={<Manufactors />} />
-        <Route path="/manufactors/new" element={<NewManufactor />} />
-        <Route path="/manufactors/:manufName" element={<Models />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/new" element={<NewProduct />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="employees" element={<Employees />} />
+        <Route path="employee/:id" element={<EmployeeDetails />} />
+        <Route path="employee/new" element={<NewEmployee />} />
+        <Route path="delivery-of-goods/*" element={<DeliveryOfGoods />} />
+        <Route path="delivery-of-goods/:id" element={<Consignment />} />
+        <Route path="delivery-of-goods/new" element={<NewConsignment />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="categories/new" element={<NewCategory />} />
+        <Route path="category/:id" element={<Category />} />
+        <Route path="manufactors" element={<Manufactors />} />
+        <Route path="manufactors/new" element={<NewManufactor />} />
+        <Route path="manufactors/:manufName" element={<Models />} />
+        <Route path="products" element={<Products />} />
+        <Route path="products/new" element={<NewProduct />} />
+        <Route path="products/:id" element={<ProductDetail />} />
+        <Route path="sales" element={<Sales />} />
+        <Route path="sales/:id" element={<Sale />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   ) : (

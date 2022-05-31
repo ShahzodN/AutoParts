@@ -8,6 +8,7 @@ export function Sale() {
   const IMAGE_SRC = `${window.location.protocol}//localhost:5000/images/Product`;
 
   const [products, setProducts] = useState([]);
+  const [taken, setTaken] = useState(0);
 
   document.onkeyup = (e) => {
     if (e.key === "f")
@@ -55,7 +56,9 @@ export function Sale() {
 
     const model = {
       products: products.map(p => ({ id: p.id, quantity: p.quantity })),
-      seller: JSON.parse(localStorage.getItem("credentials")).user
+      seller: JSON.parse(localStorage.getItem("credentials")).user,
+      taken: taken,
+      change: taken - products.map(p => (p.quantity * p.price))
     };
 
     saleService.create(model).then(result => {
@@ -100,9 +103,9 @@ export function Sale() {
 
   return (
     <div className="container">
-      <embed src="../sound/beep.mp3" hidden id="beeper"></embed>
       <div className="row mt-3">
         <div className="col-3">
+          <label htmlFor=""><b>Артикул товара</b></label>
           <input
             autoFocus
             type="text"
@@ -110,6 +113,23 @@ export function Sale() {
             id="ean-input"
             onChange={e => onScanner(e.target)}
             placeholder="Артикул товара"
+          />
+        </div>
+        <div className="col-2">
+          <label htmlFor=""><b>Принято</b></label>
+          <input
+            type="text"
+            className="form-control"
+            onChange={e => setTaken(e.target.value)}
+          />
+        </div>
+        <div className="col-2">
+          <label htmlFor=""><b>Сдача</b></label>
+          <input
+            type="text"
+            className="form-control"
+            value={taken == 0 ? 0 : taken - products.map(p => (p.quantity * p.price))}
+            readOnly
           />
         </div>
       </div>

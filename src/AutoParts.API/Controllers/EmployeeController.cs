@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AutoParts.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     [Route("api/[controller]")]
     public class EmployeeController : BaseController
     {

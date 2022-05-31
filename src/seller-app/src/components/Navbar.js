@@ -1,9 +1,12 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { BiLogOut } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
 
 export function TopNavbar() {
+
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Navbar collapseOnSelect bg="light" variant="light" expand="lg">
@@ -15,8 +18,10 @@ export function TopNavbar() {
             <Nav.Link
               eventKey={2}
               as={Link}
-              to=""
-              onClick={() => authService.signOut()}
+              to="/signin"
+              onClick={() => {
+                authService.signOut();
+              }}
             >
               Выйти
               <BiLogOut size={32} />
