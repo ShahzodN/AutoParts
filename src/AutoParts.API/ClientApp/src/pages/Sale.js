@@ -16,7 +16,7 @@ export function Sale() {
   }, []);
 
   return (
-    <div style={{ height: "100vh", backgroundColor: "white" }}>
+    <div style={{ height: "100vh", backgroundColor: "lightgray" }}>
       <div className="row justify-content-center">
         <div className="col-4 mt-3" style={{ backgroundColor: "white" }}>
           <div className="d-flex flex-column p-3">

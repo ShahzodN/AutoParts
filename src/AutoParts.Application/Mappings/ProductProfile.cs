@@ -16,7 +16,12 @@ public class ProductProfile : Profile
             .ForMember(d => d.Models, opt => opt.Ignore());
 
         CreateMap<Product, ProductDto>()
+            .ForMember(d => d.Price, opt => opt.MapFrom(src => src.LastPrice))
+            .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
             .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image!.Name));
+
+        CreateMap<Price, ProductPriceDto>()
+            .ForMember(d => d.Date, opt => opt.MapFrom(x => x.DateTime.ToString("dd-MM-yyyy")));
 
         CreateMap<Product, Product>();
     }

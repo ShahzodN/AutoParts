@@ -1,4 +1,5 @@
 import "../css/NewCategory.css";
+import noPhoto from "../assets/no-photo.png";
 
 export function CategoryCard({ category }) {
 
@@ -18,7 +19,7 @@ export function CategoryCard({ category }) {
     <div className="category-card p-2">
       <div>
         <img
-          src={`${IMAGE_SRC}/Category/${category.id}/${category.image}`}
+          src={category.image ? `${IMAGE_SRC}/Category/${category.id}/${category.image}` : noPhoto}
           alt="categoryImage"
           className="category-photo"
           style={{ width: '100%' }}

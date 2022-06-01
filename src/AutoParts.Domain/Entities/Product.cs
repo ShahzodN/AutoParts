@@ -5,7 +5,8 @@ namespace AutoParts.Domain.Entities;
 public class Product : IEntity
 {
     public string Name { get; set; } = null!;
-    public decimal Price { get; set; }
+    public List<Price> Prices { get; set; } = new();
+    public decimal LastPrice => Prices.Count == 0 ? 0 : Prices.OrderByDescending(x => x.DateTime).First().Value;
     public bool IsEnabled { get; set; }
     public int Count { get; set; }
     public string EAN { get; set; } = null!;

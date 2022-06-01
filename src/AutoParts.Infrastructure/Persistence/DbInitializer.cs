@@ -73,7 +73,7 @@ public class DbInitializer
             EAN = "2000001000014",
             Name = "Prod 1",
             Count = 10,
-            Price = 1000,
+            Prices = new() { new Price() { Value = 1200, DateTime = DateTime.Now, ProductId = 1 } },
             Models = models
         };
 

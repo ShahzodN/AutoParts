@@ -19,5 +19,7 @@ public class ProductConfig : IEntityTypeConfiguration<Product>
             .WithMany(s => s.Products)
             .HasForeignKey(s => s.CategoryId)
             .IsRequired();
+
+        builder.Ignore(s => s.LastPrice);
     }
 }

@@ -4,7 +4,7 @@ public class SaleDetailsDto
 {
     public string? Seller { get; set; }
     public string? DateTime { get; set; }
-    public List<ProductInСheck> Products { get; set; } = new();
+    public IEnumerable<ProductInСheck> Products { get; set; } = null!;
     public decimal Taken { get; set; }
     public decimal Change { get; set; }
     public decimal Sum { get; set; }

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
+using AutoParts.Application.Exceptions;
 using AutoParts.Application.Interfaces;
 using AutoParts.Application.JsonConverters;
 using AutoParts.Application.Repositories;
@@ -40,12 +41,15 @@ namespace AutoParts.Application.Employees.Commands.Update
         {
             Employee? employee = await employeeRepo.GetById(request.Id);
 
-            if (employee != null)
-            {
-                mapper.Map(request, employee);
-                employee.Image.Name = await imageService.UpdateImage(employee.GetType().Name, employee.Id, request.Photo);
-                await employeeRepo.Update(employee);
-            }
+            if (employee == null)
+                throw new NotFoundException("Employee with provided id was not found.");
+
+            mapper.Map(request, employee);
+
+            if (request.Photo != null && request.Photo.Length > 50)
+                employee.Image = await imageService.UpdateImage(employee.GetType().Name, employee.Id, request.Photo);
+
+            await employeeRepo.Update(employee);
 
             return Unit.Value;
         }

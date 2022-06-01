@@ -7,6 +7,8 @@ import { Button, Modal, Spinner } from "react-bootstrap";
 import { OperationResultModal } from "../components/OperationResultModal";
 import modelService from "../services/model.service";
 import bwipjs from "bwip-js";
+import noPhoto from "../assets/no-photo.png";
+import { Chart } from "react-google-charts";
 
 
 export function ProductDetail() {
@@ -27,6 +29,12 @@ export function ProductDetail() {
 
   const [modelsSelectValues, setModelsSelectValues] = useState([]);
   const [yearsSelectValues, setYearsSelectValues] = useState([]);
+
+  const chartData = [
+    ["Date", "Price"],
+    ["1", 1],
+    ["2", 4]
+  ];
 
   useEffect(() => {
     productService.getProductById(params.id).then(result => {
@@ -191,6 +199,18 @@ export function ProductDetail() {
     return [];
   }
 
+  function getLineChartData() {
+    let arr = [["Дата", "Цена"]];
+    product.prices.forEach(p => arr = [...arr, [p.date, p.value]]);
+    return arr;
+  }
+
+  function getColumnChartData() {
+    let arr = [["Месяц", "Количество покупок"]];
+    product.saleHistories.forEach(h => arr = [...arr, [h.month, h.quantity]]);
+    return arr;
+  }
+
   return !loading ? (
     <div className="container-fluid p-xxl-5 mt-2">
       <div className="row mb-4">
@@ -201,7 +221,7 @@ export function ProductDetail() {
                 imageFit={ImageFit.centerCover}
                 width={200}
                 height={200}
-                src={product.image.length < 50 ? `${imageSrc}/Product/${product.id}/${product.image}` : product.image}
+                src={product.image ? (product.image.length < 50 ? `${imageSrc}/Product/${product.id}/${product.image}` : product.image) : noPhoto}
                 alt="productImage"
               />
             </div>
@@ -343,34 +363,52 @@ export function ProductDetail() {
         <Button
           onClick={(e) => uploadProduct()}
           className="me-md-2"
+          variant="outline-primary"
         >
           Сохранить
         </Button>
         <Button
           onClick={(e) => deleteProduct()}
           className="mt-2 mt-md-0"
+          variant="outline-danger"
         >
           Удалить
         </Button>
       </div>
-
+      <div className="container">
+        <div className="border border-2">
+          <Chart
+            chartType="LineChart"
+            data={getLineChartData()}
+            width="100%"
+            height="300px"
+            options={{
+              pointSize: 10,
+              title: "Динамика цены товара",
+              legend: "none"
+            }}
+          />
+        </div>
+        <div className="border border-2 mt-4">
+          <Chart
+            chartType="ColumnChart"
+            data={getColumnChartData()}
+            width="100%"
+            height="300px"
+            options={{
+              title: "Количество продаж по месяцам",
+              legend: "none"
+            }}
+          />
+        </div>
+      </div>
       <OperationResultModal
         show={showOperationResultModal}
       />
     </div >
   ) : (
-    <Modal
-      show={loading}
-      backdrop="static"
-      centered
-      className="modal-90w"
-    >
-      <Modal.Body style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Spinner
-          animation="border"
-          role="status"
-        />
-      </Modal.Body>
-    </Modal>
+    <div className="d-flex justify-content-center">
+      <Spinner animation="border" size="large" />
+    </div>
   )
 }

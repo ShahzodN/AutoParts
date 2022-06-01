@@ -33,12 +33,13 @@ namespace AutoParts.Infrastructure.Services
             return new Image() { Name = $"{fileName}.{fileExtension}" };
         }
 
-        public async Task<string> UpdateImage(string type, int id, string base64)
+        public async Task<Image> UpdateImage(string type, int id, string base64)
         {
-            if (base64?.Length < 50)
-                return base64;
-
-            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").GetFiles().FirstOrDefault()?.Delete();
+            var di = new DirectoryInfo($"{ImagePath}/images/{type}/{id}");
+            if (di.Exists)
+                di.GetFiles().FirstOrDefault()?.Delete();
+            else
+                di.Create();
 
             string fileExtension = ParseFileExtension(base64!);
             string fileName = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
@@ -49,7 +50,7 @@ namespace AutoParts.Infrastructure.Services
                 await stream.WriteAsync(imageBytes, 0, imageBytes.Count());
             }
 
-            return $"{fileName}.{fileExtension}";
+            return new Image() { Name = $"{fileName}.{fileExtension}" };
         }
 
         private string ParseFileExtension(string base64)

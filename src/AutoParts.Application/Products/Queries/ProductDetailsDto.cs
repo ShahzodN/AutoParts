@@ -16,4 +16,18 @@ public class ProductDetailsDto
     public string? Image { get; set; }
     public bool ForAllManufactors { get; set; }
     public ModelWithYearsOfIssueDto[] Models { get; set; } = null!;
+    public IEnumerable<ProductPriceDto> Prices { get; set; } = null!;
+    public IEnumerable<ProductSaleHistory> SaleHistories { get; set; } = null!;
+}
+
+public class ProductPriceDto
+{
+    public string Date { get; set; } = null!;
+    public decimal Value { get; set; }
+}
+
+public class ProductSaleHistory
+{
+    public string Month { get; set; } = null!;
+    public int Quantity { get; set; }
 }
