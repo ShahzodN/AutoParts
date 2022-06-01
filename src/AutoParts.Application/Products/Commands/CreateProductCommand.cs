@@ -8,8 +8,8 @@ namespace AutoParts.Application.Products.Commands;
 
 public class CreateProductCommand : IRequest
 {
-    public string? Name { get; set; }
-    public int Price { get; set; }
+    public string Name { get; set; } = null!;
+    public decimal Price { get; set; }
     public bool IsEnabled { get; set; }
     public bool ForAllManufactors { get; set; }
     public bool ForAllModels { get; set; }

@@ -19,12 +19,16 @@ class EmployeeService {
     return await axios.delete(`${this.#baseUrl}/${id}`);
   }
 
+  async deleteAccount(id) {
+    return await axios.delete(`${this.#baseUrl}/deleteAccount?employeeId=${id}`);
+  }
+
   async update(employee) {
     return await axios.put(`${this.#baseUrl}`, employee);
   }
 
   async createAccount(data) {
-    return await axios.post(`${this.#baseUrl}/create-account`, data);
+    return await axios.post(`${this.#baseUrl}/createAccount`, data);
   }
 }
 

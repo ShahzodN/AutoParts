@@ -31,11 +31,16 @@ public class GetSaleDetailsQueryHandler : IRequestHandler<GetSaleDetailsQuery, S
         {
             DateTime = sale.SaleTime.ToString("dd-MM-yyyy hh:mm"),
             Seller = sale.Seller.FullName,
-            Products = sale.SaleDetails.Select(x => new ProductInСheck(x.Product.Name, x.Product.Price, x.Quantity, x.Product.EAN)).ToList(),
             Taken = sale.Taken,
             Change = sale.Change,
             Sum = sale.Sum
         };
+
+        saleDetailsDto.Products = sale.SaleDetails.Select(x =>
+        {
+            var price = x.Product.Prices.Where(x => x.DateTime < sale.SaleTime).OrderBy(x => x.DateTime).Last().Value;
+            return new ProductInСheck(x.Product.Name, price, x.Quantity, x.Product.EAN);
+        });
 
         return saleDetailsDto;
     }

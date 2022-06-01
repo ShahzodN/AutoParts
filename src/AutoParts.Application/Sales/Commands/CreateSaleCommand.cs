@@ -56,7 +56,7 @@ public class CreateSaleCommandHandler : IRequestHandler<CreateSaleCommand, Unit>
         {
             Seller = account.Employee,
             SaleTime = DateTime.Now,
-            Sum = Math.Round(products.Sum(x => x.Price * request.Products.First(p => p.Id == x.Id).Quantity)),
+            Sum = Math.Round(products.Sum(x => x.LastPrice * request.Products.First(p => p.Id == x.Id).Quantity)),
             Taken = request.Taken,
             Change = request.Change
         };

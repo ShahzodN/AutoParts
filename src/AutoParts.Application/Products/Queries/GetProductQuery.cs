@@ -1,3 +1,4 @@
+using System.Globalization;
 using AutoMapper;
 using AutoParts.Application.Exceptions;
 using AutoParts.Application.Models.Queries;
@@ -32,6 +33,14 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDe
         if (product == null)
             throw new NotFoundException("Product with provided id was not found");
 
+        var saleHistories = new List<ProductSaleHistory>();
+
+        for (int i = 1; i <= 12; i++)
+        {
+            var salesQuantity = product.SaleDetails.Where(x => x.Sale.SaleTime.Month == i).Count();
+            saleHistories.Add(new() { Quantity = salesQuantity, Month = new DateTime(1, i, 1).ToString("MMM", new CultureInfo("ru-RU")) });
+        }
+
         var productDetails = new ProductDetailsDto()
         {
             CategoryId = product.CategoryId,
@@ -43,8 +52,10 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDe
             Id = product.Id,
             Image = product.Image?.Name,
             IsEnabled = product.IsEnabled,
-            Price = product.Price,
-            EAN = product.EAN
+            Price = product.Prices.OrderByDescending(x => x.DateTime).First().Value,
+            EAN = product.EAN,
+            Prices = product.Prices.Select(x => new ProductPriceDto() { Date = x.DateTime.ToString("dd-MM-yyyy"), Value = x.Value }),
+            SaleHistories = saleHistories
         };
 
         var dtos = product.Models.GroupBy(x => x.ModelName)

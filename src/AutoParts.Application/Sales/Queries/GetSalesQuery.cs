@@ -34,12 +34,9 @@ namespace AutoParts.Application.Sales.Queries
 
         public async Task<IEnumerable<SaleDto>> Handle(GetSalesQuery request, CancellationToken cancellationToken)
         {
-            List<Sale> sales;
-
             var account = await userManager.FindByNameAsync(request.Seller);
 
-            sales = await saleRepo.GetAll(x => x.SaleTime.Date >= request.DateStart.Date && x.SaleTime.Date <= request.DateEnd.Date
-                                            && x.Seller.Id == account.EmployeeId);
+            var sales = await saleRepo.GetAll(x => x.SaleTime.Date >= request.DateStart.Date && x.SaleTime.Date <= request.DateEnd.Date);
 
             sales = sales.OrderByDescending(x => x.SaleTime).ToList();
             var dtos = sales.Select(x =>

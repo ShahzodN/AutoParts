@@ -34,11 +34,13 @@ public class CategoryController : BaseController
     #endregion
 
     #region PUT
+
     [HttpPut]
     public async Task<ActionResult<CategoryDto>> Update(UpdateCategoryCommand command)
     {
         return await Mediator.Send(command);
     }
+
     #endregion
 
     #region DELETE

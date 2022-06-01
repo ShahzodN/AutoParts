@@ -16,5 +16,6 @@ namespace AutoParts.Application.Employees.Queries
         public string? Address { get; set; }
         public int Salary { get; set; }
         public string? Photo { get; set; }
+        public bool HasAccount { get; set; }
     }
 }

@@ -36,6 +36,13 @@ namespace AutoParts.API.Controllers
             return Created($"/api/employee/{createdEmployee.Id}", createdEmployee);
         }
 
+        [HttpPost("createAccount")]
+        public async Task<IActionResult> CreateAccount(CreateEmployeeAccountCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
         #endregion
 
         #region PUT
@@ -57,6 +64,13 @@ namespace AutoParts.API.Controllers
         {
             await Mediator.Send(new DeleteEmployeeCommand(id));
 
+            return NoContent();
+        }
+
+        [HttpDelete("deleteAccount")]
+        public async Task<IActionResult> DeleteEmployeeAccount([FromQuery] int employeeId)
+        {
+            await Mediator.Send(new DeleteEmployeeAccountCommand(employeeId));
             return NoContent();
         }
 

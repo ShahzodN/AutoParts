@@ -1,9 +1,10 @@
 import { Button, Spinner } from "react-bootstrap";
 import employeeService from "../services/employee.service";
-import $ from "jquery";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useNavigate, useParams } from "react-router-dom";
+import { OperationResultModal } from "../components/OperationResultModal";
+import noPhoto from "../assets/no-photo.png";
 
 export function EmployeeDetails() {
 
@@ -11,22 +12,65 @@ export function EmployeeDetails() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState({ photo: "" });
+  const [account, setAccount] = useState({});
+  const [showOperationResult, setShowOperationResult] = useState(false);
   const positions = ["Администратор", "Уборщица", "Продавец", "Охрана"];
 
   const imageSrc = `http://localhost:5000/images`;
 
   useEffect(() => {
     employeeService.getById(params.id).then(result => {
-      if (result) setEmployee(result.data);
+      setEmployee(result.data);
     });
   }, [params.id]);
 
-  const uploadEmployee = () => {
+  function uploadEmployee() {
     setLoading(true);
     employeeService.update(employee).then(result => {
       setLoading(false);
       navigate("/employees");
     });
+  }
+
+  function uploadAccount() {
+    if (account.password !== account.passwordConfirmation)
+      return;
+
+    setLoading(true);
+    account.employeeId = employee.id;
+    employeeService.createAccount(account).then(result => {
+      setLoading(false);
+      setShowOperationResult(true);
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
+
+      setTimeout(() => setShowOperationResult(false), 1200);
+    })
+      .catch(error => {
+        setShowOperationResult(true);
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      });
+  }
+
+  function deleteAccount() {
+    setLoading(true);
+
+    employeeService.deleteAccount(employee.id).then(result => {
+      setLoading(false);
+      setShowOperationResult(true);
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
+
+      setTimeout(() => setShowOperationResult(false), 1200);
+    })
+      .catch(error => {
+        setShowOperationResult(true);
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+      });
   }
 
   const onFileUpload = (e) => {
@@ -50,10 +94,9 @@ export function EmployeeDetails() {
   }
 
   const toggleForms = (e) => {
-    $('.eud-wrapper').toggle();
-    $('.cae-wrapper').toggle();
-    $('.empUpdate-btns').toggle();
-    $('.empCreateAccount-btns').toggle();
+    let div = document.getElementById("cae-wrapper");
+
+    div.style.display === "none" ? div.style.display = "block" : div.style.display = "none";
   }
 
   return !loading ? (
@@ -62,7 +105,7 @@ export function EmployeeDetails() {
         <div className="col-12 col-md-4 col-lg-3 justify-content-center">
           <div className="d-flex flex-column align-items-center">
             <img
-              src={employee.photo.length < 50 ? `${imageSrc}/Employee/${employee.id}/${employee.photo}` : employee.photo}
+              src={employee.photo ? (employee.photo.length < 50 ? `${imageSrc}/Employee/${employee.id}/${employee.photo}` : employee.photo) : noPhoto}
               alt="employeePhoto"
               id="prev"
               className="employee-photo"
@@ -147,47 +190,75 @@ export function EmployeeDetails() {
           </Button>
           <Button
             className="mt-2 mt-lg-0 mx-lg-1"
+            variant="outline-danger"
+            hidden={!employee.hasAccount}
+            onClick={deleteAccount}
+          >
+            Удалить аккаунт
+          </Button>
+          <Button
+            variant="outline-secondary"
+            onClick={() => toggleForms()}
+            className="mt-2 mt-lg-0 mx-lg-1"
+            hidden={employee.hasAccount}
+          >
+            Создать аккаунт
+          </Button>
+          <Button
             onClick={uploadEmployee}
+            variant="outline-primary"
           >
             Сохранить
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => console.log(employee)}
-            className="mt-2 mt-lg-0"
-          >
-            Создать аккаунтx
-          </Button>
         </div>
       </div>
-      <div className="cae-wrapper" style={{ display: "none" }}>
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <input
-            className="form-control m-1"
-            placeholder="Email"
-          />
-          <input
-            className="form-control m-1"
-            placeholder="Пароль"
-          />
-          <input
-            className="form-control m-1"
-            placeholder="Подтвердить пароль"
-          />
+      <div id="cae-wrapper" style={{ display: "none" }}>
+        <div className="row">
+          <div className="col-3">
+            <label htmlFor=""><b>Имя пользователя</b></label>
+            <input
+              className="form-control m-1"
+              value={account.userName}
+              onChange={e => setAccount({ ...account, userName: e.target.value.trim() })}
+            />
+            <label htmlFor=""><b>Пароль</b></label>
+            <input
+              className="form-control mb-1"
+              type="password"
+              value={account.password}
+              onChange={e => setAccount({ ...account, password: e.target.value.trim() })}
+            />
+            <label htmlFor=""><b>Подтвердить пароль</b></label>
+            <input
+              className="form-control mb-2"
+              type="password"
+              value={account.passwordConfirmation}
+              onChange={e => setAccount({ ...account, passwordConfirmation: e.target.value.trim() })}
+            />
+            <div className="d-grid">
+              <Button
+                variant="outline-primary"
+                className="mb-2"
+                onClick={() => uploadAccount()}
+              >
+                Готово
+              </Button>
+              <Button
+                onClick={toggleForms}
+                variant="outline-secondary"
+              >
+                Отменить
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-      <Button
-        style={{ display: "none" }}
-        onClick={toggleForms}
-      >
-        Отменить
-      </Button>
-      <Button type="submit" form="empCreateAccount" style={{ display: "none" }}>
-        Создать
-      </Button>
+      <OperationResultModal
+        show={showOperationResult}
+      />
     </div>
   ) : (
-    <div className="container-fluid justify-content-center">
+    <div className="d-flex justify-content-center">
       <Spinner animation="border" size="large" />
     </div>
   )

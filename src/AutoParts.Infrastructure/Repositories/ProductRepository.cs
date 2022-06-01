@@ -7,6 +7,7 @@ using AutoMapper;
 using AutoParts.Application.Exceptions;
 using AutoParts.Application.Interfaces;
 using System.Text;
+using System.Linq.Expressions;
 
 namespace AutoParts.Infrastructure.Repositories;
 
@@ -26,9 +27,27 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
         this.imageService = imageService;
     }
 
+    public override async Task<List<Product>> GetAll(Expression<Func<Product, bool>> expression = null!)
+    {
+        IQueryable<Product> query = Set.Include(x => x.Prices).Include(x => x.Category);
+        List<Product> models = new();
+
+        if (expression != null)
+            query = query.Where(expression);
+        models = await query.ToListAsync();
+
+        return models;
+    }
+
     public async Task<Product> Create(CreateProductCommand command)
     {
         var product = mapper.Map<Product>(command);
+        product.Prices.Add(new()
+        {
+            Value = command.Price,
+            Product = product,
+            DateTime = DateTime.Now
+        });
 
         if (command.ForAllManufactors)
         {
@@ -65,19 +84,23 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
             throw new NotFoundException("Product with provided id was not found.");
 
         product.Name = command.Name;
-        product.Price = command.Price;
         product.IsEnabled = command.IsEnabled;
         product.CategoryId = command.CategoryId;
         product.Description = command.Description;
-        if (!string.IsNullOrEmpty(command.Image))
-        {
-            string imageName = await imageService.UpdateImage(product.GetType().Name, product.Id, command.Image);
 
-            if (product.Image == null)
-                product.Image = new Image() { Name = imageName };
-            else
-                product.Image.Name = imageName;
+        if (product.LastPrice != command.Price)
+        {
+            product.Prices.Add(new()
+            {
+                Value = command.Price,
+                DateTime = DateTime.Now,
+                Product = product
+            });
         }
+
+        if (!string.IsNullOrEmpty(command.Image))
+            product.Image = await imageService.UpdateImage(product.GetType().Name, product.Id, command.Image);
+
         product.Models.Clear();
 
         if (!command.ForAllManufactors && command.ForAllModels)
@@ -112,6 +135,7 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
 
         await context.SaveChangesAsync();
     }
+
     public async Task<Product[]> GetPagedProducts(int page = 1)
     {
         var products = await Set.OrderBy(x => x.Id)
@@ -176,6 +200,8 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
         return await Set.Include(x => x.Image)
                         .Include(x => x.Models)
                         .Include(x => x.Category)
+                        .Include(x => x.Prices)
+                        .Include(x => x.SaleDetails).ThenInclude(x => x.Sale)
                         .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -183,9 +209,11 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
     {
         var product = await Set.AsNoTracking()
                                 .Include(x => x.Image)
+                                .Include(x => x.Prices)
                                 .FirstOrDefaultAsync(x => x.EAN == ean);
         return product;
     }
+
     public void UpdateRange(params Product[] products)
     {
         Set.UpdateRange(products);

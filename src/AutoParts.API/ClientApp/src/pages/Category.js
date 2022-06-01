@@ -3,6 +3,7 @@ import { Button, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { OperationResultModal } from "../components/OperationResultModal";
 import categoryService from "../services/category.service";
+import noPhoto from "../assets/no-photo.png";
 
 export function Category() {
 
@@ -23,6 +24,7 @@ export function Category() {
 
   function uploadCategory() {
     setLoading(true);
+    delete category.productsCount;
 
     categoryService.update(category).then(result => {
       setLoading(false);
@@ -38,6 +40,7 @@ export function Category() {
       }, 1500);
     })
       .catch(error => {
+        showOperationResult(true);
         document.getElementById("fail").style.display = "block";
         document.getElementById("op-result-message").innerText = "Операция не выполнена";
       });
@@ -79,7 +82,7 @@ export function Category() {
         <div className="col-12 col-md-4 col-lg-3">
           <div className="d-flex flex-column align-items-center">
             <img
-              src={category.image.length < 50 ? `${IMAGE_SRC}/Category/${category.id}/${category.image}` : category.image}
+              src={category.image ? (category.image.length < 50 ? `${IMAGE_SRC}/Category/${category.id}/${category.image}` : category.image) : noPhoto}
               alt=""
               id="prev"
               className="category-photo"

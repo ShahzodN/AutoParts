@@ -34,6 +34,7 @@ public class SaleRepository : BaseRepository<Sale, ApplicationDbContext>, ISaleR
     {
         return await Set.Include(x => x.Seller).Include(x => x.SaleDetails)
                                                 .ThenInclude(x => x.Product)
+                                                .ThenInclude(x => x.Prices)
                                                 .FirstOrDefaultAsync(x => x.Id == id);
     }
 

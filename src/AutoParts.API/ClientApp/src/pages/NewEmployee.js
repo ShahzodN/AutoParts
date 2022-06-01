@@ -41,6 +41,8 @@ export function NewEmployee() {
       }, 1500);
     })
       .catch(error => {
+        setShowOperationResult(true);
+
         document.getElementById("fail").style.display = "block";
         document.getElementById("op-result-message").innerText = "Операция не выполнена";
       })

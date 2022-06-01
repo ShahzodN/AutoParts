@@ -12,7 +12,7 @@ public class UpdateCategoryCommand : IRequest<CategoryDto>
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public string Image { get; set; } = null!;
+    public string? Image { get; set; }
 }
 
 public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, CategoryDto>
@@ -36,7 +36,9 @@ public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComman
             throw new NotFoundException("Category with provided id was not found.");
 
         mapper.Map(request, category);
-        category.Image.Name = await imageService.UpdateImage(category.GetType().Name, category.Id, request.Image);
+        if (request.Image != null && request.Image.Length > 50)
+            category.Image = await imageService.UpdateImage(category.GetType().Name, category.Id, request.Image);
+
         await categoryRepo.Update(category);
 
         return mapper.Map<CategoryDto>(category);

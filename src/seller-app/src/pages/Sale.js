@@ -63,6 +63,7 @@ export function Sale() {
 
     saleService.create(model).then(result => {
       setProducts([]);
+      setTaken(0);
     });
 
     focusOnInput();
@@ -120,6 +121,8 @@ export function Sale() {
           <input
             type="text"
             className="form-control"
+            value={taken}
+            onFocus={(e) => e.target.select()}
             onChange={e => setTaken(e.target.value)}
           />
         </div>
@@ -174,7 +177,7 @@ export function Sale() {
       </div>
       <Button
         onClick={_ => finishSale()}
-        disabled={products.length === 0}
+        disabled={products.length === 0 || taken < products.map(p => (p.quantity * p.price))}
       >
         Завершить
       </Button>
