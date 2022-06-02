@@ -5,6 +5,9 @@ import Select from "react-select";
 import { useNavigate, useParams } from "react-router-dom";
 import { OperationResultModal } from "../components/OperationResultModal";
 import noPhoto from "../assets/no-photo.png";
+import { Chart } from "react-google-charts";
+import { useWindowSize } from "./useWindowSize";
+import "../css/EmployeeDetails.css";
 
 export function EmployeeDetails() {
 
@@ -13,16 +16,52 @@ export function EmployeeDetails() {
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState({ photo: "" });
   const [account, setAccount] = useState({});
+  const [schedule, setSchedule] = useState({ employeeId: 0, workDays: [] });
+  const [workedDays, setWorkedDays] = useState();
   const [showOperationResult, setShowOperationResult] = useState(false);
   const positions = ["Администратор", "Уборщица", "Продавец", "Охрана"];
 
   const imageSrc = `http://localhost:5000/images`;
+  const size = useWindowSize();
 
   useEffect(() => {
     employeeService.getById(params.id).then(result => {
       setEmployee(result.data);
+      renderDays(result.data.workDays);
+      setSchedule({ employeeId: result.data.id, workDays: result.data.workDays });
+      let arr = [
+        [
+          {
+            type: "date",
+            id: "Date"
+          },
+          {
+            type: "number",
+            id: "Worked"
+          }
+        ],
+        [new Date(2022, 5, 2), 0]
+      ];
+      result.data.workedDays.forEach(x => {
+        const a = x.split("-");
+        arr.push([new Date(parseInt(a[2]), parseInt(a[1]) - 1, parseInt(a[0])), 1]);
+      });
+      setWorkedDays(arr);
     });
-  }, [params.id]);
+
+  }, [params.id, size]);
+
+  function onDaySelect(day, e) {
+    const exist = schedule.workDays.find(x => x === day);
+    if (exist) {
+      setSchedule({ ...schedule, employeeId: employee.id, workDays: schedule.workDays.filter(x => x !== day) });
+    }
+    else {
+      setSchedule({ ...schedule, employeeId: employee.id, workDays: [...schedule.workDays, day] });
+    }
+
+    exist ? e.target.style.backgroundColor = "#fff" : e.target.style.backgroundColor = "#8cedd5";
+  }
 
   function uploadEmployee() {
     setLoading(true);
@@ -73,6 +112,39 @@ export function EmployeeDetails() {
       });
   }
 
+  function renderDays(days) {
+    let dayHolders = document.getElementsByClassName("day-of-week");
+
+    for (let i = 0; i < days.length; i++) {
+      if (days[i] === 0)
+        dayHolders[dayHolders.length - 1].style.backgroundColor = "#8cedd5";
+      else
+        dayHolders[days[i] - 1].style.backgroundColor = "#8cedd5";
+    }
+  }
+
+  function saveSchedule() {
+    employeeService.setSchedule(schedule).then(result => {
+      setShowOperationResult(true);
+
+      document.getElementById("success").style.display = "block";
+      document.getElementById("op-result-message").innerText = "Успешно!";
+
+      setTimeout(() => {
+        setShowOperationResult(false);
+      }, 1200);
+    })
+      .catch(error => {
+        setShowOperationResult(true);
+        document.getElementById("fail").style.display = "block";
+        document.getElementById("op-result-message").innerText = "Операция не выполнена";
+
+        setTimeout(() => {
+          setShowOperationResult(false);
+        }, 1200);
+      });
+  }
+
   const onFileUpload = (e) => {
     const reader = new FileReader();
 
@@ -97,6 +169,29 @@ export function EmployeeDetails() {
     let div = document.getElementById("cae-wrapper");
 
     div.style.display === "none" ? div.style.display = "block" : div.style.display = "none";
+  }
+
+  function getCalendarChartData() {
+    let arr = [
+      [
+        {
+          type: "date",
+          id: "Date"
+        },
+        {
+          type: "number",
+          id: "Worked"
+        }
+      ],
+      [new Date(2022, 1, 1), 0]
+    ];
+
+    employee.workedDays.forEach(d => {
+      const elements = d.split("-");
+      arr.push([new Date(d), 1])
+    });
+
+    return arr;
   }
 
   return !loading ? (
@@ -189,7 +284,7 @@ export function EmployeeDetails() {
             Удалить
           </Button>
           <Button
-            className="mt-2 mt-lg-0 mx-lg-1"
+            className="my-2 my-lg-0 mt-lg-0 mx-lg-1"
             variant="outline-danger"
             hidden={!employee.hasAccount}
             onClick={deleteAccount}
@@ -252,6 +347,55 @@ export function EmployeeDetails() {
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        <h2>График работы</h2>
+        <div className="d-flex flex-column flex-lg-row align-items-center">
+          <div className="d-flex">
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(1, e)}>
+              ПН
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(2, e)}>
+              ВТ
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(3, e)}>
+              СР
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(4, e)}>
+              ЧТ
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(5, e)}>
+              ПТ
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(6, e)}>
+              СБ
+            </div>
+            <div className="p-2 fs-4 border me-1 day-of-week" onClick={(e) => onDaySelect(0, e)}>
+              ВС
+            </div>
+          </div>
+          <div className="d-grid">
+            <Button
+              onClick={() => saveSchedule()}
+              variant="outline-primary"
+              style={{ boxShadow: "none" }}
+            >
+              Сохранить
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-2 d-flex justify-content-center mt-3 border border-2 overflow-">
+        <Chart
+          chartType="Calendar"
+          data={workedDays}
+          width="100%"
+          height="100%"
+          options={{
+            title: "Рабочие дни сотрудника"
+          }}
+        />
       </div>
       <OperationResultModal
         show={showOperationResult}

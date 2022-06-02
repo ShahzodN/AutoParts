@@ -28,6 +28,7 @@ namespace AutoParts.Infrastructure.Repositories
         public override async Task<Employee?> GetById(int id)
         {
             return await Set.Include(s => s.Image)
+                            .Include(x => x.Schedules)
                             .FirstOrDefaultAsync(s => s.Id == id);
         }
     }

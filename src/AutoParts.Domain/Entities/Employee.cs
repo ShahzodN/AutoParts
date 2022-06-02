@@ -13,4 +13,5 @@ public class Employee : IEntity
     public int Salary { get; set; }
     public Image Image { get; set; } = null!;
     public EmployeePosition Position { get; set; }
+    public List<WorkSchedule> Schedules { get; set; } = new();
 }

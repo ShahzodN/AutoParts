@@ -20,12 +20,15 @@ namespace AutoParts.Application.Employees.Queries
         private readonly IEmployeeRepository employeeRepo;
         private readonly IMapper mapper;
         private readonly UserManager<Account> userManager;
+        private readonly ISaleRepository saleRepo;
 
-        public GetEmployeeQueryHandler(IEmployeeRepository employeeRepo, UserManager<Account> userManager, IMapper mapper)
+        public GetEmployeeQueryHandler(IEmployeeRepository employeeRepo, UserManager<Account> userManager,
+                                        ISaleRepository saleRepo, IMapper mapper)
         {
             this.employeeRepo = employeeRepo;
             this.mapper = mapper;
             this.userManager = userManager;
+            this.saleRepo = saleRepo;
         }
 
         public async Task<EmployeeDto> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
@@ -36,6 +39,10 @@ namespace AutoParts.Application.Employees.Queries
                 throw new NotFoundException("Employee was not found");
 
             var employeeDto = mapper.Map<EmployeeDto>(employee);
+            var sales = await saleRepo.GetAll(x => x.SellerId == employee.Id);
+            var workedDays = sales.Select(x => x.SaleTime.ToString("dd-MM-yyyy"));
+            employeeDto.WorkedDays = workedDays;
+
             var account = await userManager.Users.FirstOrDefaultAsync(x => x.EmployeeId == employee.Id);
 
             employeeDto.HasAccount = account != null;
