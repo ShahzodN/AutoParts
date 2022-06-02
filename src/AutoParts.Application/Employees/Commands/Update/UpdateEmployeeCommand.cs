@@ -21,7 +21,7 @@ namespace AutoParts.Application.Employees.Commands.Update
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int Salary { get; set; }
-        public string Photo { get; set; } = null!;
+        public string? Photo { get; set; }
     }
 
     public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand>

@@ -17,5 +17,7 @@ namespace AutoParts.Application.Employees.Queries
         public int Salary { get; set; }
         public string? Photo { get; set; }
         public bool HasAccount { get; set; }
+        public IEnumerable<int> WorkDays { get; set; } = null!;
+        public IEnumerable<string>? WorkedDays { get; set; }
     }
 }

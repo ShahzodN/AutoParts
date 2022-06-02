@@ -6,6 +6,7 @@ public class Sale : IEntity
 {
     public List<SaleDetails> SaleDetails { get; set; } = new();
     public Employee Seller { get; set; } = null!;
+    public int SellerId { get; set; }
     public DateTime SaleTime { get; set; }
     public decimal Taken { get; set; }
     public decimal Change { get; set; }

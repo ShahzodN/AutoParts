@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import productService from "../services/product.service";
 import Select from "react-select";
 import { Image, ImageFit } from "@fluentui/react";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { OperationResultModal } from "../components/OperationResultModal";
 import modelService from "../services/model.service";
 import bwipjs from "bwip-js";
@@ -29,12 +29,6 @@ export function ProductDetail() {
 
   const [modelsSelectValues, setModelsSelectValues] = useState([]);
   const [yearsSelectValues, setYearsSelectValues] = useState([]);
-
-  const chartData = [
-    ["Date", "Price"],
-    ["1", 1],
-    ["2", 4]
-  ];
 
   useEffect(() => {
     productService.getProductById(params.id).then(result => {

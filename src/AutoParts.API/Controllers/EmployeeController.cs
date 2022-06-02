@@ -43,6 +43,13 @@ namespace AutoParts.API.Controllers
             return NoContent();
         }
 
+        [HttpPost("setSchedule")]
+        public async Task<IActionResult> SetWorkSchedule(SetWorkScheduleCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
         #endregion
 
         #region PUT

@@ -27,6 +27,10 @@ class EmployeeService {
     return await axios.put(`${this.#baseUrl}`, employee);
   }
 
+  async setSchedule(data) {
+    return await axios.post(`${this.#baseUrl}/setSchedule`, data);
+  }
+
   async createAccount(data) {
     return await axios.post(`${this.#baseUrl}/createAccount`, data);
   }
