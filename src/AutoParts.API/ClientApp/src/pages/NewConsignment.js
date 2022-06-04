@@ -55,7 +55,7 @@ export function NewConsignment() {
       .then(res => {
         setInterval(() => {
           setLoading(false);
-          navigate('/delivery-of-goods');
+          navigate('delivery-of-goods');
         }, 1500);
       });
   }

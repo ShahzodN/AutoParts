@@ -30,10 +30,15 @@ public class ProductsController : BaseController
     }
 
     [HttpGet("filter")]
-    public ActionResult<string> GetFilteredProducts([FromQuery] int[] item, string name)
+    public async Task<ActionResult<ProductDto[]>> GetFilteredProducts([FromQuery] int[]? categories,
+                                                                    [FromQuery] int[]? manufactors,
+                                                                    [FromQuery] string[]? models,
+                                                                    [FromQuery] int? yearFrom,
+                                                                    [FromQuery] int? yearTo,
+                                                                    [FromQuery] int? priceFrom,
+                                                                    [FromQuery] int? priceTo)
     {
-        var a = 12;
-        return Ok($"{name}, {item.Length}");
+        return Ok(await Mediator.Send(new GetFilteredProductsQuery(categories, manufactors, models, yearFrom, yearTo, priceFrom, priceTo)));
     }
 
     [HttpGet("suggestion")]

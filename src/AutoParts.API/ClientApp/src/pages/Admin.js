@@ -21,6 +21,7 @@ import { NewManufactor } from "./NewManufactor";
 import { PageNotFound } from "./PageNotFound";
 import { Sales } from "./Sales";
 import { Sale } from "./Sale";
+import { Reports } from "./Reports";
 
 export function Admin() {
   return (
@@ -46,6 +47,7 @@ export function Admin() {
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="sales" element={<Sales />} />
         <Route path="sales/:id" element={<Sale />} />
+        <Route path="reports" element={<Reports />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

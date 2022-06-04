@@ -41,7 +41,7 @@ public class SaleRepository : BaseRepository<Sale, ApplicationDbContext>, ISaleR
     public override async Task<List<Sale>> GetAll(Expression<Func<Sale, bool>> expression = null!)
     {
         IQueryable<Sale> query = Set.Include(x => x.Seller)
-                                    .Include(x => x.SaleDetails).ThenInclude(x => x.Product);
+                                    .Include(x => x.SaleDetails).ThenInclude(x => x.Product).ThenInclude(x => x.Prices);
         List<Sale> models = new();
 
         if (expression != null)

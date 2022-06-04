@@ -30,7 +30,9 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
     public override async Task<List<Product>> GetAll(Expression<Func<Product, bool>> expression = null!)
     {
         IQueryable<Product> query = Set.Include(x => x.Prices)
+                                        .Include(x => x.ConsignmentDetails).ThenInclude(x => x.Consignment)
                                         .Include(x => x.Category)
+                                        .Include(x => x.Models)
                                         .Include(x => x.Image);
         List<Product> models = new();
 

@@ -111,7 +111,6 @@ export function Sale() {
 
   return (
     <div className="container">
-      <button onClick={() => console.log(products, products.map(x => (x.price * x.quantity)))}>asdasd</button>
       <div className="row mt-3">
         <div className="col-3">
           <label htmlFor=""><b>Артикул товара</b></label>

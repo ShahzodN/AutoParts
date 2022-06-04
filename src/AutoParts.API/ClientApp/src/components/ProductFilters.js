@@ -12,16 +12,16 @@ export function ProductFilters({ data, setProducts }) {
 
   useEffect(() => {
     if (window.location.search) {
-      productService.getFilteredProducts(window.location.search).then(res => setProducts(res));
+      productService.getFilteredProducts(window.location.search).then(res => setProducts(res.data));
     }
   }, []);
 
   const loadModels = (value, callback) => {
-    modelService.getModelsName(value).then(res => callback(res));
+    modelService.getModelsName(value).then(res => callback(res.data));
   }
 
   const filterData = () => {
-    productService.getFilteredProducts(window.location.search).then(res => setProducts(res));
+    productService.getFilteredProducts(window.location.search).then(res => setProducts(res.data));
   }
 
   const categoryValues = () => {
