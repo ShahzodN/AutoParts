@@ -32,7 +32,7 @@ public class CreateConsignmentCommandHandler : IRequestHandler<CreateConsignment
 
         foreach (var s in request.ProductsList)
         {
-            products.First(p => p.Id == s.Key).Count += s.Value;
+            products.First(p => p.Id == s.Key).Quantity += s.Value;
             consignment.ConsignmentDetails.Add(new()
             {
                 Consignment = consignment,

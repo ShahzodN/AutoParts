@@ -39,10 +39,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
     {
         var product = await productRepo.Create(request);
 
-        if (request.Image != null)
-            product.Image = await imageService.SetImages(product, request.Image);
+        if (request.Image?.Length > 50)
+        {
+            if (request.Image != null)
+                product.Image = await imageService.SetImages(product, request.Image);
 
-        await productRepo.Update(product);
+            await productRepo.Update(product);
+        }
 
         return Unit.Value;
     }

@@ -44,10 +44,10 @@ public class CreateSaleCommandHandler : IRequestHandler<CreateSaleCommand, Unit>
 
         products.ForEach(p =>
         {
-            if (p.Count - request.Products.First(rp => rp.Id == p.Id).Quantity < 0)
+            if (p.Quantity - request.Products.First(rp => rp.Id == p.Id).Quantity < 0)
                 throw new BusinessLogicException($"Некорректное количество у товара с артикулом {p.EAN}");
 
-            p.Count -= request.Products.First(rp => rp.Id == p.Id).Quantity;
+            p.Quantity -= request.Products.First(rp => rp.Id == p.Id).Quantity;
         });
 
         var account = await userManager.Users.Include(x => x.Employee).FirstAsync(x => x.NormalizedUserName == request.Seller.ToUpper());

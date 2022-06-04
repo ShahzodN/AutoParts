@@ -1,0 +1,16 @@
+.avatar-photo {
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+}
+
+.employee-name {
+    font-weight: 500;
+}
+
+.today-workers-card {
+    width: 20rem;
+    border-radius: 2rem;
+    max-height: 25rem;
+    overflow-y: scroll;
+}

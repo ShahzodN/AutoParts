@@ -8,7 +8,7 @@ import employeeService from "../services/employee.service";
 export function NewEmployee() {
 
   const [loading, setLoading] = useState(false);
-  const [employee, setEmployee] = useState({});
+  const [employee, setEmployee] = useState({ photo: "" });
   const navigate = useNavigate();
   const [showOperationResult, setShowOperationResult] = useState(false);
   const positions = ["Администратор", "Уборщица", "Продавец", "Охрана"];

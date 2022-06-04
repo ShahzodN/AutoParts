@@ -14,11 +14,12 @@ namespace AutoParts.Infrastructure.Repositories
 
         public override async Task<List<Employee>> GetAll(Expression<Func<Employee, bool>> expression = null!)
         {
-            IQueryable<Employee> query = Set.Include(x => x.Image);
+            IQueryable<Employee> query = Set.Include(x => x.Image)
+                                            .Include(x => x.Schedules);
             List<Employee> models = new();
 
             if (expression != null)
-                query = Set.Where(expression);
+                query = query.Where(expression);
 
             models = await query.ToListAsync();
 

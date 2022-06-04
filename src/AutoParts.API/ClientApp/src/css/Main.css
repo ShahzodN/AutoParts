@@ -1,0 +1,21 @@
+.dot {
+    border-radius: 50%;
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.dot-category {
+    background-color: rgb(232, 61, 255);
+}
+
+.dot-product {
+    background-color: rgb(39, 135, 219);
+}
+
+.dot-mark {
+    background-color: aqua;
+}
+
+.dot-model {
+    background-color: chartreuse;
+}

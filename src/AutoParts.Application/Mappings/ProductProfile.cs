@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoParts.Application.Products.Commands;
 using AutoParts.Application.Products.Queries;
+using AutoParts.Application.Statistics.Queries;
 using AutoParts.Domain.Entities;
 
 namespace AutoParts.Application.Mappings;
@@ -24,5 +25,8 @@ public class ProductProfile : Profile
             .ForMember(d => d.Date, opt => opt.MapFrom(x => x.DateTime.ToString("dd-MM-yyyy")));
 
         CreateMap<Product, Product>();
+
+        CreateMap<Product, LowBalanceProductDto>()
+            .ForMember(d => d.Price, opt => opt.MapFrom(src => src.LastPrice));
     }
 }

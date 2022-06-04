@@ -29,7 +29,9 @@ public class ProductRepository : BaseRepository<Product, ApplicationDbContext>, 
 
     public override async Task<List<Product>> GetAll(Expression<Func<Product, bool>> expression = null!)
     {
-        IQueryable<Product> query = Set.Include(x => x.Prices).Include(x => x.Category);
+        IQueryable<Product> query = Set.Include(x => x.Prices)
+                                        .Include(x => x.Category)
+                                        .Include(x => x.Image);
         List<Product> models = new();
 
         if (expression != null)

@@ -7,6 +7,7 @@ import { Categories } from "./Categories";
 import { Manufactors } from "./Manufactors";
 import { Models } from "./Models";
 import { Products } from "./Products";
+import { Main } from "./Main";
 import { NewProduct } from "./NewProduct";
 import { ProductDetail } from "./ProductDetail";
 import { AdminNavbar } from "../components/AdminNavbar";
@@ -16,30 +17,18 @@ import { EmployeeDetails } from "../components/EmployeeDetails";
 import { NewEmployee } from "./NewEmployee";
 import { NewCategory } from "./NewCategory";
 import { Category } from "./Category";
-import dashboardService from "../services/dashboard.service";
-import { Spinner } from "react-bootstrap";
 import { NewManufactor } from "./NewManufactor";
 import { PageNotFound } from "./PageNotFound";
 import { Sales } from "./Sales";
 import { Sale } from "./Sale";
 
 export function Admin() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    dashboardService.getSecret().then(res => {
-      if (res) {
-        setLoading(false);
-      }
-    });
-  }, [])
-
-  return !loading ? (
-    <div className="d-flex flex-column">
+  return (
+    <>
       <AdminNavbar />
 
       <Routes>
-        <Route exact path="/" element={<AdminMainPage />} />
+        <Route exact path="/" element={<Main />} />
         <Route path="employees" element={<Employees />} />
         <Route path="employee/:id" element={<EmployeeDetails />} />
         <Route path="employee/new" element={<NewEmployee />} />
@@ -59,19 +48,6 @@ export function Admin() {
         <Route path="sales/:id" element={<Sale />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-    </div>
-  ) : (
-    <div className="container d-flex justify-content-center">
-      <Spinner animation="border" size="large" />
-    </div>
-  )
-}
-
-export function AdminMainPage() {
-  return (
-    <div className="container">
-      <h1>Главная страница</h1>
-
-    </div>
+    </>
   )
 }
