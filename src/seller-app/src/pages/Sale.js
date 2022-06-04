@@ -29,8 +29,8 @@ export function Sale() {
   }
 
   function onScanner(input) {
-    beep();
-    if (input.value.length) {
+    if (input.value.length === 13) {
+      beep();
       saleService.getProduct(input.value).then(result => {
         let index = products.findIndex(x => x.id === result.data.id);
 
@@ -50,6 +50,13 @@ export function Sale() {
     focusOnInput();
   }
 
+  function getSum() {
+    let sum = 0;
+
+    products.forEach(p => sum += p.price * p.quantity);
+    return sum;
+  }
+
   function finishSale() {
     if (products.length === 0)
       return;
@@ -58,7 +65,7 @@ export function Sale() {
       products: products.map(p => ({ id: p.id, quantity: p.quantity })),
       seller: JSON.parse(localStorage.getItem("credentials")).user,
       taken: taken,
-      change: taken - products.map(p => (p.quantity * p.price))
+      change: taken - getSum()
     };
 
     saleService.create(model).then(result => {
@@ -104,6 +111,7 @@ export function Sale() {
 
   return (
     <div className="container">
+      <button onClick={() => console.log(products, products.map(x => (x.price * x.quantity)))}>asdasd</button>
       <div className="row mt-3">
         <div className="col-3">
           <label htmlFor=""><b>Артикул товара</b></label>
@@ -131,7 +139,7 @@ export function Sale() {
           <input
             type="text"
             className="form-control"
-            value={taken == 0 ? 0 : taken - products.map(p => (p.quantity * p.price))}
+            value={taken == 0 ? 0 : taken - getSum()}
             readOnly
           />
         </div>
@@ -173,7 +181,7 @@ export function Sale() {
             })}
           </tbody>
         </table>
-        <span id="sale-sum">Сумма: <strong>{products.map(p => (p.quantity * p.price))}&#8381;</strong></span>
+        <span id="sale-sum">Сумма: <strong>{getSum()}&#8381;</strong></span>
       </div>
       <Button
         onClick={_ => finishSale()}

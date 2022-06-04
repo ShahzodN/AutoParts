@@ -19,7 +19,7 @@ namespace AutoParts.Infrastructure
         {
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                opt.UseNpgsql(config.GetConnectionString("psql"));
+                opt.UseNpgsql(config.GetConnectionString("psql"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
 
             services.AddIdentity<Account, IdentityRole<int>>(opt =>

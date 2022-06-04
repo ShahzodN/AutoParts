@@ -42,9 +42,12 @@ namespace AutoParts.Application.Employees.Commands.Create
 
             employee = await employeeRepo.Create(employee);
 
-            Image image = await imageService.SetImages(employee, request.Photo);
-            employee.Image = image;
-            await employeeRepo.Update(employee);
+            if (request.Photo.Length > 50)
+            {
+                Image image = await imageService.SetImages(employee, request.Photo);
+                employee.Image = image;
+                await employeeRepo.Update(employee);
+            }
 
             return mapper.Map<EmployeeDto>(employee);
         }

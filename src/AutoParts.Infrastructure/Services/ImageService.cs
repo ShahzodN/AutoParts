@@ -1,4 +1,3 @@
-using AutoParts.Application.Exceptions;
 using AutoParts.Application.Interfaces;
 using AutoParts.Domain.Entities;
 using AutoParts.Domain.Interfaces;
@@ -63,7 +62,9 @@ namespace AutoParts.Infrastructure.Services
 
         public void DeleteImage(string type, int id)
         {
-            new DirectoryInfo($"{ImagePath}/images/{type}/{id}").Delete(true);
+            var di = new DirectoryInfo($"{ImagePath}/images/{type}/{id}");
+            if (di.Exists)
+                di.Delete(true);
         }
     }
 }

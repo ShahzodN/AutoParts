@@ -15,7 +15,7 @@ export function ProductCard({ product }) {
       <div className="d-flex flex-column mt-2">
         <span className="p-price">{product.price} ₽</span>
         <span className="p-name">{product.name}</span>
-        <span className="p-balance">В наличии: {product.count}</span>
+        <span className="p-balance">В наличии: {product.quantity}</span>
         <span className="p-category">Категория: {product.category}</span>
       </div>
     </div>

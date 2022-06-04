@@ -8,7 +8,7 @@ public class Product : IEntity
     public List<Price> Prices { get; set; } = new();
     public decimal LastPrice => Prices.Count == 0 ? 0 : Prices.OrderByDescending(x => x.DateTime).First().Value;
     public bool IsEnabled { get; set; }
-    public int Count { get; set; }
+    public int Quantity { get; set; }
     public string EAN { get; set; } = null!;
     public string? Description { get; set; }
     public Image? Image { get; set; } = null!;

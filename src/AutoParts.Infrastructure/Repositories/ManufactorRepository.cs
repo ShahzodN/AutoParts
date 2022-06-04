@@ -15,18 +15,14 @@ namespace AutoParts.Infrastructure.Repositories
 
         public override async Task<List<Manufactor>> GetAll(Expression<Func<Manufactor, bool>> expression = null!)
         {
-            IQueryable<Manufactor> query = null!;
+            IQueryable<Manufactor> query = Set.Include(s => s.Image)
+                                                .Include(x => x.Models).ThenInclude(x => x.Products);
             List<Manufactor> models = new();
 
-            query = Set.Include(s => s.Image);
-
             if (expression != null)
-            {
                 query = Set.Where(expression);
-                models = await query.ToListAsync();
-            }
-            else
-                models = await query.ToListAsync();
+
+            models = await query.ToListAsync();
 
             return models;
         }

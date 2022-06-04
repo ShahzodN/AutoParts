@@ -17,7 +17,7 @@ public class CategoryRepository : BaseRepository<Category, ApplicationDbContext>
         IQueryable<Category> query = Set;
         List<Category> categories = new();
 
-        query = Set.Include(s => s.Image).Include(x => x.Products);
+        query = Set.Include(s => s.Image).Include(x => x.Products).ThenInclude(x => x.SaleDetails);
 
         if (expression != null)
             query = query.Where(expression);

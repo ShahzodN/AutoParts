@@ -40,16 +40,14 @@ public class SaleRepository : BaseRepository<Sale, ApplicationDbContext>, ISaleR
 
     public override async Task<List<Sale>> GetAll(Expression<Func<Sale, bool>> expression = null!)
     {
-        IQueryable<Sale> query = Set.Include(x => x.Seller).Include(x => x.SaleDetails);
+        IQueryable<Sale> query = Set.Include(x => x.Seller)
+                                    .Include(x => x.SaleDetails).ThenInclude(x => x.Product);
         List<Sale> models = new();
 
         if (expression != null)
-        {
             query = query.Where(expression);
-            models = await query.ToListAsync();
-        }
-        else
-            models = await Set.ToListAsync();
+
+        models = await query.ToListAsync();
 
         return models;
     }

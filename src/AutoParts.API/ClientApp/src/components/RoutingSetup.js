@@ -7,12 +7,12 @@ import { PageNotFound } from "../pages/PageNotFound";
 export class RoutingSetup extends Component {
   render() {
     return (
-      <div>
+      <>
         <Routes>
           <Route path="/*" element={<Admin />} />
           <Route path="/signin" element={<SignIn />} />
         </Routes>
-      </div>
+      </>
     );
   }
 }

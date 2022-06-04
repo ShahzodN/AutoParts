@@ -1,8 +1,10 @@
 import { axios } from "../axios/axios";
 
 class Dashboard {
-    async getSecret() {
-        return await axios.get("dashboard");
+    #BASE_URL = "dashboard";
+
+    async getStatistics() {
+        return await axios.get(`${this.#BASE_URL}`);
     }
 }
 

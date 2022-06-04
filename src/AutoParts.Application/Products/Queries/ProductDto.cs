@@ -7,6 +7,6 @@ public class ProductDto
     public decimal Price { get; set; }
     public string? EAN { get; set; }
     public string? Image { get; set; }
-    public int Count { get; set; }
+    public int Quantity { get; set; }
     public string? Category { get; set; }
 }
