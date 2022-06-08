@@ -15,6 +15,7 @@ export function AdminNavbar() {
         <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
           <Nav>
             <Nav.Link eventKey={7} as={Link} to="/sales">Продажи</Nav.Link>
+            <Nav.Link eventKey={8} as={Link} to="/reports">Отчёт</Nav.Link>
             <Nav.Link eventKey={1} as={Link} to="/employees">Сотрудники</Nav.Link>
             <Nav.Link eventKey={2} as={Link} to="/delivery-of-goods">Поставки товаров</Nav.Link>
             <Nav.Link eventKey={3} as={Link} to="/categories">Категория</Nav.Link>

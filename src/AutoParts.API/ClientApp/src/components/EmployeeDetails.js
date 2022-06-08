@@ -39,8 +39,8 @@ export function EmployeeDetails() {
             type: "number",
             id: "Worked"
           }
-        ],
-        [new Date(2022, 5, 2), 0]
+        ]
+        // [new Date(2022, 5, 2), 0]
       ];
       result.data.workedDays.forEach(x => {
         const a = x.split("-");
@@ -188,7 +188,7 @@ export function EmployeeDetails() {
 
     employee.workedDays.forEach(d => {
       const elements = d.split("-");
-      arr.push([new Date(d), 1])
+      arr.push([new Date(d), 1]);
     });
 
     return arr;

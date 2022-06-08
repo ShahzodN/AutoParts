@@ -1,3 +1,4 @@
+using System.Globalization;
 using AutoParts.Application.Identity;
 using AutoParts.Application.Repositories;
 using AutoParts.Domain.Entities;
@@ -45,7 +46,7 @@ namespace AutoParts.Application.Sales.Queries
                 {
                     Id = x.Id,
                     Sum = x.Sum,
-                    DateTime = x.SaleTime.ToString("dd-MM-yyyy hh:mm"),
+                    DateTime = x.SaleTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("ru-RU")),
                     Seller = x.Seller.FullName
                 };
                 return dto;

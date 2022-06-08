@@ -2,7 +2,6 @@ using AutoParts.API.Middleware;
 using AutoParts.Application;
 using AutoParts.Infrastructure;
 using AutoParts.Infrastructure.Persistence;
-using Microsoft.AspNetCore.CookiePolicy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +23,8 @@ var app = builder.Build();
 DbInitializer.Init(app.Services);
 app.UseMiddleware<ExceptionHandler>();
 app.UseStaticFiles();
-app.UseCookiePolicy(new CookiePolicyOptions()
-{
-    HttpOnly = HttpOnlyPolicy.Always,
-    MinimumSameSitePolicy = SameSiteMode.Unspecified
-});
-
 app.UseCors("CashierApp");
 app.UseRouting();
-app.UseMiddleware<TokenWriter>();
 app.UseAuthentication();
 app.UseAuthorization();
 
